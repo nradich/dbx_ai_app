@@ -23,7 +23,7 @@
         <div class="preview" id="preview" hidden><img id="preview-image" alt="Selected aircraft tail preview"><div class="preview-info"><div><span class="preview-eyebrow">PHOTO READY</span><strong id="file-name"></strong></div><button type="button" class="text-button" id="change-photo">Change photo ↗</button></div></div>
         <p class="photo-guidance"><span>✳</span> Tail-focused photos work best. Full-plane photos are not supported by the current model.</p>
         <div class="field-divider"></div>
-        <div class="form-label-row"><label for="observed">When did you see it?</label><span>LOCAL TIME</span></div>
+        <div class="form-label-row"><label for="observed">When did you see it on the runway?</label><span>LOCAL TIME</span></div>
         <div class="time-field"><input id="observed" type="datetime-local" value="2026-10-27T08:20"><span class="field-icon">◷</span></div>
         <p class="field-hint">San Diego time · Pacific Time</p>
         <button class="primary-button" id="show-result" type="button">Show sample result <span>↗</span></button>
@@ -35,12 +35,11 @@
         <div id="result-state" hidden aria-live="polite">
           <div class="result-alert"><span>i</span><p><strong>Illustrative example</strong> · This is a fixed sample, not a prediction from your photo or time.</p></div>
           <div class="result-label"><span>IDENTIFIED AIRLINE</span><span>MODEL OUTPUT</span></div>
-          <div class="airline-result"><div class="airline-emblem">S</div><div><span class="result-caption">POSSIBLE AIRLINE</span><h3>Southwest Airlines</h3><p>Based on an example tail photo</p></div><div class="airline-arrow">↗</div></div>
-          <div class="model-note">The model can be wrong, even when its confidence is high.</div>
+          <div class="airline-result"><div class="airline-emblem">S</div><div><span class="result-caption">AIRLINE</span><h3>Southwest Airlines <span class="airline-code">WN</span></h3><p>Based on an example tail photo</p></div><div class="airline-arrow">↗</div></div>
           <div class="candidate-heading"><div><span class="step">NEXT / SCHEDULE LOOKUP</span><h3>Possible departures</h3><p>Tuesday · 8:20 AM sighting · SAN</p></div><span class="count-badge">2 CANDIDATES</span></div>
           <div class="flight"><div class="flight-icon">↗</div><div class="flight-main"><strong>Phoenix <span>PHX</span></strong><small>WN1002 · Scheduled 8:30 AM</small></div><div class="flight-time">10 min <span>after sighting</span></div></div>
           <div class="flight"><div class="flight-icon">↗</div><div class="flight-main"><strong>Las Vegas <span>LAS</span></strong><small>WN1001 · Scheduled 7:30 AM</small></div><div class="flight-time">50 min <span>before sighting</span></div></div>
-          <div class="candidate-note"><span>✳</span><p><strong>These are possibilities, not confirmed flights.</strong> Schedule times are gate departures, and runway timing can vary.</p></div>
+          <div class="candidate-note"><span>✳</span><p><strong>These are possibilities, not confirmed flights.</strong> Schedule times are gate departures, and runway timing can vary. The model can also be wrong, even when its confidence is high.</p></div>
           <button type="button" class="reset-button" id="reset-result">← Back to the starting view</button>
         </div>
       </section>
