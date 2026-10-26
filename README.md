@@ -22,6 +22,15 @@ All ten test images passed isolated logged-model and registered-model CPU reload
 checks. This ten-image result is illustrative, not a robust estimate of accuracy
 on arbitrary airplane photos. Inputs must focus on the tail.
 
+### New full-plane stress check
+
+On ten newly sourced full-plane photos (two per airline), the unchanged version 1
+scored **3/10** on whole photographs and **8/10** on manual tail crops of those
+same photographs. This confirms that full-plane submission needs additional work.
+See [photos, attribution and predictions](full_plane_tests/RESULTS.md).
+The visual notebook is `notebooks/03_full_plane_evaluation.py`; reproduce scoring
+with `evaluation/workload.yaml` from its own directory after uploading the new folder.
+
 ## Dataset and provenance
 
 - Tiny dataset: **50 photographs**, 10 per class. Grouped targets are **30 train / 10

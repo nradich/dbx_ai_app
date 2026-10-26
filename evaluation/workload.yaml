@@ -1,0 +1,20 @@
+experiment_name: airplane-full-plane-evaluation
+environment:
+  version: databricks_ai_v6
+  dependencies: []
+compute:
+  num_accelerators: 1
+  accelerator_type: GPU_1xA10
+code_source:
+  type: snapshot
+  snapshot:
+    root_path: .
+    include_paths:
+      - evaluate.py
+command: python "$CODE_SOURCE_PATH/evaluate.py"
+max_retries: 0
+timeout_minutes: 15
+parameters:
+  dataset_root: /Volumes/dbx_ai_app/airplane_tail_id/training_data/full_plane_tests_v1
+  output_root: /Volumes/dbx_ai_app/airplane_tail_id/training_data/full_plane_evaluations
+  model_uri: models:/dbx_ai_app.airplane_tail_id.airplane_tail_identifier/1

@@ -1,0 +1,491 @@
+{
+  "version": 1,
+  "classes": [
+    "alaska",
+    "american",
+    "delta",
+    "southwest",
+    "united"
+  ],
+  "bbox_format": "normalized [left, top, right, bottom] in saved oriented full image; manual vertical-tail region including a small margin",
+  "selection_policy": "External photographs selected and manually reviewed before inference; no model access or training.",
+  "independence_note": "No strict independence from ImageNet or other pretraining data is assured.",
+  "records": [
+    {
+      "id": "alaska_full_01",
+      "airline": "alaska",
+      "title": "File:Alaska Airlines Boeing 737-990(ER) N493AS approaching EWR Airport.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Alaska_Airlines_Boeing_737-990(ER)_N493AS_approaching_EWR_Airport.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Alaska_Airlines_Boeing_737-990%28ER%29_N493AS_approaching_EWR_Airport.jpg",
+      "artist": "Adam Moreira (AEMoreira042281)",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source_width": 2400,
+      "source_height": 1800,
+      "commons_sha1": "f5df2e5d09cdea6fb9349040106b9f22d32a1832",
+      "registrations": [
+        "N493AS"
+      ],
+      "bbox": [
+        0.075,
+        0.3,
+        0.245,
+        0.565
+      ],
+      "review_note": "Full side view in flight; standard Alaska face tail with More to Love fuselage.",
+      "download_kind": "Commons 1920px derivative (original throttled)",
+      "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/Alaska_Airlines_Boeing_737-990%28ER%29_N493AS_approaching_EWR_Airport.jpg/1920px-Alaska_Airlines_Boeing_737-990%28ER%29_N493AS_approaching_EWR_Airport.jpg",
+      "source_sha256": "d571595ca73d84fea96f2928a640d02c2c6be73316113a53d8617e1d48049636",
+      "downloaded_source_sha1": "37714278888658894d2067631a523d6a4ca4899c",
+      "downloaded_source_width": 1920,
+      "downloaded_source_height": 1440,
+      "path": "images/alaska/alaska_full_01.jpg",
+      "width": 1920,
+      "height": 1440,
+      "sha256": "859aeaf570c2905f522346f063c3a13e93ff00fe85dae2072f70a6ba216fa4bb",
+      "downloaded": "2026-10-26T21:55:50+00:00",
+      "fingerprints": {
+        "source": {
+          "dhash": 2044803587319296771,
+          "phash": 1086459316904511614,
+          "pixels": "403c7b53c01eaca39b2402706352d4416c4e3e30b4712160d5c4c2f2d031bc00"
+        },
+        "crop": {
+          "dhash": 12918178140532216105,
+          "phash": 5210564792832064670,
+          "pixels": "aa57c428e672402792d47929613ec21eaa8c2182ba65800822ac4c0c44194af6"
+        }
+      },
+      "manual_bbox_reviewed": true
+    },
+    {
+      "id": "alaska_full_02",
+      "airline": "alaska",
+      "title": "File:Alaska Boeing 737-900ER N214AK BWI MD1.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Alaska_Boeing_737-900ER_N214AK_BWI_MD1.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/3/31/Alaska_Boeing_737-900ER_N214AK_BWI_MD1.jpg",
+      "artist": "Acroterion",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source_width": 6688,
+      "source_height": 3432,
+      "commons_sha1": "8c76c3491afea45525fd0ce78bb484d8331f8703",
+      "registrations": [
+        "N214AK"
+      ],
+      "bbox": [
+        0.815,
+        0.235,
+        0.935,
+        0.57
+      ],
+      "review_note": "Full three-quarter landing view; standard Alaska face tail.",
+      "download_kind": "Commons 1920px derivative (original throttled)",
+      "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Alaska_Boeing_737-900ER_N214AK_BWI_MD1.jpg/1920px-Alaska_Boeing_737-900ER_N214AK_BWI_MD1.jpg",
+      "source_sha256": "2e9394320e8fe2d171d0a1924b06f4e1e94b60c96a8c15e34307ad95cf6c29d9",
+      "downloaded_source_sha1": "b1a03bc60592962694b3c34f8b9411a110856965",
+      "downloaded_source_width": 1920,
+      "downloaded_source_height": 985,
+      "path": "images/alaska/alaska_full_02.jpg",
+      "width": 1920,
+      "height": 985,
+      "sha256": "7491d1816013d40bf8ee858e831f8b6ba471857df4860feb5261a44f31162e36",
+      "downloaded": "2026-10-26T21:55:54+00:00",
+      "fingerprints": {
+        "source": {
+          "dhash": 346827054574935710,
+          "phash": 4496369829167800099,
+          "pixels": "016fadfa3017bab49aef8727fd136e65833b5ad1f1025961535ae3d507a36a96"
+        },
+        "crop": {
+          "dhash": 245384986563091865,
+          "phash": 370701662145090482,
+          "pixels": "239829751c8b1fe524365de0ba538fbb36b84e231c7500c70cd599c8cb0a28b4"
+        }
+      },
+      "manual_bbox_reviewed": true
+    },
+    {
+      "id": "american_full_01",
+      "airline": "american",
+      "title": "File:American Boeing 737-800 N359PX BWI MD1.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:American_Boeing_737-800_N359PX_BWI_MD1.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/1/1a/American_Boeing_737-800_N359PX_BWI_MD1.jpg",
+      "artist": "Acroterion",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source_width": 6884,
+      "source_height": 3772,
+      "commons_sha1": "dd50c73e2fbd99ad07b69f0471ce2d6f51643f09",
+      "registrations": [
+        "N359PX"
+      ],
+      "bbox": [
+        0.735,
+        0.2,
+        0.88,
+        0.545
+      ],
+      "review_note": "Full three-quarter landing view; contemporary striped tail, partly crossed by foreground winglet. Top margin expanded after crop review.",
+      "download_kind": "Commons 1920px derivative (original throttled)",
+      "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/American_Boeing_737-800_N359PX_BWI_MD1.jpg/1920px-American_Boeing_737-800_N359PX_BWI_MD1.jpg",
+      "source_sha256": "beaf31485cdbd9794ffe93f767d3bbcb5fe4558371a7922d1c97aa8850658a20",
+      "downloaded_source_sha1": "325b4b93d10ef105649e40d35c6263f699c3cac8",
+      "downloaded_source_width": 1920,
+      "downloaded_source_height": 1052,
+      "path": "images/american/american_full_01.jpg",
+      "width": 1920,
+      "height": 1052,
+      "sha256": "dbbb2d86496eac468cdcefc03629354a04ac8cfa90b4343f32fbbe63f76b598b",
+      "downloaded": "2026-10-26T21:55:56+00:00",
+      "fingerprints": {
+        "source": {
+          "dhash": 8087698354466,
+          "phash": 4496635025814759594,
+          "pixels": "9370a8fc31eef198553ae9e6c937a3ddf019579f8eea0d284e5490cf9e779396"
+        },
+        "crop": {
+          "dhash": 4433527803125575969,
+          "phash": 5801752256791283947,
+          "pixels": "b8dafe38e5c0771cd035bd05455bfc03f54bde08077b0f1be843a01d2bfdafd8"
+        }
+      },
+      "manual_bbox_reviewed": true
+    },
+    {
+      "id": "american_full_02",
+      "airline": "american",
+      "title": "File:Boeing 737-823 \u2018N957AN\u2019 American Airlines.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Boeing_737-823_%E2%80%98N957AN%E2%80%99_American_Airlines.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Boeing_737-823_%E2%80%98N957AN%E2%80%99_American_Airlines.jpg",
+      "artist": "Alan Wilson",
+      "license": "CC BY-SA 2.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+      "source_width": 5027,
+      "source_height": 3351,
+      "commons_sha1": "0d98fad703e13284f396ed3783d89812ee873f90",
+      "registrations": [
+        "N957AN"
+      ],
+      "bbox": [
+        0.055,
+        0.215,
+        0.26,
+        0.515
+      ],
+      "review_note": "Full side landing view; contemporary striped tail.",
+      "download_kind": "Commons 1920px derivative (original throttled)",
+      "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/Boeing_737-823_%E2%80%98N957AN%E2%80%99_American_Airlines.jpg/1920px-Boeing_737-823_%E2%80%98N957AN%E2%80%99_American_Airlines.jpg",
+      "source_sha256": "2e9427b765837c66a01c63d2844e989a25d61469c9e5aac2d4234b3963b58d15",
+      "downloaded_source_sha1": "c20d34f5b35ca46d74d436fc30c04878069fe32b",
+      "downloaded_source_width": 1920,
+      "downloaded_source_height": 1280,
+      "path": "images/american/american_full_02.jpg",
+      "width": 1920,
+      "height": 1280,
+      "sha256": "868ff5506fcfc77ebac23621bc494149bf5f0f427dbfaf6646ff161e362bdd95",
+      "downloaded": "2026-10-26T21:55:59+00:00",
+      "fingerprints": {
+        "source": {
+          "dhash": 17938077205409689840,
+          "phash": 3682199459490285681,
+          "pixels": "8d8a7c72b89f688f91efaddc4a10fe6fd373a99f3aff9b018cae8e23b3080406"
+        },
+        "crop": {
+          "dhash": 226045087760915273,
+          "phash": 8360722596024316334,
+          "pixels": "b280acd0c40faa48535b63c6cc69ea24aa4e8e2e5ae3940b7454efd13c61fba8"
+        }
+      },
+      "manual_bbox_reviewed": true
+    },
+    {
+      "id": "delta_full_01",
+      "airline": "delta",
+      "title": "File:Delta Air Lines N3757D 2001 Boeing 737-832 C-N 30813 - McCarran International Airport (5388949029) (2).jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Delta_Air_Lines_N3757D_2001_Boeing_737-832_C-N_30813_-_McCarran_International_Airport_(5388949029)_(2).jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Delta_Air_Lines_N3757D_2001_Boeing_737-832_C-N_30813_-_McCarran_International_Airport_%285388949029%29_%282%29.jpg",
+      "artist": "Tom\u00e1s Del Coro from Las Vegas, Nevada, USA",
+      "license": "CC BY-SA 2.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+      "source_width": 2312,
+      "source_height": 1590,
+      "commons_sha1": "278e737d5be23182dd8deca54111adcface327f7",
+      "registrations": [
+        "N3757D"
+      ],
+      "bbox": [
+        0.675,
+        0.225,
+        0.91,
+        0.535
+      ],
+      "review_note": "Full side touchdown view; standard Delta widget tail.",
+      "download_kind": "Commons 1920px derivative (original throttled)",
+      "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Delta_Air_Lines_N3757D_2001_Boeing_737-832_C-N_30813_-_McCarran_International_Airport_%285388949029%29_%282%29.jpg/1920px-Delta_Air_Lines_N3757D_2001_Boeing_737-832_C-N_30813_-_McCarran_International_Airport_%285388949029%29_%282%29.jpg",
+      "source_sha256": "feaed709758e1930c1b44a9671129087175ca2aca5bb82520cf753533152b1d0",
+      "downloaded_source_sha1": "b832db3ff1f68651a1d9589bb9c9dc87ac25c3ae",
+      "downloaded_source_width": 1920,
+      "downloaded_source_height": 1320,
+      "path": "images/delta/delta_full_01.jpg",
+      "width": 1920,
+      "height": 1320,
+      "sha256": "9798982147a91cec360818ab085254f34cddec11cbbf9f7322d521708464e40c",
+      "downloaded": "2026-10-26T21:56:02+00:00",
+      "fingerprints": {
+        "source": {
+          "dhash": 4931520080120168448,
+          "phash": 1510510216000743853,
+          "pixels": "66ccd2b1b74c4c4d47c2bce3f375077c661163d5eeb6e2c752b246212f2c5104"
+        },
+        "crop": {
+          "dhash": 16111545466515384898,
+          "phash": 5351365087605336555,
+          "pixels": "6c23f917c6e8bbe497e582a84d8451bd0a92b1b14130c96c36900e30ab214264"
+        }
+      },
+      "manual_bbox_reviewed": true
+    },
+    {
+      "id": "delta_full_02",
+      "airline": "delta",
+      "title": "File:Boeing 737-900ER N875DN Delta AL BWI MD1.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Boeing_737-900ER_N875DN_Delta_AL_BWI_MD1.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/1/13/Boeing_737-900ER_N875DN_Delta_AL_BWI_MD1.jpg",
+      "artist": "Acroterion",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source_width": 7889,
+      "source_height": 3268,
+      "commons_sha1": "2f42dadc979b6c6a2599a63cf1e8b6855b6db513",
+      "registrations": [
+        "N875DN"
+      ],
+      "bbox": [
+        0.775,
+        0.23,
+        0.935,
+        0.585
+      ],
+      "review_note": "Full three-quarter landing view; standard Delta widget tail.",
+      "download_kind": "Commons 1920px derivative (original throttled)",
+      "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Boeing_737-900ER_N875DN_Delta_AL_BWI_MD1.jpg/1920px-Boeing_737-900ER_N875DN_Delta_AL_BWI_MD1.jpg",
+      "source_sha256": "232d2fa050ec6f2752a7ab82cd4fc506bb53810c7e9956dea918c963a4aafeed",
+      "downloaded_source_sha1": "bb140510416944566c224318aa9d4127ee415225",
+      "downloaded_source_width": 1920,
+      "downloaded_source_height": 795,
+      "path": "images/delta/delta_full_02.jpg",
+      "width": 1920,
+      "height": 795,
+      "sha256": "43d0e5c787de439c7183e67bf95fb0f1c179d2555dda0ad9a84252a21b277871",
+      "downloaded": "2026-10-26T21:56:04+00:00",
+      "fingerprints": {
+        "source": {
+          "dhash": 14352004229035977559,
+          "phash": 8382915939542014247,
+          "pixels": "bdd27fc0deec509ebbaee71cb526b9f7eb5cafac3e9d5fef833354e7ec40f850"
+        },
+        "crop": {
+          "dhash": 6888712194687071848,
+          "phash": 1457992309385013675,
+          "pixels": "12d3b37d911c62ce3567a34ce57927d82b92c19c16ea58eed3cb4d468871ff85"
+        }
+      },
+      "manual_bbox_reviewed": true
+    },
+    {
+      "id": "southwest_full_01",
+      "airline": "southwest",
+      "title": "File:Southwest Boeing 737-800 N8676A BWI MD1.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Southwest_Boeing_737-800_N8676A_BWI_MD1.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Southwest_Boeing_737-800_N8676A_BWI_MD1.jpg",
+      "artist": "Acroterion",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source_width": 6716,
+      "source_height": 3628,
+      "commons_sha1": "283bdb162ec334c9147977675237b5256ca718a9",
+      "registrations": [
+        "N8676A"
+      ],
+      "bbox": [
+        0.7,
+        0.315,
+        0.915,
+        0.64
+      ],
+      "review_note": "Full three-quarter landing view; current red/yellow/blue tail.",
+      "download_kind": "Commons 1920px derivative (original throttled)",
+      "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/Southwest_Boeing_737-800_N8676A_BWI_MD1.jpg/1920px-Southwest_Boeing_737-800_N8676A_BWI_MD1.jpg",
+      "source_sha256": "ab4ee6fe1b41cc01759ffb01b78a119a1a911712e7bc6200133eba008231229c",
+      "downloaded_source_sha1": "9cbbaf56a7c161b7c9f2ea91a9ad28da70bef987",
+      "downloaded_source_width": 1920,
+      "downloaded_source_height": 1037,
+      "path": "images/southwest/southwest_full_01.jpg",
+      "width": 1920,
+      "height": 1037,
+      "sha256": "62be562b3c186e7cd995f98468946ca79ca1fb404f18ed4d004188453d3eb952",
+      "downloaded": "2026-10-26T21:56:06+00:00",
+      "fingerprints": {
+        "source": {
+          "dhash": 10503290773837724732,
+          "phash": 523434323295128186,
+          "pixels": "dc5d885e30552ae831733605d59f2eb4258496854f0e16191f1a71f3d7ba0131"
+        },
+        "crop": {
+          "dhash": 3708586999778138264,
+          "phash": 3094093727370978475,
+          "pixels": "9fdfb5aa05cc8fcc62b75c39a2b01fcc1b18be70753201c92a150ce43e323f60"
+        }
+      },
+      "manual_bbox_reviewed": true
+    },
+    {
+      "id": "southwest_full_02",
+      "airline": "southwest",
+      "title": "File:Southwest Boeing 737-700 N235WN BWI MD1.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Southwest_Boeing_737-700_N235WN_BWI_MD1.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/1/11/Southwest_Boeing_737-700_N235WN_BWI_MD1.jpg",
+      "artist": "Acroterion",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source_width": 6482,
+      "source_height": 3412,
+      "commons_sha1": "aefbd7eff606e47b37a593a05001c18bd569e1d5",
+      "registrations": [
+        "N235WN"
+      ],
+      "bbox": [
+        0.705,
+        0.225,
+        0.92,
+        0.615
+      ],
+      "review_note": "Full three-quarter landing view; current red/yellow/blue tail.",
+      "download_kind": "Commons 1920px derivative (original throttled)",
+      "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Southwest_Boeing_737-700_N235WN_BWI_MD1.jpg/1920px-Southwest_Boeing_737-700_N235WN_BWI_MD1.jpg",
+      "source_sha256": "6a6384030200ffabaf4bc3997bd8b7ab2cd8c90e8ce618a8a402550ba1c254c7",
+      "downloaded_source_sha1": "9b6b0d20521d2cbfa6f0193e837ed99fb9f90d3e",
+      "downloaded_source_width": 1920,
+      "downloaded_source_height": 1011,
+      "path": "images/southwest/southwest_full_02.jpg",
+      "width": 1920,
+      "height": 1011,
+      "sha256": "dc9604009482b5899dfdeb302ed2776c678d9a2d8404798381430477a2776abc",
+      "downloaded": "2026-10-26T21:56:09+00:00",
+      "fingerprints": {
+        "source": {
+          "dhash": 468988229542608124,
+          "phash": 523500292315142587,
+          "pixels": "4730cb9b887c3a5a758d22680d50ab059e99c5a062bc07883f3b10c0a892c2a1"
+        },
+        "crop": {
+          "dhash": 1961192414465216146,
+          "phash": 3273639020899732635,
+          "pixels": "50189fa5c6db0740e48555d558c06acd5dc69402cf6a221e33c665708556040d"
+        }
+      },
+      "manual_bbox_reviewed": true
+    },
+    {
+      "id": "united_full_01",
+      "airline": "united",
+      "title": "File:United Boeing 737-700 N23708 BWI MD1.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:United_Boeing_737-700_N23708_BWI_MD1.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/7/79/United_Boeing_737-700_N23708_BWI_MD1.jpg",
+      "artist": "Acroterion",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source_width": 6596,
+      "source_height": 3754,
+      "commons_sha1": "22a8ce2b48f9d3ce1be12e48ae11d0a71e85ac84",
+      "registrations": [
+        "N23708"
+      ],
+      "bbox": [
+        0.73,
+        0.17,
+        0.955,
+        0.53
+      ],
+      "review_note": "Full three-quarter landing view; current blue globe tail.",
+      "download_kind": "Commons 1920px derivative (original throttled)",
+      "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/United_Boeing_737-700_N23708_BWI_MD1.jpg/1920px-United_Boeing_737-700_N23708_BWI_MD1.jpg",
+      "source_sha256": "3fa03a89c3148014b04b5e896446c320a6b715e87eb9666a63a274f8b12d380e",
+      "downloaded_source_sha1": "e31b88128f8d2d1dee71403a2579eb29e12e37d5",
+      "downloaded_source_width": 1920,
+      "downloaded_source_height": 1093,
+      "path": "images/united/united_full_01.jpg",
+      "width": 1920,
+      "height": 1093,
+      "sha256": "61728b72ec75681e2f7e758d0633ecc60a528182c101a6a3627045c061d99b1c",
+      "downloaded": "2026-10-26T21:56:11+00:00",
+      "fingerprints": {
+        "source": {
+          "dhash": 14471868590498880546,
+          "phash": 1499163926436813350,
+          "pixels": "ce7cba6221fabdc68f6459c8aac93ea973dccf6ede816aeed57111603370ea44"
+        },
+        "crop": {
+          "dhash": 4603530031161701497,
+          "phash": 7787493905716242667,
+          "pixels": "5961e54482fddf83fb1d38cfca832328187d74223a50771bd7579550afb3dc14"
+        }
+      },
+      "manual_bbox_reviewed": true
+    },
+    {
+      "id": "united_full_02",
+      "airline": "united",
+      "title": "File:United Airlines Boeing 737 -800 NG MAX N33289 Arriving SFO light ref L1180211.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:United_Airlines_Boeing_737_-800_NG_MAX_N33289_Arriving_SFO_light_ref_L1180211.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/9/9e/United_Airlines_Boeing_737_-800_NG_MAX_N33289_Arriving_SFO_light_ref_L1180211.jpg",
+      "artist": "Bill Abbott",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source_width": 4193,
+      "source_height": 2359,
+      "commons_sha1": "d8b159e8128c987df481d27fd4e61edc8aa6077e",
+      "registrations": [
+        "N33289"
+      ],
+      "bbox": [
+        0.73,
+        0.12,
+        0.915,
+        0.515
+      ],
+      "review_note": "Full side ground view; earlier gold globe tail.",
+      "download_kind": "Commons 1920px derivative (original throttled)",
+      "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9e/United_Airlines_Boeing_737_-800_NG_MAX_N33289_Arriving_SFO_light_ref_L1180211.jpg/1920px-United_Airlines_Boeing_737_-800_NG_MAX_N33289_Arriving_SFO_light_ref_L1180211.jpg",
+      "source_sha256": "8e075e11aba257199d1156144ee41a4ac844eeca82fa6c772dee577643d4c52b",
+      "downloaded_source_sha1": "e33f2db3e9c886d3706c447b0cee8c4c27f6f5c4",
+      "downloaded_source_width": 1920,
+      "downloaded_source_height": 1080,
+      "path": "images/united/united_full_02.jpg",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "c2c5ef2c137ef14389dca0e3c31562aa8e227685adebfe4725b153dcfe05ac08",
+      "downloaded": "2026-10-26T21:56:13+00:00",
+      "fingerprints": {
+        "source": {
+          "dhash": 4848133085487917184,
+          "phash": 1981113801457427841,
+          "pixels": "5557f12b94b2c5533f249964eb55b60f503ca14361bc8a371604ce46321cc0f3"
+        },
+        "crop": {
+          "dhash": 4168933749267194706,
+          "phash": 8737579730589811321,
+          "pixels": "3fbfe86e469e566d5f1b36c4e1427367023f8e7037199632a204121adf484860"
+        }
+      },
+      "manual_bbox_reviewed": true
+    }
+  ],
+  "duplicate_checks": {
+    "method": "training.prepare_data fingerprints: exact source SHA256, decoded RGB, dHash <=4/64 AND pHash <=8/63; all full/crop combinations against 50 local source photos and manual crops, plus within this set.",
+    "existing_photos_checked": 50,
+    "findings": [],
+    "limitations": "Heuristic screen, not proof of independent capture or absence from pretraining. Original remote full sources for existing cropped photos were not re-downloaded."
+  }
+}
