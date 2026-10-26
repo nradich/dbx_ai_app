@@ -1,0 +1,12 @@
+[
+  {"candidate": "alaska_01", "id": "alaska_full_01", "bbox": [0.075, 0.30, 0.245, 0.565], "review_note": "Full side view in flight; standard Alaska face tail with More to Love fuselage."},
+  {"candidate": "alaska_06", "id": "alaska_full_02", "bbox": [0.815, 0.235, 0.935, 0.57], "review_note": "Full three-quarter landing view; standard Alaska face tail."},
+  {"candidate": "american_01", "id": "american_full_01", "bbox": [0.735, 0.20, 0.88, 0.545], "review_note": "Full three-quarter landing view; contemporary striped tail, partly crossed by foreground winglet. Top margin expanded after crop review."},
+  {"candidate": "american_03", "id": "american_full_02", "bbox": [0.055, 0.215, 0.26, 0.515], "review_note": "Full side landing view; contemporary striped tail."},
+  {"candidate": "delta_03", "id": "delta_full_01", "bbox": [0.675, 0.225, 0.91, 0.535], "review_note": "Full side touchdown view; standard Delta widget tail."},
+  {"candidate": "delta_04", "id": "delta_full_02", "bbox": [0.775, 0.23, 0.935, 0.585], "review_note": "Full three-quarter landing view; standard Delta widget tail."},
+  {"candidate": "southwest_03", "id": "southwest_full_01", "bbox": [0.70, 0.315, 0.915, 0.64], "review_note": "Full three-quarter landing view; current red/yellow/blue tail."},
+  {"candidate": "southwest_06", "id": "southwest_full_02", "bbox": [0.705, 0.225, 0.92, 0.615], "review_note": "Full three-quarter landing view; current red/yellow/blue tail."},
+  {"candidate": "united_01", "id": "united_full_01", "bbox": [0.73, 0.17, 0.955, 0.53], "review_note": "Full three-quarter landing view; current blue globe tail."},
+  {"candidate": "united_06", "id": "united_full_02", "bbox": [0.73, 0.12, 0.915, 0.515], "review_note": "Full side ground view; earlier gold globe tail."}
+]

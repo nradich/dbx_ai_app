@@ -1,0 +1,408 @@
+{
+  "model_uri": "models:/dbx_ai_app.airplane_tail_id.airplane_tail_identifier/1",
+  "manifest_sha256": "a987f89cbc908f3fe3bb5503030f4a1760dbfc966d9bea1f11e2c212dc388b6d",
+  "classes": [
+    "alaska",
+    "american",
+    "delta",
+    "southwest",
+    "united"
+  ],
+  "metrics": {
+    "full_plane_accuracy": 0.3,
+    "full_plane_macro_f1": 0.20606060606060606,
+    "manual_tail_crop_accuracy": 0.8,
+    "manual_tail_crop_macro_f1": 0.7999999999999999
+  },
+  "summary": {
+    "full_plane": {
+      "correct": 3,
+      "total": 10,
+      "accuracy": 0.3,
+      "macro_f1": 0.20606060606060606,
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1
+        ]
+      ]
+    },
+    "manual_tail_crop": {
+      "correct": 8,
+      "total": 10,
+      "accuracy": 0.8,
+      "macro_f1": 0.7999999999999999,
+      "confusion_matrix": [
+        [
+          1,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1
+        ]
+      ]
+    }
+  },
+  "predictions": [
+    {
+      "id": "alaska_full_01",
+      "variant": "full_plane",
+      "actual": "alaska",
+      "predicted": "southwest",
+      "confidence": 0.9073554277420044,
+      "correct": false,
+      "probabilities": {
+        "alaska": 0.02911670133471489,
+        "american": 0.0049380771815776825,
+        "delta": 0.009649259969592094,
+        "southwest": 0.9073554277420044,
+        "united": 0.04894055798649788
+      }
+    },
+    {
+      "id": "alaska_full_01",
+      "variant": "manual_tail_crop",
+      "actual": "alaska",
+      "predicted": "alaska",
+      "confidence": 0.9222853779792786,
+      "correct": true,
+      "probabilities": {
+        "alaska": 0.9222853779792786,
+        "american": 0.0005587254418060184,
+        "delta": 0.0058073303662240505,
+        "southwest": 0.039629168808460236,
+        "united": 0.03171946853399277
+      }
+    },
+    {
+      "id": "alaska_full_02",
+      "variant": "full_plane",
+      "actual": "alaska",
+      "predicted": "southwest",
+      "confidence": 0.6940082311630249,
+      "correct": false,
+      "probabilities": {
+        "alaska": 0.22600455582141876,
+        "american": 0.0028786298353224993,
+        "delta": 0.028117312118411064,
+        "southwest": 0.6940082311630249,
+        "united": 0.04899131506681442
+      }
+    },
+    {
+      "id": "alaska_full_02",
+      "variant": "manual_tail_crop",
+      "actual": "alaska",
+      "predicted": "southwest",
+      "confidence": 0.4625032842159271,
+      "correct": false,
+      "probabilities": {
+        "alaska": 0.2299433946609497,
+        "american": 0.040166955441236496,
+        "delta": 0.1010061725974083,
+        "southwest": 0.4625032842159271,
+        "united": 0.1663801670074463
+      }
+    },
+    {
+      "id": "american_full_01",
+      "variant": "full_plane",
+      "actual": "american",
+      "predicted": "southwest",
+      "confidence": 0.5204801559448242,
+      "correct": false,
+      "probabilities": {
+        "alaska": 0.24221564829349518,
+        "american": 0.010670208372175694,
+        "delta": 0.18394337594509125,
+        "southwest": 0.5204801559448242,
+        "united": 0.04269066080451012
+      }
+    },
+    {
+      "id": "american_full_01",
+      "variant": "manual_tail_crop",
+      "actual": "american",
+      "predicted": "american",
+      "confidence": 0.8028609752655029,
+      "correct": true,
+      "probabilities": {
+        "alaska": 0.01115335151553154,
+        "american": 0.8028609752655029,
+        "delta": 0.13057535886764526,
+        "southwest": 0.03470601886510849,
+        "united": 0.02070418931543827
+      }
+    },
+    {
+      "id": "american_full_02",
+      "variant": "full_plane",
+      "actual": "american",
+      "predicted": "southwest",
+      "confidence": 0.6580994129180908,
+      "correct": false,
+      "probabilities": {
+        "alaska": 0.21744032204151154,
+        "american": 0.029741616919636726,
+        "delta": 0.04108742997050285,
+        "southwest": 0.6580994129180908,
+        "united": 0.05363122373819351
+      }
+    },
+    {
+      "id": "american_full_02",
+      "variant": "manual_tail_crop",
+      "actual": "american",
+      "predicted": "american",
+      "confidence": 0.9306260943412781,
+      "correct": true,
+      "probabilities": {
+        "alaska": 0.006334605626761913,
+        "american": 0.9306260943412781,
+        "delta": 0.018680281937122345,
+        "southwest": 0.040859535336494446,
+        "united": 0.003499502781778574
+      }
+    },
+    {
+      "id": "delta_full_01",
+      "variant": "full_plane",
+      "actual": "delta",
+      "predicted": "southwest",
+      "confidence": 0.7922181487083435,
+      "correct": false,
+      "probabilities": {
+        "alaska": 0.03532284125685692,
+        "american": 0.01733805425465107,
+        "delta": 0.024630138650536537,
+        "southwest": 0.7922181487083435,
+        "united": 0.13049079477787018
+      }
+    },
+    {
+      "id": "delta_full_01",
+      "variant": "manual_tail_crop",
+      "actual": "delta",
+      "predicted": "delta",
+      "confidence": 0.5726641416549683,
+      "correct": true,
+      "probabilities": {
+        "alaska": 0.08160635083913803,
+        "american": 0.024513887241482735,
+        "delta": 0.5726641416549683,
+        "southwest": 0.12609857320785522,
+        "united": 0.19511696696281433
+      }
+    },
+    {
+      "id": "delta_full_02",
+      "variant": "full_plane",
+      "actual": "delta",
+      "predicted": "southwest",
+      "confidence": 0.5991178154945374,
+      "correct": false,
+      "probabilities": {
+        "alaska": 0.2779237926006317,
+        "american": 0.0024267511907964945,
+        "delta": 0.05812574923038483,
+        "southwest": 0.5991178154945374,
+        "united": 0.06240585818886757
+      }
+    },
+    {
+      "id": "delta_full_02",
+      "variant": "manual_tail_crop",
+      "actual": "delta",
+      "predicted": "delta",
+      "confidence": 0.49859610199928284,
+      "correct": true,
+      "probabilities": {
+        "alaska": 0.030443411320447922,
+        "american": 0.010061361826956272,
+        "delta": 0.49859610199928284,
+        "southwest": 0.38877585530281067,
+        "united": 0.07212325930595398
+      }
+    },
+    {
+      "id": "southwest_full_01",
+      "variant": "full_plane",
+      "actual": "southwest",
+      "predicted": "southwest",
+      "confidence": 0.9752536416053772,
+      "correct": true,
+      "probabilities": {
+        "alaska": 0.006907844915986061,
+        "american": 0.0009216750622726977,
+        "delta": 0.005393075756728649,
+        "southwest": 0.9752536416053772,
+        "united": 0.011523790657520294
+      }
+    },
+    {
+      "id": "southwest_full_01",
+      "variant": "manual_tail_crop",
+      "actual": "southwest",
+      "predicted": "southwest",
+      "confidence": 0.9771036505699158,
+      "correct": true,
+      "probabilities": {
+        "alaska": 0.005243577994406223,
+        "american": 0.0006984089850448072,
+        "delta": 0.014027384109795094,
+        "southwest": 0.9771036505699158,
+        "united": 0.002926919376477599
+      }
+    },
+    {
+      "id": "southwest_full_02",
+      "variant": "full_plane",
+      "actual": "southwest",
+      "predicted": "southwest",
+      "confidence": 0.978293776512146,
+      "correct": true,
+      "probabilities": {
+        "alaska": 0.010220594704151154,
+        "american": 0.002353035844862461,
+        "delta": 0.003846759209409356,
+        "southwest": 0.978293776512146,
+        "united": 0.005285895429551601
+      }
+    },
+    {
+      "id": "southwest_full_02",
+      "variant": "manual_tail_crop",
+      "actual": "southwest",
+      "predicted": "southwest",
+      "confidence": 0.9852413535118103,
+      "correct": true,
+      "probabilities": {
+        "alaska": 0.0018990162061527371,
+        "american": 0.001653311774134636,
+        "delta": 0.009724372066557407,
+        "southwest": 0.9852413535118103,
+        "united": 0.0014819583157077432
+      }
+    },
+    {
+      "id": "united_full_01",
+      "variant": "full_plane",
+      "actual": "united",
+      "predicted": "united",
+      "confidence": 0.5966534614562988,
+      "correct": true,
+      "probabilities": {
+        "alaska": 0.07185480743646622,
+        "american": 0.004670274443924427,
+        "delta": 0.004069837741553783,
+        "southwest": 0.32275161147117615,
+        "united": 0.5966534614562988
+      }
+    },
+    {
+      "id": "united_full_01",
+      "variant": "manual_tail_crop",
+      "actual": "united",
+      "predicted": "united",
+      "confidence": 0.8437585830688477,
+      "correct": true,
+      "probabilities": {
+        "alaska": 0.08636091649532318,
+        "american": 0.016004448756575584,
+        "delta": 0.008282333612442017,
+        "southwest": 0.04559369385242462,
+        "united": 0.8437585830688477
+      }
+    },
+    {
+      "id": "united_full_02",
+      "variant": "full_plane",
+      "actual": "united",
+      "predicted": "southwest",
+      "confidence": 0.6885854601860046,
+      "correct": false,
+      "probabilities": {
+        "alaska": 0.11696059256792068,
+        "american": 0.03604225814342499,
+        "delta": 0.004670439288020134,
+        "southwest": 0.6885854601860046,
+        "united": 0.1537412405014038
+      }
+    },
+    {
+      "id": "united_full_02",
+      "variant": "manual_tail_crop",
+      "actual": "united",
+      "predicted": "southwest",
+      "confidence": 0.5216616988182068,
+      "correct": false,
+      "probabilities": {
+        "alaska": 0.020421016961336136,
+        "american": 0.047090549021959305,
+        "delta": 0.008912390097975731,
+        "southwest": 0.5216616988182068,
+        "united": 0.4019143283367157
+      }
+    }
+  ],
+  "scope": "Ten external photos; paired manual crops are the same sources, not independent tests; no retraining."
+}
