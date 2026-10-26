@@ -31,6 +31,13 @@ See [photos, attribution and predictions](full_plane_tests/RESULTS.md).
 The visual notebook is `notebooks/03_full_plane_evaluation.py`; reproduce scoring
 with `evaluation/workload.yaml` from its own directory after uploading the new folder.
 
+## Model Serving for the app
+
+Serving endpoint: **`airplane-tail-identifier`**, pinned to registered version **1**,
+Small CPU with scale-to-zero. See [deployment and app integration](serving/README.md)
+for the base64-image API contract, app service-principal resource, backend client,
+and end-to-end serving smoke test. The app should submit the selected tail crop.
+
 ## Dataset and provenance
 
 - Tiny dataset: **50 photographs**, 10 per class. Grouped targets are **30 train / 10
