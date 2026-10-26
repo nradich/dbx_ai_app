@@ -1,6 +1,6 @@
 # American Airlines tail image sources
 
-Images were resized from their Wikimedia Commons originals. Each image is a separate photograph, and the tail markings shown are the contemporary American Airlines livery. Follow each source link for the complete licensing details.
+Images were resized from their Wikimedia Commons originals; images 8–10 were also cropped around the tail. Each image is a separate photograph, and the tail markings shown are the contemporary American Airlines livery. Follow each source link for the complete licensing details.
 
 - **american_tail_1.jpg** — [2015-10-14 Heck des American Airlines Airbus A330 (freddy2001).jpg](https://commons.wikimedia.org/wiki/File:2015-10-14_Heck_des_American_Airlines_Airbus_A330_(freddy2001).jpg), by Freddy2001, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0). Resized from original.
 - **american_tail_2.jpg** — [AA Tail (14688006613).jpg](https://commons.wikimedia.org/wiki/File:AA_Tail_(14688006613).jpg), by Valentin Hintikka from Finland, [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0). Resized from original.
@@ -9,3 +9,6 @@ Images were resized from their Wikimedia Commons originals. Each image is a sepa
 - **american_tail_5.jpg** — [N787AL 777 American tailfin SCQ.jpg](https://commons.wikimedia.org/wiki/File:N787AL_777_American_tailfin_SCQ.jpg), by Bene Riobó, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0). Resized from original.
 - **american_tail_6.jpg** — [N814NN B737-800 American Airlines @ MIA, December 2016 (01).jpg](https://commons.wikimedia.org/wiki/File:N814NN_B737-800_American_Airlines_@_MIA,_December_2016_(01).jpg), by JTOcchialini, [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0). Resized from original.
 - **american_tail_7.jpg** — [Tailfin AA B787-9 (N836AA).jpg](https://commons.wikimedia.org/wiki/File:Tailfin_AA_B787-9_(N836AA).jpg), by Radomianin, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0). Resized from original.
+- **american_tail_8.jpg** — [File:American 737-8 MAX N321TG departing Boston June 2025 1.jpg](https://commons.wikimedia.org/wiki/File:American_737-8_MAX_N321TG_departing_Boston_June_2025_1.jpg), by 4300streetcar, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0). Cropped and resized from original.
+- **american_tail_9.jpg** — [File:American Airlines Airbus A319 N711UW departing Boston June 2025 1.jpg](https://commons.wikimedia.org/wiki/File:American_Airlines_Airbus_A319_N711UW_departing_Boston_June_2025_1.jpg), by 4300streetcar, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0). Cropped and resized from original.
+- **american_tail_10.jpg** — [File:American Airlines Airplane Tail at PHL.jpg](https://commons.wikimedia.org/wiki/File:American_Airlines_Airplane_Tail_at_PHL.jpg), by DiscoA340, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0). Cropped and resized from original.
