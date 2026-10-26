@@ -160,6 +160,6 @@ classes to probabilities). This is a contract example, not fabricated prediction
 ## Example flight schedule
 
 [Schedule setup and CSVs](schedule/README.md) define two Unity Catalog demo tables,
-a synthetic day of San Diego departures, and a candidate lookup by classifier label
+a synthetic weekly San Diego schedule, and a candidate lookup by classifier label
 and observation time. The fixture is not a real flight schedule; a tail prediction
 and time alone cannot confirm a particular flight or destination.

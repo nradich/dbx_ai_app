@@ -7,7 +7,7 @@ FROM '/Volumes/dbx_ai_app/airplane_tail_id/training_data/schedule_demo/airlines.
 FILEFORMAT = CSV
 FORMAT_OPTIONS ('header' = 'true', 'mode' = 'FAILFAST');
 
-COPY INTO dbx_ai_app.airplane_tail_id.demo_departures
-FROM '/Volumes/dbx_ai_app/airplane_tail_id/training_data/schedule_demo/departures.csv'
+COPY INTO dbx_ai_app.airplane_tail_id.demo_weekly_departures
+FROM '/Volumes/dbx_ai_app/airplane_tail_id/training_data/schedule_weekly_demo/departures.csv'
 FILEFORMAT = CSV
 FORMAT_OPTIONS ('header' = 'true', 'mode' = 'FAILFAST');
