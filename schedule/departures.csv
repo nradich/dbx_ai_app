@@ -1,0 +1,561 @@
+departure_id,airline_id,flight_number,origin_iata,destination_iata,destination_city,day_of_week,scheduled_departure_local
+demo-MON-AS1001,alaska,AS1001,SAN,SEA,Seattle,MON,07:00:00
+demo-MON-AA1001,american,AA1001,SAN,PHX,Phoenix,MON,07:10:00
+demo-MON-DL1001,delta,DL1001,SAN,SEA,Seattle,MON,07:20:00
+demo-MON-WN1001,southwest,WN1001,SAN,LAS,Las Vegas,MON,07:30:00
+demo-MON-UA1001,united,UA1001,SAN,DEN,Denver,MON,07:40:00
+demo-MON-AS1002,alaska,AS1002,SAN,PDX,Portland,MON,08:00:00
+demo-MON-AA1002,american,AA1002,SAN,CLT,Charlotte,MON,08:10:00
+demo-MON-DL1002,delta,DL1002,SAN,ATL,Atlanta,MON,08:20:00
+demo-MON-WN1002,southwest,WN1002,SAN,PHX,Phoenix,MON,08:30:00
+demo-MON-UA1002,united,UA1002,SAN,IAH,Houston,MON,08:40:00
+demo-MON-AS1003,alaska,AS1003,SAN,SFO,San Francisco,MON,09:00:00
+demo-MON-AA1003,american,AA1003,SAN,DFW,Dallas-Fort Worth,MON,09:10:00
+demo-MON-DL1003,delta,DL1003,SAN,SLC,Salt Lake City,MON,09:20:00
+demo-MON-WN1003,southwest,WN1003,SAN,OAK,Oakland,MON,09:30:00
+demo-MON-UA1003,united,UA1003,SAN,SFO,San Francisco,MON,09:40:00
+demo-MON-AS1004,alaska,AS1004,SAN,SEA,Seattle,MON,10:00:00
+demo-MON-AA1004,american,AA1004,SAN,PHX,Phoenix,MON,10:10:00
+demo-MON-DL1004,delta,DL1004,SAN,SEA,Seattle,MON,10:20:00
+demo-MON-WN1004,southwest,WN1004,SAN,LAS,Las Vegas,MON,10:30:00
+demo-MON-UA1004,united,UA1004,SAN,DEN,Denver,MON,10:40:00
+demo-MON-AS1005,alaska,AS1005,SAN,PDX,Portland,MON,11:00:00
+demo-MON-AA1005,american,AA1005,SAN,CLT,Charlotte,MON,11:10:00
+demo-MON-DL1005,delta,DL1005,SAN,ATL,Atlanta,MON,11:20:00
+demo-MON-WN1005,southwest,WN1005,SAN,PHX,Phoenix,MON,11:30:00
+demo-MON-UA1005,united,UA1005,SAN,IAH,Houston,MON,11:40:00
+demo-MON-AS1006,alaska,AS1006,SAN,SFO,San Francisco,MON,12:00:00
+demo-MON-AA1006,american,AA1006,SAN,DFW,Dallas-Fort Worth,MON,12:10:00
+demo-MON-DL1006,delta,DL1006,SAN,SLC,Salt Lake City,MON,12:20:00
+demo-MON-WN1006,southwest,WN1006,SAN,OAK,Oakland,MON,12:30:00
+demo-MON-UA1006,united,UA1006,SAN,SFO,San Francisco,MON,12:40:00
+demo-MON-AS1007,alaska,AS1007,SAN,SEA,Seattle,MON,13:00:00
+demo-MON-AA1007,american,AA1007,SAN,PHX,Phoenix,MON,13:10:00
+demo-MON-DL1007,delta,DL1007,SAN,SEA,Seattle,MON,13:20:00
+demo-MON-WN1007,southwest,WN1007,SAN,LAS,Las Vegas,MON,13:30:00
+demo-MON-UA1007,united,UA1007,SAN,DEN,Denver,MON,13:40:00
+demo-MON-AS1008,alaska,AS1008,SAN,PDX,Portland,MON,14:00:00
+demo-MON-AA1008,american,AA1008,SAN,CLT,Charlotte,MON,14:10:00
+demo-MON-DL1008,delta,DL1008,SAN,ATL,Atlanta,MON,14:20:00
+demo-MON-WN1008,southwest,WN1008,SAN,PHX,Phoenix,MON,14:30:00
+demo-MON-UA1008,united,UA1008,SAN,IAH,Houston,MON,14:40:00
+demo-MON-AS1009,alaska,AS1009,SAN,SFO,San Francisco,MON,15:00:00
+demo-MON-AA1009,american,AA1009,SAN,DFW,Dallas-Fort Worth,MON,15:10:00
+demo-MON-DL1009,delta,DL1009,SAN,SLC,Salt Lake City,MON,15:20:00
+demo-MON-WN1009,southwest,WN1009,SAN,OAK,Oakland,MON,15:30:00
+demo-MON-UA1009,united,UA1009,SAN,SFO,San Francisco,MON,15:40:00
+demo-MON-AS1010,alaska,AS1010,SAN,SEA,Seattle,MON,16:00:00
+demo-MON-AA1010,american,AA1010,SAN,PHX,Phoenix,MON,16:10:00
+demo-MON-DL1010,delta,DL1010,SAN,SEA,Seattle,MON,16:20:00
+demo-MON-WN1010,southwest,WN1010,SAN,LAS,Las Vegas,MON,16:30:00
+demo-MON-UA1010,united,UA1010,SAN,DEN,Denver,MON,16:40:00
+demo-MON-AS1011,alaska,AS1011,SAN,PDX,Portland,MON,17:00:00
+demo-MON-AA1011,american,AA1011,SAN,CLT,Charlotte,MON,17:10:00
+demo-MON-DL1011,delta,DL1011,SAN,ATL,Atlanta,MON,17:20:00
+demo-MON-WN1011,southwest,WN1011,SAN,PHX,Phoenix,MON,17:30:00
+demo-MON-UA1011,united,UA1011,SAN,IAH,Houston,MON,17:40:00
+demo-MON-AS1012,alaska,AS1012,SAN,SFO,San Francisco,MON,18:00:00
+demo-MON-AA1012,american,AA1012,SAN,DFW,Dallas-Fort Worth,MON,18:10:00
+demo-MON-DL1012,delta,DL1012,SAN,SLC,Salt Lake City,MON,18:20:00
+demo-MON-WN1012,southwest,WN1012,SAN,OAK,Oakland,MON,18:30:00
+demo-MON-UA1012,united,UA1012,SAN,SFO,San Francisco,MON,18:40:00
+demo-MON-AS1013,alaska,AS1013,SAN,SEA,Seattle,MON,19:00:00
+demo-MON-AA1013,american,AA1013,SAN,PHX,Phoenix,MON,19:10:00
+demo-MON-DL1013,delta,DL1013,SAN,SEA,Seattle,MON,19:20:00
+demo-MON-WN1013,southwest,WN1013,SAN,LAS,Las Vegas,MON,19:30:00
+demo-MON-UA1013,united,UA1013,SAN,DEN,Denver,MON,19:40:00
+demo-MON-AS1014,alaska,AS1014,SAN,PDX,Portland,MON,20:00:00
+demo-MON-AA1014,american,AA1014,SAN,CLT,Charlotte,MON,20:10:00
+demo-MON-DL1014,delta,DL1014,SAN,ATL,Atlanta,MON,20:20:00
+demo-MON-WN1014,southwest,WN1014,SAN,PHX,Phoenix,MON,20:30:00
+demo-MON-UA1014,united,UA1014,SAN,IAH,Houston,MON,20:40:00
+demo-MON-AS1015,alaska,AS1015,SAN,SFO,San Francisco,MON,21:00:00
+demo-MON-AA1015,american,AA1015,SAN,DFW,Dallas-Fort Worth,MON,21:10:00
+demo-MON-DL1015,delta,DL1015,SAN,SLC,Salt Lake City,MON,21:20:00
+demo-MON-WN1015,southwest,WN1015,SAN,OAK,Oakland,MON,21:30:00
+demo-MON-UA1015,united,UA1015,SAN,SFO,San Francisco,MON,21:40:00
+demo-MON-AS1016,alaska,AS1016,SAN,SEA,Seattle,MON,22:00:00
+demo-MON-AA1016,american,AA1016,SAN,PHX,Phoenix,MON,22:10:00
+demo-MON-DL1016,delta,DL1016,SAN,SEA,Seattle,MON,22:20:00
+demo-MON-WN1016,southwest,WN1016,SAN,LAS,Las Vegas,MON,22:30:00
+demo-MON-UA1016,united,UA1016,SAN,DEN,Denver,MON,22:40:00
+demo-TUE-AS1001,alaska,AS1001,SAN,SEA,Seattle,TUE,07:00:00
+demo-TUE-AA1001,american,AA1001,SAN,PHX,Phoenix,TUE,07:10:00
+demo-TUE-DL1001,delta,DL1001,SAN,SEA,Seattle,TUE,07:20:00
+demo-TUE-WN1001,southwest,WN1001,SAN,LAS,Las Vegas,TUE,07:30:00
+demo-TUE-UA1001,united,UA1001,SAN,DEN,Denver,TUE,07:40:00
+demo-TUE-AS1002,alaska,AS1002,SAN,PDX,Portland,TUE,08:00:00
+demo-TUE-AA1002,american,AA1002,SAN,CLT,Charlotte,TUE,08:10:00
+demo-TUE-DL1002,delta,DL1002,SAN,ATL,Atlanta,TUE,08:20:00
+demo-TUE-WN1002,southwest,WN1002,SAN,PHX,Phoenix,TUE,08:30:00
+demo-TUE-UA1002,united,UA1002,SAN,IAH,Houston,TUE,08:40:00
+demo-TUE-AS1003,alaska,AS1003,SAN,SFO,San Francisco,TUE,09:00:00
+demo-TUE-AA1003,american,AA1003,SAN,DFW,Dallas-Fort Worth,TUE,09:10:00
+demo-TUE-DL1003,delta,DL1003,SAN,SLC,Salt Lake City,TUE,09:20:00
+demo-TUE-WN1003,southwest,WN1003,SAN,OAK,Oakland,TUE,09:30:00
+demo-TUE-UA1003,united,UA1003,SAN,SFO,San Francisco,TUE,09:40:00
+demo-TUE-AS1004,alaska,AS1004,SAN,SEA,Seattle,TUE,10:00:00
+demo-TUE-AA1004,american,AA1004,SAN,PHX,Phoenix,TUE,10:10:00
+demo-TUE-DL1004,delta,DL1004,SAN,SEA,Seattle,TUE,10:20:00
+demo-TUE-WN1004,southwest,WN1004,SAN,LAS,Las Vegas,TUE,10:30:00
+demo-TUE-UA1004,united,UA1004,SAN,DEN,Denver,TUE,10:40:00
+demo-TUE-AS1005,alaska,AS1005,SAN,PDX,Portland,TUE,11:00:00
+demo-TUE-AA1005,american,AA1005,SAN,CLT,Charlotte,TUE,11:10:00
+demo-TUE-DL1005,delta,DL1005,SAN,ATL,Atlanta,TUE,11:20:00
+demo-TUE-WN1005,southwest,WN1005,SAN,PHX,Phoenix,TUE,11:30:00
+demo-TUE-UA1005,united,UA1005,SAN,IAH,Houston,TUE,11:40:00
+demo-TUE-AS1006,alaska,AS1006,SAN,SFO,San Francisco,TUE,12:00:00
+demo-TUE-AA1006,american,AA1006,SAN,DFW,Dallas-Fort Worth,TUE,12:10:00
+demo-TUE-DL1006,delta,DL1006,SAN,SLC,Salt Lake City,TUE,12:20:00
+demo-TUE-WN1006,southwest,WN1006,SAN,OAK,Oakland,TUE,12:30:00
+demo-TUE-UA1006,united,UA1006,SAN,SFO,San Francisco,TUE,12:40:00
+demo-TUE-AS1007,alaska,AS1007,SAN,SEA,Seattle,TUE,13:00:00
+demo-TUE-AA1007,american,AA1007,SAN,PHX,Phoenix,TUE,13:10:00
+demo-TUE-DL1007,delta,DL1007,SAN,SEA,Seattle,TUE,13:20:00
+demo-TUE-WN1007,southwest,WN1007,SAN,LAS,Las Vegas,TUE,13:30:00
+demo-TUE-UA1007,united,UA1007,SAN,DEN,Denver,TUE,13:40:00
+demo-TUE-AS1008,alaska,AS1008,SAN,PDX,Portland,TUE,14:00:00
+demo-TUE-AA1008,american,AA1008,SAN,CLT,Charlotte,TUE,14:10:00
+demo-TUE-DL1008,delta,DL1008,SAN,ATL,Atlanta,TUE,14:20:00
+demo-TUE-WN1008,southwest,WN1008,SAN,PHX,Phoenix,TUE,14:30:00
+demo-TUE-UA1008,united,UA1008,SAN,IAH,Houston,TUE,14:40:00
+demo-TUE-AS1009,alaska,AS1009,SAN,SFO,San Francisco,TUE,15:00:00
+demo-TUE-AA1009,american,AA1009,SAN,DFW,Dallas-Fort Worth,TUE,15:10:00
+demo-TUE-DL1009,delta,DL1009,SAN,SLC,Salt Lake City,TUE,15:20:00
+demo-TUE-WN1009,southwest,WN1009,SAN,OAK,Oakland,TUE,15:30:00
+demo-TUE-UA1009,united,UA1009,SAN,SFO,San Francisco,TUE,15:40:00
+demo-TUE-AS1010,alaska,AS1010,SAN,SEA,Seattle,TUE,16:00:00
+demo-TUE-AA1010,american,AA1010,SAN,PHX,Phoenix,TUE,16:10:00
+demo-TUE-DL1010,delta,DL1010,SAN,SEA,Seattle,TUE,16:20:00
+demo-TUE-WN1010,southwest,WN1010,SAN,LAS,Las Vegas,TUE,16:30:00
+demo-TUE-UA1010,united,UA1010,SAN,DEN,Denver,TUE,16:40:00
+demo-TUE-AS1011,alaska,AS1011,SAN,PDX,Portland,TUE,17:00:00
+demo-TUE-AA1011,american,AA1011,SAN,CLT,Charlotte,TUE,17:10:00
+demo-TUE-DL1011,delta,DL1011,SAN,ATL,Atlanta,TUE,17:20:00
+demo-TUE-WN1011,southwest,WN1011,SAN,PHX,Phoenix,TUE,17:30:00
+demo-TUE-UA1011,united,UA1011,SAN,IAH,Houston,TUE,17:40:00
+demo-TUE-AS1012,alaska,AS1012,SAN,SFO,San Francisco,TUE,18:00:00
+demo-TUE-AA1012,american,AA1012,SAN,DFW,Dallas-Fort Worth,TUE,18:10:00
+demo-TUE-DL1012,delta,DL1012,SAN,SLC,Salt Lake City,TUE,18:20:00
+demo-TUE-WN1012,southwest,WN1012,SAN,OAK,Oakland,TUE,18:30:00
+demo-TUE-UA1012,united,UA1012,SAN,SFO,San Francisco,TUE,18:40:00
+demo-TUE-AS1013,alaska,AS1013,SAN,SEA,Seattle,TUE,19:00:00
+demo-TUE-AA1013,american,AA1013,SAN,PHX,Phoenix,TUE,19:10:00
+demo-TUE-DL1013,delta,DL1013,SAN,SEA,Seattle,TUE,19:20:00
+demo-TUE-WN1013,southwest,WN1013,SAN,LAS,Las Vegas,TUE,19:30:00
+demo-TUE-UA1013,united,UA1013,SAN,DEN,Denver,TUE,19:40:00
+demo-TUE-AS1014,alaska,AS1014,SAN,PDX,Portland,TUE,20:00:00
+demo-TUE-AA1014,american,AA1014,SAN,CLT,Charlotte,TUE,20:10:00
+demo-TUE-DL1014,delta,DL1014,SAN,ATL,Atlanta,TUE,20:20:00
+demo-TUE-WN1014,southwest,WN1014,SAN,PHX,Phoenix,TUE,20:30:00
+demo-TUE-UA1014,united,UA1014,SAN,IAH,Houston,TUE,20:40:00
+demo-TUE-AS1015,alaska,AS1015,SAN,SFO,San Francisco,TUE,21:00:00
+demo-TUE-AA1015,american,AA1015,SAN,DFW,Dallas-Fort Worth,TUE,21:10:00
+demo-TUE-DL1015,delta,DL1015,SAN,SLC,Salt Lake City,TUE,21:20:00
+demo-TUE-WN1015,southwest,WN1015,SAN,OAK,Oakland,TUE,21:30:00
+demo-TUE-UA1015,united,UA1015,SAN,SFO,San Francisco,TUE,21:40:00
+demo-TUE-AS1016,alaska,AS1016,SAN,SEA,Seattle,TUE,22:00:00
+demo-TUE-AA1016,american,AA1016,SAN,PHX,Phoenix,TUE,22:10:00
+demo-TUE-DL1016,delta,DL1016,SAN,SEA,Seattle,TUE,22:20:00
+demo-TUE-WN1016,southwest,WN1016,SAN,LAS,Las Vegas,TUE,22:30:00
+demo-TUE-UA1016,united,UA1016,SAN,DEN,Denver,TUE,22:40:00
+demo-WED-AS1001,alaska,AS1001,SAN,SEA,Seattle,WED,07:00:00
+demo-WED-AA1001,american,AA1001,SAN,PHX,Phoenix,WED,07:10:00
+demo-WED-DL1001,delta,DL1001,SAN,SEA,Seattle,WED,07:20:00
+demo-WED-WN1001,southwest,WN1001,SAN,LAS,Las Vegas,WED,07:30:00
+demo-WED-UA1001,united,UA1001,SAN,DEN,Denver,WED,07:40:00
+demo-WED-AS1002,alaska,AS1002,SAN,PDX,Portland,WED,08:00:00
+demo-WED-AA1002,american,AA1002,SAN,CLT,Charlotte,WED,08:10:00
+demo-WED-DL1002,delta,DL1002,SAN,ATL,Atlanta,WED,08:20:00
+demo-WED-WN1002,southwest,WN1002,SAN,PHX,Phoenix,WED,08:30:00
+demo-WED-UA1002,united,UA1002,SAN,IAH,Houston,WED,08:40:00
+demo-WED-AS1003,alaska,AS1003,SAN,SFO,San Francisco,WED,09:00:00
+demo-WED-AA1003,american,AA1003,SAN,DFW,Dallas-Fort Worth,WED,09:10:00
+demo-WED-DL1003,delta,DL1003,SAN,SLC,Salt Lake City,WED,09:20:00
+demo-WED-WN1003,southwest,WN1003,SAN,OAK,Oakland,WED,09:30:00
+demo-WED-UA1003,united,UA1003,SAN,SFO,San Francisco,WED,09:40:00
+demo-WED-AS1004,alaska,AS1004,SAN,SEA,Seattle,WED,10:00:00
+demo-WED-AA1004,american,AA1004,SAN,PHX,Phoenix,WED,10:10:00
+demo-WED-DL1004,delta,DL1004,SAN,SEA,Seattle,WED,10:20:00
+demo-WED-WN1004,southwest,WN1004,SAN,LAS,Las Vegas,WED,10:30:00
+demo-WED-UA1004,united,UA1004,SAN,DEN,Denver,WED,10:40:00
+demo-WED-AS1005,alaska,AS1005,SAN,PDX,Portland,WED,11:00:00
+demo-WED-AA1005,american,AA1005,SAN,CLT,Charlotte,WED,11:10:00
+demo-WED-DL1005,delta,DL1005,SAN,ATL,Atlanta,WED,11:20:00
+demo-WED-WN1005,southwest,WN1005,SAN,PHX,Phoenix,WED,11:30:00
+demo-WED-UA1005,united,UA1005,SAN,IAH,Houston,WED,11:40:00
+demo-WED-AS1006,alaska,AS1006,SAN,SFO,San Francisco,WED,12:00:00
+demo-WED-AA1006,american,AA1006,SAN,DFW,Dallas-Fort Worth,WED,12:10:00
+demo-WED-DL1006,delta,DL1006,SAN,SLC,Salt Lake City,WED,12:20:00
+demo-WED-WN1006,southwest,WN1006,SAN,OAK,Oakland,WED,12:30:00
+demo-WED-UA1006,united,UA1006,SAN,SFO,San Francisco,WED,12:40:00
+demo-WED-AS1007,alaska,AS1007,SAN,SEA,Seattle,WED,13:00:00
+demo-WED-AA1007,american,AA1007,SAN,PHX,Phoenix,WED,13:10:00
+demo-WED-DL1007,delta,DL1007,SAN,SEA,Seattle,WED,13:20:00
+demo-WED-WN1007,southwest,WN1007,SAN,LAS,Las Vegas,WED,13:30:00
+demo-WED-UA1007,united,UA1007,SAN,DEN,Denver,WED,13:40:00
+demo-WED-AS1008,alaska,AS1008,SAN,PDX,Portland,WED,14:00:00
+demo-WED-AA1008,american,AA1008,SAN,CLT,Charlotte,WED,14:10:00
+demo-WED-DL1008,delta,DL1008,SAN,ATL,Atlanta,WED,14:20:00
+demo-WED-WN1008,southwest,WN1008,SAN,PHX,Phoenix,WED,14:30:00
+demo-WED-UA1008,united,UA1008,SAN,IAH,Houston,WED,14:40:00
+demo-WED-AS1009,alaska,AS1009,SAN,SFO,San Francisco,WED,15:00:00
+demo-WED-AA1009,american,AA1009,SAN,DFW,Dallas-Fort Worth,WED,15:10:00
+demo-WED-DL1009,delta,DL1009,SAN,SLC,Salt Lake City,WED,15:20:00
+demo-WED-WN1009,southwest,WN1009,SAN,OAK,Oakland,WED,15:30:00
+demo-WED-UA1009,united,UA1009,SAN,SFO,San Francisco,WED,15:40:00
+demo-WED-AS1010,alaska,AS1010,SAN,SEA,Seattle,WED,16:00:00
+demo-WED-AA1010,american,AA1010,SAN,PHX,Phoenix,WED,16:10:00
+demo-WED-DL1010,delta,DL1010,SAN,SEA,Seattle,WED,16:20:00
+demo-WED-WN1010,southwest,WN1010,SAN,LAS,Las Vegas,WED,16:30:00
+demo-WED-UA1010,united,UA1010,SAN,DEN,Denver,WED,16:40:00
+demo-WED-AS1011,alaska,AS1011,SAN,PDX,Portland,WED,17:00:00
+demo-WED-AA1011,american,AA1011,SAN,CLT,Charlotte,WED,17:10:00
+demo-WED-DL1011,delta,DL1011,SAN,ATL,Atlanta,WED,17:20:00
+demo-WED-WN1011,southwest,WN1011,SAN,PHX,Phoenix,WED,17:30:00
+demo-WED-UA1011,united,UA1011,SAN,IAH,Houston,WED,17:40:00
+demo-WED-AS1012,alaska,AS1012,SAN,SFO,San Francisco,WED,18:00:00
+demo-WED-AA1012,american,AA1012,SAN,DFW,Dallas-Fort Worth,WED,18:10:00
+demo-WED-DL1012,delta,DL1012,SAN,SLC,Salt Lake City,WED,18:20:00
+demo-WED-WN1012,southwest,WN1012,SAN,OAK,Oakland,WED,18:30:00
+demo-WED-UA1012,united,UA1012,SAN,SFO,San Francisco,WED,18:40:00
+demo-WED-AS1013,alaska,AS1013,SAN,SEA,Seattle,WED,19:00:00
+demo-WED-AA1013,american,AA1013,SAN,PHX,Phoenix,WED,19:10:00
+demo-WED-DL1013,delta,DL1013,SAN,SEA,Seattle,WED,19:20:00
+demo-WED-WN1013,southwest,WN1013,SAN,LAS,Las Vegas,WED,19:30:00
+demo-WED-UA1013,united,UA1013,SAN,DEN,Denver,WED,19:40:00
+demo-WED-AS1014,alaska,AS1014,SAN,PDX,Portland,WED,20:00:00
+demo-WED-AA1014,american,AA1014,SAN,CLT,Charlotte,WED,20:10:00
+demo-WED-DL1014,delta,DL1014,SAN,ATL,Atlanta,WED,20:20:00
+demo-WED-WN1014,southwest,WN1014,SAN,PHX,Phoenix,WED,20:30:00
+demo-WED-UA1014,united,UA1014,SAN,IAH,Houston,WED,20:40:00
+demo-WED-AS1015,alaska,AS1015,SAN,SFO,San Francisco,WED,21:00:00
+demo-WED-AA1015,american,AA1015,SAN,DFW,Dallas-Fort Worth,WED,21:10:00
+demo-WED-DL1015,delta,DL1015,SAN,SLC,Salt Lake City,WED,21:20:00
+demo-WED-WN1015,southwest,WN1015,SAN,OAK,Oakland,WED,21:30:00
+demo-WED-UA1015,united,UA1015,SAN,SFO,San Francisco,WED,21:40:00
+demo-WED-AS1016,alaska,AS1016,SAN,SEA,Seattle,WED,22:00:00
+demo-WED-AA1016,american,AA1016,SAN,PHX,Phoenix,WED,22:10:00
+demo-WED-DL1016,delta,DL1016,SAN,SEA,Seattle,WED,22:20:00
+demo-WED-WN1016,southwest,WN1016,SAN,LAS,Las Vegas,WED,22:30:00
+demo-WED-UA1016,united,UA1016,SAN,DEN,Denver,WED,22:40:00
+demo-THU-AS1001,alaska,AS1001,SAN,SEA,Seattle,THU,07:00:00
+demo-THU-AA1001,american,AA1001,SAN,PHX,Phoenix,THU,07:10:00
+demo-THU-DL1001,delta,DL1001,SAN,SEA,Seattle,THU,07:20:00
+demo-THU-WN1001,southwest,WN1001,SAN,LAS,Las Vegas,THU,07:30:00
+demo-THU-UA1001,united,UA1001,SAN,DEN,Denver,THU,07:40:00
+demo-THU-AS1002,alaska,AS1002,SAN,PDX,Portland,THU,08:00:00
+demo-THU-AA1002,american,AA1002,SAN,CLT,Charlotte,THU,08:10:00
+demo-THU-DL1002,delta,DL1002,SAN,ATL,Atlanta,THU,08:20:00
+demo-THU-WN1002,southwest,WN1002,SAN,PHX,Phoenix,THU,08:30:00
+demo-THU-UA1002,united,UA1002,SAN,IAH,Houston,THU,08:40:00
+demo-THU-AS1003,alaska,AS1003,SAN,SFO,San Francisco,THU,09:00:00
+demo-THU-AA1003,american,AA1003,SAN,DFW,Dallas-Fort Worth,THU,09:10:00
+demo-THU-DL1003,delta,DL1003,SAN,SLC,Salt Lake City,THU,09:20:00
+demo-THU-WN1003,southwest,WN1003,SAN,OAK,Oakland,THU,09:30:00
+demo-THU-UA1003,united,UA1003,SAN,SFO,San Francisco,THU,09:40:00
+demo-THU-AS1004,alaska,AS1004,SAN,SEA,Seattle,THU,10:00:00
+demo-THU-AA1004,american,AA1004,SAN,PHX,Phoenix,THU,10:10:00
+demo-THU-DL1004,delta,DL1004,SAN,SEA,Seattle,THU,10:20:00
+demo-THU-WN1004,southwest,WN1004,SAN,LAS,Las Vegas,THU,10:30:00
+demo-THU-UA1004,united,UA1004,SAN,DEN,Denver,THU,10:40:00
+demo-THU-AS1005,alaska,AS1005,SAN,PDX,Portland,THU,11:00:00
+demo-THU-AA1005,american,AA1005,SAN,CLT,Charlotte,THU,11:10:00
+demo-THU-DL1005,delta,DL1005,SAN,ATL,Atlanta,THU,11:20:00
+demo-THU-WN1005,southwest,WN1005,SAN,PHX,Phoenix,THU,11:30:00
+demo-THU-UA1005,united,UA1005,SAN,IAH,Houston,THU,11:40:00
+demo-THU-AS1006,alaska,AS1006,SAN,SFO,San Francisco,THU,12:00:00
+demo-THU-AA1006,american,AA1006,SAN,DFW,Dallas-Fort Worth,THU,12:10:00
+demo-THU-DL1006,delta,DL1006,SAN,SLC,Salt Lake City,THU,12:20:00
+demo-THU-WN1006,southwest,WN1006,SAN,OAK,Oakland,THU,12:30:00
+demo-THU-UA1006,united,UA1006,SAN,SFO,San Francisco,THU,12:40:00
+demo-THU-AS1007,alaska,AS1007,SAN,SEA,Seattle,THU,13:00:00
+demo-THU-AA1007,american,AA1007,SAN,PHX,Phoenix,THU,13:10:00
+demo-THU-DL1007,delta,DL1007,SAN,SEA,Seattle,THU,13:20:00
+demo-THU-WN1007,southwest,WN1007,SAN,LAS,Las Vegas,THU,13:30:00
+demo-THU-UA1007,united,UA1007,SAN,DEN,Denver,THU,13:40:00
+demo-THU-AS1008,alaska,AS1008,SAN,PDX,Portland,THU,14:00:00
+demo-THU-AA1008,american,AA1008,SAN,CLT,Charlotte,THU,14:10:00
+demo-THU-DL1008,delta,DL1008,SAN,ATL,Atlanta,THU,14:20:00
+demo-THU-WN1008,southwest,WN1008,SAN,PHX,Phoenix,THU,14:30:00
+demo-THU-UA1008,united,UA1008,SAN,IAH,Houston,THU,14:40:00
+demo-THU-AS1009,alaska,AS1009,SAN,SFO,San Francisco,THU,15:00:00
+demo-THU-AA1009,american,AA1009,SAN,DFW,Dallas-Fort Worth,THU,15:10:00
+demo-THU-DL1009,delta,DL1009,SAN,SLC,Salt Lake City,THU,15:20:00
+demo-THU-WN1009,southwest,WN1009,SAN,OAK,Oakland,THU,15:30:00
+demo-THU-UA1009,united,UA1009,SAN,SFO,San Francisco,THU,15:40:00
+demo-THU-AS1010,alaska,AS1010,SAN,SEA,Seattle,THU,16:00:00
+demo-THU-AA1010,american,AA1010,SAN,PHX,Phoenix,THU,16:10:00
+demo-THU-DL1010,delta,DL1010,SAN,SEA,Seattle,THU,16:20:00
+demo-THU-WN1010,southwest,WN1010,SAN,LAS,Las Vegas,THU,16:30:00
+demo-THU-UA1010,united,UA1010,SAN,DEN,Denver,THU,16:40:00
+demo-THU-AS1011,alaska,AS1011,SAN,PDX,Portland,THU,17:00:00
+demo-THU-AA1011,american,AA1011,SAN,CLT,Charlotte,THU,17:10:00
+demo-THU-DL1011,delta,DL1011,SAN,ATL,Atlanta,THU,17:20:00
+demo-THU-WN1011,southwest,WN1011,SAN,PHX,Phoenix,THU,17:30:00
+demo-THU-UA1011,united,UA1011,SAN,IAH,Houston,THU,17:40:00
+demo-THU-AS1012,alaska,AS1012,SAN,SFO,San Francisco,THU,18:00:00
+demo-THU-AA1012,american,AA1012,SAN,DFW,Dallas-Fort Worth,THU,18:10:00
+demo-THU-DL1012,delta,DL1012,SAN,SLC,Salt Lake City,THU,18:20:00
+demo-THU-WN1012,southwest,WN1012,SAN,OAK,Oakland,THU,18:30:00
+demo-THU-UA1012,united,UA1012,SAN,SFO,San Francisco,THU,18:40:00
+demo-THU-AS1013,alaska,AS1013,SAN,SEA,Seattle,THU,19:00:00
+demo-THU-AA1013,american,AA1013,SAN,PHX,Phoenix,THU,19:10:00
+demo-THU-DL1013,delta,DL1013,SAN,SEA,Seattle,THU,19:20:00
+demo-THU-WN1013,southwest,WN1013,SAN,LAS,Las Vegas,THU,19:30:00
+demo-THU-UA1013,united,UA1013,SAN,DEN,Denver,THU,19:40:00
+demo-THU-AS1014,alaska,AS1014,SAN,PDX,Portland,THU,20:00:00
+demo-THU-AA1014,american,AA1014,SAN,CLT,Charlotte,THU,20:10:00
+demo-THU-DL1014,delta,DL1014,SAN,ATL,Atlanta,THU,20:20:00
+demo-THU-WN1014,southwest,WN1014,SAN,PHX,Phoenix,THU,20:30:00
+demo-THU-UA1014,united,UA1014,SAN,IAH,Houston,THU,20:40:00
+demo-THU-AS1015,alaska,AS1015,SAN,SFO,San Francisco,THU,21:00:00
+demo-THU-AA1015,american,AA1015,SAN,DFW,Dallas-Fort Worth,THU,21:10:00
+demo-THU-DL1015,delta,DL1015,SAN,SLC,Salt Lake City,THU,21:20:00
+demo-THU-WN1015,southwest,WN1015,SAN,OAK,Oakland,THU,21:30:00
+demo-THU-UA1015,united,UA1015,SAN,SFO,San Francisco,THU,21:40:00
+demo-THU-AS1016,alaska,AS1016,SAN,SEA,Seattle,THU,22:00:00
+demo-THU-AA1016,american,AA1016,SAN,PHX,Phoenix,THU,22:10:00
+demo-THU-DL1016,delta,DL1016,SAN,SEA,Seattle,THU,22:20:00
+demo-THU-WN1016,southwest,WN1016,SAN,LAS,Las Vegas,THU,22:30:00
+demo-THU-UA1016,united,UA1016,SAN,DEN,Denver,THU,22:40:00
+demo-FRI-AS1001,alaska,AS1001,SAN,SEA,Seattle,FRI,07:00:00
+demo-FRI-AA1001,american,AA1001,SAN,PHX,Phoenix,FRI,07:10:00
+demo-FRI-DL1001,delta,DL1001,SAN,SEA,Seattle,FRI,07:20:00
+demo-FRI-WN1001,southwest,WN1001,SAN,LAS,Las Vegas,FRI,07:30:00
+demo-FRI-UA1001,united,UA1001,SAN,DEN,Denver,FRI,07:40:00
+demo-FRI-AS1002,alaska,AS1002,SAN,PDX,Portland,FRI,08:00:00
+demo-FRI-AA1002,american,AA1002,SAN,CLT,Charlotte,FRI,08:10:00
+demo-FRI-DL1002,delta,DL1002,SAN,ATL,Atlanta,FRI,08:20:00
+demo-FRI-WN1002,southwest,WN1002,SAN,PHX,Phoenix,FRI,08:30:00
+demo-FRI-UA1002,united,UA1002,SAN,IAH,Houston,FRI,08:40:00
+demo-FRI-AS1003,alaska,AS1003,SAN,SFO,San Francisco,FRI,09:00:00
+demo-FRI-AA1003,american,AA1003,SAN,DFW,Dallas-Fort Worth,FRI,09:10:00
+demo-FRI-DL1003,delta,DL1003,SAN,SLC,Salt Lake City,FRI,09:20:00
+demo-FRI-WN1003,southwest,WN1003,SAN,OAK,Oakland,FRI,09:30:00
+demo-FRI-UA1003,united,UA1003,SAN,SFO,San Francisco,FRI,09:40:00
+demo-FRI-AS1004,alaska,AS1004,SAN,SEA,Seattle,FRI,10:00:00
+demo-FRI-AA1004,american,AA1004,SAN,PHX,Phoenix,FRI,10:10:00
+demo-FRI-DL1004,delta,DL1004,SAN,SEA,Seattle,FRI,10:20:00
+demo-FRI-WN1004,southwest,WN1004,SAN,LAS,Las Vegas,FRI,10:30:00
+demo-FRI-UA1004,united,UA1004,SAN,DEN,Denver,FRI,10:40:00
+demo-FRI-AS1005,alaska,AS1005,SAN,PDX,Portland,FRI,11:00:00
+demo-FRI-AA1005,american,AA1005,SAN,CLT,Charlotte,FRI,11:10:00
+demo-FRI-DL1005,delta,DL1005,SAN,ATL,Atlanta,FRI,11:20:00
+demo-FRI-WN1005,southwest,WN1005,SAN,PHX,Phoenix,FRI,11:30:00
+demo-FRI-UA1005,united,UA1005,SAN,IAH,Houston,FRI,11:40:00
+demo-FRI-AS1006,alaska,AS1006,SAN,SFO,San Francisco,FRI,12:00:00
+demo-FRI-AA1006,american,AA1006,SAN,DFW,Dallas-Fort Worth,FRI,12:10:00
+demo-FRI-DL1006,delta,DL1006,SAN,SLC,Salt Lake City,FRI,12:20:00
+demo-FRI-WN1006,southwest,WN1006,SAN,OAK,Oakland,FRI,12:30:00
+demo-FRI-UA1006,united,UA1006,SAN,SFO,San Francisco,FRI,12:40:00
+demo-FRI-AS1007,alaska,AS1007,SAN,SEA,Seattle,FRI,13:00:00
+demo-FRI-AA1007,american,AA1007,SAN,PHX,Phoenix,FRI,13:10:00
+demo-FRI-DL1007,delta,DL1007,SAN,SEA,Seattle,FRI,13:20:00
+demo-FRI-WN1007,southwest,WN1007,SAN,LAS,Las Vegas,FRI,13:30:00
+demo-FRI-UA1007,united,UA1007,SAN,DEN,Denver,FRI,13:40:00
+demo-FRI-AS1008,alaska,AS1008,SAN,PDX,Portland,FRI,14:00:00
+demo-FRI-AA1008,american,AA1008,SAN,CLT,Charlotte,FRI,14:10:00
+demo-FRI-DL1008,delta,DL1008,SAN,ATL,Atlanta,FRI,14:20:00
+demo-FRI-WN1008,southwest,WN1008,SAN,PHX,Phoenix,FRI,14:30:00
+demo-FRI-UA1008,united,UA1008,SAN,IAH,Houston,FRI,14:40:00
+demo-FRI-AS1009,alaska,AS1009,SAN,SFO,San Francisco,FRI,15:00:00
+demo-FRI-AA1009,american,AA1009,SAN,DFW,Dallas-Fort Worth,FRI,15:10:00
+demo-FRI-DL1009,delta,DL1009,SAN,SLC,Salt Lake City,FRI,15:20:00
+demo-FRI-WN1009,southwest,WN1009,SAN,OAK,Oakland,FRI,15:30:00
+demo-FRI-UA1009,united,UA1009,SAN,SFO,San Francisco,FRI,15:40:00
+demo-FRI-AS1010,alaska,AS1010,SAN,SEA,Seattle,FRI,16:00:00
+demo-FRI-AA1010,american,AA1010,SAN,PHX,Phoenix,FRI,16:10:00
+demo-FRI-DL1010,delta,DL1010,SAN,SEA,Seattle,FRI,16:20:00
+demo-FRI-WN1010,southwest,WN1010,SAN,LAS,Las Vegas,FRI,16:30:00
+demo-FRI-UA1010,united,UA1010,SAN,DEN,Denver,FRI,16:40:00
+demo-FRI-AS1011,alaska,AS1011,SAN,PDX,Portland,FRI,17:00:00
+demo-FRI-AA1011,american,AA1011,SAN,CLT,Charlotte,FRI,17:10:00
+demo-FRI-DL1011,delta,DL1011,SAN,ATL,Atlanta,FRI,17:20:00
+demo-FRI-WN1011,southwest,WN1011,SAN,PHX,Phoenix,FRI,17:30:00
+demo-FRI-UA1011,united,UA1011,SAN,IAH,Houston,FRI,17:40:00
+demo-FRI-AS1012,alaska,AS1012,SAN,SFO,San Francisco,FRI,18:00:00
+demo-FRI-AA1012,american,AA1012,SAN,DFW,Dallas-Fort Worth,FRI,18:10:00
+demo-FRI-DL1012,delta,DL1012,SAN,SLC,Salt Lake City,FRI,18:20:00
+demo-FRI-WN1012,southwest,WN1012,SAN,OAK,Oakland,FRI,18:30:00
+demo-FRI-UA1012,united,UA1012,SAN,SFO,San Francisco,FRI,18:40:00
+demo-FRI-AS1013,alaska,AS1013,SAN,SEA,Seattle,FRI,19:00:00
+demo-FRI-AA1013,american,AA1013,SAN,PHX,Phoenix,FRI,19:10:00
+demo-FRI-DL1013,delta,DL1013,SAN,SEA,Seattle,FRI,19:20:00
+demo-FRI-WN1013,southwest,WN1013,SAN,LAS,Las Vegas,FRI,19:30:00
+demo-FRI-UA1013,united,UA1013,SAN,DEN,Denver,FRI,19:40:00
+demo-FRI-AS1014,alaska,AS1014,SAN,PDX,Portland,FRI,20:00:00
+demo-FRI-AA1014,american,AA1014,SAN,CLT,Charlotte,FRI,20:10:00
+demo-FRI-DL1014,delta,DL1014,SAN,ATL,Atlanta,FRI,20:20:00
+demo-FRI-WN1014,southwest,WN1014,SAN,PHX,Phoenix,FRI,20:30:00
+demo-FRI-UA1014,united,UA1014,SAN,IAH,Houston,FRI,20:40:00
+demo-FRI-AS1015,alaska,AS1015,SAN,SFO,San Francisco,FRI,21:00:00
+demo-FRI-AA1015,american,AA1015,SAN,DFW,Dallas-Fort Worth,FRI,21:10:00
+demo-FRI-DL1015,delta,DL1015,SAN,SLC,Salt Lake City,FRI,21:20:00
+demo-FRI-WN1015,southwest,WN1015,SAN,OAK,Oakland,FRI,21:30:00
+demo-FRI-UA1015,united,UA1015,SAN,SFO,San Francisco,FRI,21:40:00
+demo-FRI-AS1016,alaska,AS1016,SAN,SEA,Seattle,FRI,22:00:00
+demo-FRI-AA1016,american,AA1016,SAN,PHX,Phoenix,FRI,22:10:00
+demo-FRI-DL1016,delta,DL1016,SAN,SEA,Seattle,FRI,22:20:00
+demo-FRI-WN1016,southwest,WN1016,SAN,LAS,Las Vegas,FRI,22:30:00
+demo-FRI-UA1016,united,UA1016,SAN,DEN,Denver,FRI,22:40:00
+demo-SAT-AS1001,alaska,AS1001,SAN,SEA,Seattle,SAT,07:00:00
+demo-SAT-AA1001,american,AA1001,SAN,PHX,Phoenix,SAT,07:10:00
+demo-SAT-DL1001,delta,DL1001,SAN,SEA,Seattle,SAT,07:20:00
+demo-SAT-WN1001,southwest,WN1001,SAN,LAS,Las Vegas,SAT,07:30:00
+demo-SAT-UA1001,united,UA1001,SAN,DEN,Denver,SAT,07:40:00
+demo-SAT-AS1002,alaska,AS1002,SAN,PDX,Portland,SAT,08:00:00
+demo-SAT-AA1002,american,AA1002,SAN,CLT,Charlotte,SAT,08:10:00
+demo-SAT-DL1002,delta,DL1002,SAN,ATL,Atlanta,SAT,08:20:00
+demo-SAT-WN1002,southwest,WN1002,SAN,PHX,Phoenix,SAT,08:30:00
+demo-SAT-UA1002,united,UA1002,SAN,IAH,Houston,SAT,08:40:00
+demo-SAT-AS1003,alaska,AS1003,SAN,SFO,San Francisco,SAT,09:00:00
+demo-SAT-AA1003,american,AA1003,SAN,DFW,Dallas-Fort Worth,SAT,09:10:00
+demo-SAT-DL1003,delta,DL1003,SAN,SLC,Salt Lake City,SAT,09:20:00
+demo-SAT-WN1003,southwest,WN1003,SAN,OAK,Oakland,SAT,09:30:00
+demo-SAT-UA1003,united,UA1003,SAN,SFO,San Francisco,SAT,09:40:00
+demo-SAT-AS1004,alaska,AS1004,SAN,SEA,Seattle,SAT,10:00:00
+demo-SAT-AA1004,american,AA1004,SAN,PHX,Phoenix,SAT,10:10:00
+demo-SAT-DL1004,delta,DL1004,SAN,SEA,Seattle,SAT,10:20:00
+demo-SAT-WN1004,southwest,WN1004,SAN,LAS,Las Vegas,SAT,10:30:00
+demo-SAT-UA1004,united,UA1004,SAN,DEN,Denver,SAT,10:40:00
+demo-SAT-AS1005,alaska,AS1005,SAN,PDX,Portland,SAT,11:00:00
+demo-SAT-AA1005,american,AA1005,SAN,CLT,Charlotte,SAT,11:10:00
+demo-SAT-DL1005,delta,DL1005,SAN,ATL,Atlanta,SAT,11:20:00
+demo-SAT-WN1005,southwest,WN1005,SAN,PHX,Phoenix,SAT,11:30:00
+demo-SAT-UA1005,united,UA1005,SAN,IAH,Houston,SAT,11:40:00
+demo-SAT-AS1006,alaska,AS1006,SAN,SFO,San Francisco,SAT,12:00:00
+demo-SAT-AA1006,american,AA1006,SAN,DFW,Dallas-Fort Worth,SAT,12:10:00
+demo-SAT-DL1006,delta,DL1006,SAN,SLC,Salt Lake City,SAT,12:20:00
+demo-SAT-WN1006,southwest,WN1006,SAN,OAK,Oakland,SAT,12:30:00
+demo-SAT-UA1006,united,UA1006,SAN,SFO,San Francisco,SAT,12:40:00
+demo-SAT-AS1007,alaska,AS1007,SAN,SEA,Seattle,SAT,13:00:00
+demo-SAT-AA1007,american,AA1007,SAN,PHX,Phoenix,SAT,13:10:00
+demo-SAT-DL1007,delta,DL1007,SAN,SEA,Seattle,SAT,13:20:00
+demo-SAT-WN1007,southwest,WN1007,SAN,LAS,Las Vegas,SAT,13:30:00
+demo-SAT-UA1007,united,UA1007,SAN,DEN,Denver,SAT,13:40:00
+demo-SAT-AS1008,alaska,AS1008,SAN,PDX,Portland,SAT,14:00:00
+demo-SAT-AA1008,american,AA1008,SAN,CLT,Charlotte,SAT,14:10:00
+demo-SAT-DL1008,delta,DL1008,SAN,ATL,Atlanta,SAT,14:20:00
+demo-SAT-WN1008,southwest,WN1008,SAN,PHX,Phoenix,SAT,14:30:00
+demo-SAT-UA1008,united,UA1008,SAN,IAH,Houston,SAT,14:40:00
+demo-SAT-AS1009,alaska,AS1009,SAN,SFO,San Francisco,SAT,15:00:00
+demo-SAT-AA1009,american,AA1009,SAN,DFW,Dallas-Fort Worth,SAT,15:10:00
+demo-SAT-DL1009,delta,DL1009,SAN,SLC,Salt Lake City,SAT,15:20:00
+demo-SAT-WN1009,southwest,WN1009,SAN,OAK,Oakland,SAT,15:30:00
+demo-SAT-UA1009,united,UA1009,SAN,SFO,San Francisco,SAT,15:40:00
+demo-SAT-AS1010,alaska,AS1010,SAN,SEA,Seattle,SAT,16:00:00
+demo-SAT-AA1010,american,AA1010,SAN,PHX,Phoenix,SAT,16:10:00
+demo-SAT-DL1010,delta,DL1010,SAN,SEA,Seattle,SAT,16:20:00
+demo-SAT-WN1010,southwest,WN1010,SAN,LAS,Las Vegas,SAT,16:30:00
+demo-SAT-UA1010,united,UA1010,SAN,DEN,Denver,SAT,16:40:00
+demo-SAT-AS1011,alaska,AS1011,SAN,PDX,Portland,SAT,17:00:00
+demo-SAT-AA1011,american,AA1011,SAN,CLT,Charlotte,SAT,17:10:00
+demo-SAT-DL1011,delta,DL1011,SAN,ATL,Atlanta,SAT,17:20:00
+demo-SAT-WN1011,southwest,WN1011,SAN,PHX,Phoenix,SAT,17:30:00
+demo-SAT-UA1011,united,UA1011,SAN,IAH,Houston,SAT,17:40:00
+demo-SAT-AS1012,alaska,AS1012,SAN,SFO,San Francisco,SAT,18:00:00
+demo-SAT-AA1012,american,AA1012,SAN,DFW,Dallas-Fort Worth,SAT,18:10:00
+demo-SAT-DL1012,delta,DL1012,SAN,SLC,Salt Lake City,SAT,18:20:00
+demo-SAT-WN1012,southwest,WN1012,SAN,OAK,Oakland,SAT,18:30:00
+demo-SAT-UA1012,united,UA1012,SAN,SFO,San Francisco,SAT,18:40:00
+demo-SAT-AS1013,alaska,AS1013,SAN,SEA,Seattle,SAT,19:00:00
+demo-SAT-AA1013,american,AA1013,SAN,PHX,Phoenix,SAT,19:10:00
+demo-SAT-DL1013,delta,DL1013,SAN,SEA,Seattle,SAT,19:20:00
+demo-SAT-WN1013,southwest,WN1013,SAN,LAS,Las Vegas,SAT,19:30:00
+demo-SAT-UA1013,united,UA1013,SAN,DEN,Denver,SAT,19:40:00
+demo-SAT-AS1014,alaska,AS1014,SAN,PDX,Portland,SAT,20:00:00
+demo-SAT-AA1014,american,AA1014,SAN,CLT,Charlotte,SAT,20:10:00
+demo-SAT-DL1014,delta,DL1014,SAN,ATL,Atlanta,SAT,20:20:00
+demo-SAT-WN1014,southwest,WN1014,SAN,PHX,Phoenix,SAT,20:30:00
+demo-SAT-UA1014,united,UA1014,SAN,IAH,Houston,SAT,20:40:00
+demo-SAT-AS1015,alaska,AS1015,SAN,SFO,San Francisco,SAT,21:00:00
+demo-SAT-AA1015,american,AA1015,SAN,DFW,Dallas-Fort Worth,SAT,21:10:00
+demo-SAT-DL1015,delta,DL1015,SAN,SLC,Salt Lake City,SAT,21:20:00
+demo-SAT-WN1015,southwest,WN1015,SAN,OAK,Oakland,SAT,21:30:00
+demo-SAT-UA1015,united,UA1015,SAN,SFO,San Francisco,SAT,21:40:00
+demo-SAT-AS1016,alaska,AS1016,SAN,SEA,Seattle,SAT,22:00:00
+demo-SAT-AA1016,american,AA1016,SAN,PHX,Phoenix,SAT,22:10:00
+demo-SAT-DL1016,delta,DL1016,SAN,SEA,Seattle,SAT,22:20:00
+demo-SAT-WN1016,southwest,WN1016,SAN,LAS,Las Vegas,SAT,22:30:00
+demo-SAT-UA1016,united,UA1016,SAN,DEN,Denver,SAT,22:40:00
+demo-SUN-AS1001,alaska,AS1001,SAN,SEA,Seattle,SUN,07:00:00
+demo-SUN-AA1001,american,AA1001,SAN,PHX,Phoenix,SUN,07:10:00
+demo-SUN-DL1001,delta,DL1001,SAN,SEA,Seattle,SUN,07:20:00
+demo-SUN-WN1001,southwest,WN1001,SAN,LAS,Las Vegas,SUN,07:30:00
+demo-SUN-UA1001,united,UA1001,SAN,DEN,Denver,SUN,07:40:00
+demo-SUN-AS1002,alaska,AS1002,SAN,PDX,Portland,SUN,08:00:00
+demo-SUN-AA1002,american,AA1002,SAN,CLT,Charlotte,SUN,08:10:00
+demo-SUN-DL1002,delta,DL1002,SAN,ATL,Atlanta,SUN,08:20:00
+demo-SUN-WN1002,southwest,WN1002,SAN,PHX,Phoenix,SUN,08:30:00
+demo-SUN-UA1002,united,UA1002,SAN,IAH,Houston,SUN,08:40:00
+demo-SUN-AS1003,alaska,AS1003,SAN,SFO,San Francisco,SUN,09:00:00
+demo-SUN-AA1003,american,AA1003,SAN,DFW,Dallas-Fort Worth,SUN,09:10:00
+demo-SUN-DL1003,delta,DL1003,SAN,SLC,Salt Lake City,SUN,09:20:00
+demo-SUN-WN1003,southwest,WN1003,SAN,OAK,Oakland,SUN,09:30:00
+demo-SUN-UA1003,united,UA1003,SAN,SFO,San Francisco,SUN,09:40:00
+demo-SUN-AS1004,alaska,AS1004,SAN,SEA,Seattle,SUN,10:00:00
+demo-SUN-AA1004,american,AA1004,SAN,PHX,Phoenix,SUN,10:10:00
+demo-SUN-DL1004,delta,DL1004,SAN,SEA,Seattle,SUN,10:20:00
+demo-SUN-WN1004,southwest,WN1004,SAN,LAS,Las Vegas,SUN,10:30:00
+demo-SUN-UA1004,united,UA1004,SAN,DEN,Denver,SUN,10:40:00
+demo-SUN-AS1005,alaska,AS1005,SAN,PDX,Portland,SUN,11:00:00
+demo-SUN-AA1005,american,AA1005,SAN,CLT,Charlotte,SUN,11:10:00
+demo-SUN-DL1005,delta,DL1005,SAN,ATL,Atlanta,SUN,11:20:00
+demo-SUN-WN1005,southwest,WN1005,SAN,PHX,Phoenix,SUN,11:30:00
+demo-SUN-UA1005,united,UA1005,SAN,IAH,Houston,SUN,11:40:00
+demo-SUN-AS1006,alaska,AS1006,SAN,SFO,San Francisco,SUN,12:00:00
+demo-SUN-AA1006,american,AA1006,SAN,DFW,Dallas-Fort Worth,SUN,12:10:00
+demo-SUN-DL1006,delta,DL1006,SAN,SLC,Salt Lake City,SUN,12:20:00
+demo-SUN-WN1006,southwest,WN1006,SAN,OAK,Oakland,SUN,12:30:00
+demo-SUN-UA1006,united,UA1006,SAN,SFO,San Francisco,SUN,12:40:00
+demo-SUN-AS1007,alaska,AS1007,SAN,SEA,Seattle,SUN,13:00:00
+demo-SUN-AA1007,american,AA1007,SAN,PHX,Phoenix,SUN,13:10:00
+demo-SUN-DL1007,delta,DL1007,SAN,SEA,Seattle,SUN,13:20:00
+demo-SUN-WN1007,southwest,WN1007,SAN,LAS,Las Vegas,SUN,13:30:00
+demo-SUN-UA1007,united,UA1007,SAN,DEN,Denver,SUN,13:40:00
+demo-SUN-AS1008,alaska,AS1008,SAN,PDX,Portland,SUN,14:00:00
+demo-SUN-AA1008,american,AA1008,SAN,CLT,Charlotte,SUN,14:10:00
+demo-SUN-DL1008,delta,DL1008,SAN,ATL,Atlanta,SUN,14:20:00
+demo-SUN-WN1008,southwest,WN1008,SAN,PHX,Phoenix,SUN,14:30:00
+demo-SUN-UA1008,united,UA1008,SAN,IAH,Houston,SUN,14:40:00
+demo-SUN-AS1009,alaska,AS1009,SAN,SFO,San Francisco,SUN,15:00:00
+demo-SUN-AA1009,american,AA1009,SAN,DFW,Dallas-Fort Worth,SUN,15:10:00
+demo-SUN-DL1009,delta,DL1009,SAN,SLC,Salt Lake City,SUN,15:20:00
+demo-SUN-WN1009,southwest,WN1009,SAN,OAK,Oakland,SUN,15:30:00
+demo-SUN-UA1009,united,UA1009,SAN,SFO,San Francisco,SUN,15:40:00
+demo-SUN-AS1010,alaska,AS1010,SAN,SEA,Seattle,SUN,16:00:00
+demo-SUN-AA1010,american,AA1010,SAN,PHX,Phoenix,SUN,16:10:00
+demo-SUN-DL1010,delta,DL1010,SAN,SEA,Seattle,SUN,16:20:00
+demo-SUN-WN1010,southwest,WN1010,SAN,LAS,Las Vegas,SUN,16:30:00
+demo-SUN-UA1010,united,UA1010,SAN,DEN,Denver,SUN,16:40:00
+demo-SUN-AS1011,alaska,AS1011,SAN,PDX,Portland,SUN,17:00:00
+demo-SUN-AA1011,american,AA1011,SAN,CLT,Charlotte,SUN,17:10:00
+demo-SUN-DL1011,delta,DL1011,SAN,ATL,Atlanta,SUN,17:20:00
+demo-SUN-WN1011,southwest,WN1011,SAN,PHX,Phoenix,SUN,17:30:00
+demo-SUN-UA1011,united,UA1011,SAN,IAH,Houston,SUN,17:40:00
+demo-SUN-AS1012,alaska,AS1012,SAN,SFO,San Francisco,SUN,18:00:00
+demo-SUN-AA1012,american,AA1012,SAN,DFW,Dallas-Fort Worth,SUN,18:10:00
+demo-SUN-DL1012,delta,DL1012,SAN,SLC,Salt Lake City,SUN,18:20:00
+demo-SUN-WN1012,southwest,WN1012,SAN,OAK,Oakland,SUN,18:30:00
+demo-SUN-UA1012,united,UA1012,SAN,SFO,San Francisco,SUN,18:40:00
+demo-SUN-AS1013,alaska,AS1013,SAN,SEA,Seattle,SUN,19:00:00
+demo-SUN-AA1013,american,AA1013,SAN,PHX,Phoenix,SUN,19:10:00
+demo-SUN-DL1013,delta,DL1013,SAN,SEA,Seattle,SUN,19:20:00
+demo-SUN-WN1013,southwest,WN1013,SAN,LAS,Las Vegas,SUN,19:30:00
+demo-SUN-UA1013,united,UA1013,SAN,DEN,Denver,SUN,19:40:00
+demo-SUN-AS1014,alaska,AS1014,SAN,PDX,Portland,SUN,20:00:00
+demo-SUN-AA1014,american,AA1014,SAN,CLT,Charlotte,SUN,20:10:00
+demo-SUN-DL1014,delta,DL1014,SAN,ATL,Atlanta,SUN,20:20:00
+demo-SUN-WN1014,southwest,WN1014,SAN,PHX,Phoenix,SUN,20:30:00
+demo-SUN-UA1014,united,UA1014,SAN,IAH,Houston,SUN,20:40:00
+demo-SUN-AS1015,alaska,AS1015,SAN,SFO,San Francisco,SUN,21:00:00
+demo-SUN-AA1015,american,AA1015,SAN,DFW,Dallas-Fort Worth,SUN,21:10:00
+demo-SUN-DL1015,delta,DL1015,SAN,SLC,Salt Lake City,SUN,21:20:00
+demo-SUN-WN1015,southwest,WN1015,SAN,OAK,Oakland,SUN,21:30:00
+demo-SUN-UA1015,united,UA1015,SAN,SFO,San Francisco,SUN,21:40:00
+demo-SUN-AS1016,alaska,AS1016,SAN,SEA,Seattle,SUN,22:00:00
+demo-SUN-AA1016,american,AA1016,SAN,PHX,Phoenix,SUN,22:10:00
+demo-SUN-DL1016,delta,DL1016,SAN,SEA,Seattle,SUN,22:20:00
+demo-SUN-WN1016,southwest,WN1016,SAN,LAS,Las Vegas,SUN,22:30:00
+demo-SUN-UA1016,united,UA1016,SAN,DEN,Denver,SUN,22:40:00
