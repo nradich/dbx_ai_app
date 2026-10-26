@@ -170,3 +170,9 @@ classes to probabilities). This is a contract example, not fabricated prediction
 a synthetic weekly San Diego schedule, and a candidate lookup by classifier label
 and observation time. The fixture is not a real flight schedule; a tail prediction
 and time alone cannot confirm a particular flight or destination.
+
+## App wireframe
+
+Open [the interactive wireframe](app_wireframe/index.html) for a mock of the
+photo submission and possible-departure flow. It uses fixed sample results and
+does not call the serving endpoint or Unity Catalog. See [wireframe notes](app_wireframe/README.md).
