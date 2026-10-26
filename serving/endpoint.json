@@ -1,0 +1,20 @@
+{
+  "name": "airplane-tail-identifier",
+  "config": {
+    "served_entities": [
+      {
+        "name": "airplane-tail-v1",
+        "entity_name": "dbx_ai_app.airplane_tail_id.airplane_tail_identifier",
+        "entity_version": "1",
+        "workload_type": "CPU",
+        "workload_size": "Small",
+        "scale_to_zero_enabled": true
+      }
+    ],
+    "traffic_config": {
+      "routes": [
+        {"served_model_name": "airplane-tail-v1", "traffic_percentage": 100}
+      ]
+    }
+  }
+}
