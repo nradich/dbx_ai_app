@@ -1,0 +1,29 @@
+{
+  "run_name": "Validate airline-tail notebooks",
+  "timeout_seconds": 900,
+  "tasks": [
+    {
+      "task_key": "dataset_review",
+      "notebook_task": {
+        "notebook_path": "/Shared/dbx_ai_app/01_dataset_review"
+      },
+      "environment_key": "review"
+    },
+    {
+      "task_key": "results",
+      "notebook_task": {
+        "notebook_path": "/Shared/dbx_ai_app/02_results_and_predict"
+      },
+      "environment_key": "review"
+    }
+  ],
+  "environments": [
+    {
+      "environment_key": "review",
+      "spec": {
+        "client": "4",
+        "dependencies": ["matplotlib==3.10.6", "pillow==11.3.0", "pandas==2.2.3"]
+      }
+    }
+  ]
+}

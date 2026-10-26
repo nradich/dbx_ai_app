@@ -1,0 +1,10 @@
+.local/
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+.databricks/
+mlruns/
+*.pt
+*.pth
