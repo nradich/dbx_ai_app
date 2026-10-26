@@ -156,3 +156,10 @@ Input: pandas DataFrame with string column `image_base64` containing encoded ima
 bytes (no data-URL prefix). Output: one row per input with `airline` (class name),
 `confidence` (winning probability) and `probabilities_json` (JSON mapping all five
 classes to probabilities). This is a contract example, not fabricated prediction output.
+
+## Example flight schedule
+
+[Schedule setup and CSVs](schedule/README.md) define two Unity Catalog demo tables,
+a synthetic day of San Diego departures, and a candidate lookup by classifier label
+and observation time. The fixture is not a real flight schedule; a tail prediction
+and time alone cannot confirm a particular flight or destination.

@@ -1,0 +1,6 @@
+airline_id,airline_name,iata_code,icao_code
+alaska,Alaska Airlines,AS,ASA
+american,American Airlines,AA,AAL
+delta,Delta Air Lines,DL,DAL
+southwest,Southwest Airlines,WN,SWA
+united,United Airlines,UA,UAL
