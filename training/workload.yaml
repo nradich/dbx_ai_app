@@ -1,0 +1,27 @@
+experiment_name: airplane-tail-identifier
+environment:
+  version: databricks_ai_v6
+  dependencies: []
+compute:
+  num_accelerators: 1
+  accelerator_type: GPU_1xA10
+code_source:
+  type: snapshot
+  snapshot:
+    root_path: .
+    include_paths:
+      - train.py
+      - model.py
+      - vision.py
+      - verify_model.py
+command: python "$CODE_SOURCE_PATH/train.py"
+max_retries: 0
+timeout_minutes: 20
+parameters:
+  dataset_root: /Volumes/dbx_ai_app/airplane_tail_id/training_data/dataset_v1
+  output_root: /Volumes/dbx_ai_app/airplane_tail_id/training_data/runs
+  registered_model_name: dbx_ai_app.airplane_tail_id.airplane_tail_identifier
+  epochs: 30
+  batch_size: 16
+  learning_rate: 0.002
+  seed: 42
