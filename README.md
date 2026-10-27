@@ -56,6 +56,8 @@ and end-to-end serving smoke test. The app should submit the selected tail crop.
   crop SHA256 hashes, checks decoded-pixel/perceptual duplicate candidates and
   preserves groups. Training verifies crop hashes and logs the manifest hash.
   Use a fresh dataset version if source data or annotations change.
+- [Additional photo candidates](additional_tail_photos/README.md) are kept separate
+  from the existing 50-image training dataset pending annotation and split review.
 - Attribution: `airline_tails/<class>/SOURCES.md`, copied to prepared
   `sources/<class>/SOURCES.md` and MLflow artifacts. Sources for existing
    `southwest_tail_1.png`–`southwest_tail_5.png` remain unknown; do not infer licenses.
