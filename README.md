@@ -4,6 +4,13 @@ Train a five-class airline classifier: **Alaska, American, Delta, Southwest, Uni
 Input must be a **tail-focused image**: there is no tail detector or unknown-airline
 rejection. ResNet-18 uses a frozen ImageNet backbone and trains only its airline head.
 
+## Automated repository checks
+
+[GitHub Actions](ci/README.md) runs code, dataset, schedule, serving-contract and
+saved-photo checks on branch pushes and pull requests, including merges to main.
+These CPU-only checks run on GitHub without Databricks credentials; deployment
+and model evaluation remain separate.
+
 ## Measured demo result
 
 Version **1**, alias **`demo`**:
