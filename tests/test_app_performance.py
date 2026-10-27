@@ -32,6 +32,8 @@ RUN_A, RUN_B = 'a' * 32, 'b' * 32
 EVAL_NEW, EVAL_OLD = 'e' * 32, 'f' * 32
 EPOCH = int(datetime(2026, 10, 27, 20, 0, tzinfo=timezone.utc).timestamp())
 TABLE_PREFIX = '`dbx_ai_app`.`airplane_tail_id`.'
+SID1, SID2, SID3 = ('11111111-2222-4333-8444-000000000001', '11111111-2222-4333-8444-000000000002',
+                    '11111111-2222-4333-8444-000000000003')
 
 
 class Clock:
@@ -80,7 +82,7 @@ class FakeWorkspace:
     def __init__(self):
         self.sql, self.sql_error = [], None
         self.eval_runs, self.eval_metrics, self.eval_predictions = [], [], []
-        self.groups, self.recent = [], []
+        self.groups, self.recent, self.by_version, self.photo_rows = [], [], [], []
         self.endpoint_error, self.endpoint_gets = None, 0
         self.entities = [NS(name='airplane-tail-v2', entity_name='m', entity_version='2')]
         self.runs, self.histories, self.search_calls, self.get_run_calls = [], {}, [], []
@@ -138,9 +140,15 @@ class FakeWorkspace:
                                          'val_loss', 'aliases', 'serving', 'selected'])
         if "'status' AS kind" in statement:
             return self._response(self.groups, ['kind', 'label', 'n'])
+        if 'GROUP BY model_version' in statement:
+            return self._response(self.by_version, ['model_version', 'submissions', 'reviewed', 'correct'])
+        if 'WHERE submission_id = :submission_id' in statement:
+            rows = [r for r in self.recent + self.photo_rows if r['submission_id'] == params['submission_id']]
+            return self._response(rows[:1], ['crop_path', 'original_path'])
         if 'photo_submissions' in statement:
-            return self._response(self.recent, ['submission_id', 'submitted_epoch', 'predicted_airline',
-                                                'confidence', 'review_label', 'model_version'])
+            return self._response(self.recent, ['submission_id', 'submitted_epoch', 'status', 'predicted_airline',
+                                                'confidence', 'review_label', 'review_source', 'model_version',
+                                                'crop_path', 'original_path'])
         raise AssertionError(f'unexpected SQL: {statement}')
 
     # Serving ---------------------------------------------------------------
@@ -565,11 +573,25 @@ class SubmissionStatsTests(Base):
             {'kind': 'bucket', 'label': '4', 'n': '4'},
             {'kind': 'review', 'label': 'correct', 'n': '3'},
             {'kind': 'review', 'label': 'incorrect', 'n': '1'}]
+        vol = '/Volumes/dbx_ai_app/airplane_tail_id/submitted_photos/2026/10/27'
+        s1, s2, s3 = SID1, SID2, SID3
         t.fake.recent = [
-            {'submission_id': 's1', 'submitted_epoch': str(EPOCH), 'predicted_airline': 'delta',
-             'confidence': '0.91', 'review_label': 'delta', 'model_version': '2'},
-            {'submission_id': 's2', 'submitted_epoch': str(EPOCH - 60), 'predicted_airline': None,
-             'confidence': None, 'review_label': None, 'model_version': None}]
+            {'submission_id': s1, 'submitted_epoch': str(EPOCH), 'status': 'succeeded',
+             'predicted_airline': 'delta', 'confidence': '0.91', 'review_label': 'delta',
+             'review_source': 'app_user', 'model_version': '3',
+             'crop_path': f'{vol}/{s1}/tail_crop.png', 'original_path': f'{vol}/{s1}/original.png'},
+            {'submission_id': s2, 'submitted_epoch': str(EPOCH - 60), 'status': 'failed',
+             'predicted_airline': None, 'confidence': None, 'review_label': None, 'review_source': None,
+             'model_version': None, 'crop_path': f'{vol}/{s2}/tail_crop.png', 'original_path': None},
+            {'submission_id': s3, 'submitted_epoch': str(EPOCH - 120), 'status': 'succeeded',
+             'predicted_airline': 'southwest', 'confidence': '0.79', 'review_label': 'american',
+             'review_source': None, 'model_version': '1',
+             'crop_path': '/Volumes/other/place/x/2026/10/27/' + s3 + '/tail_crop.png',
+             'original_path': None}]
+        t.fake.by_version = [
+            {'model_version': '3', 'submissions': '2', 'reviewed': '1', 'correct': '1'},
+            {'model_version': None, 'submissions': '1', 'reviewed': '0', 'correct': None},
+            {'model_version': '1', 'submissions': '4', 'reviewed': '4', 'correct': '1'}]
         body = self.ok(t.client.get(self.URL))
         self.assertEqual({k: body[k] for k in ('total', 'succeeded', 'failed', 'reviewed',
                                                'reviewed_correct')},
@@ -581,24 +603,34 @@ class SubmissionStatsTests(Base):
             {'lower': 0.0, 'upper': 0.2, 'count': 0}, {'lower': 0.2, 'upper': 0.4, 'count': 3},
             {'lower': 0.4, 'upper': 0.6, 'count': 0}, {'lower': 0.6, 'upper': 0.8, 'count': 0},
             {'lower': 0.8, 'upper': 1.0, 'count': 4}])
+        self.assertEqual(body['by_model_version'], [
+            {'model_version': '1', 'submissions': 4, 'reviewed': 4, 'correct': 1},
+            {'model_version': '3', 'submissions': 2, 'reviewed': 1, 'correct': 1},
+            {'model_version': None, 'submissions': 1, 'reviewed': 0, 'correct': 0}])
         self.assertEqual(body['recent'], [
-            {'submission_id': 's1', 'submitted_at': '2026-10-27T20:00:00Z', 'predicted_airline': 'delta',
-             'confidence': 0.91, 'review_label': 'delta', 'model_version': '2'},
-            {'submission_id': 's2', 'submitted_at': '2026-10-27T19:59:00Z', 'predicted_airline': None,
-             'confidence': None, 'review_label': None, 'model_version': None}])
-        aggregate, recent = t.fake.sql
+            {'submission_id': s1, 'submitted_at': '2026-10-27T20:00:00Z', 'status': 'succeeded',
+             'predicted_airline': 'delta', 'confidence': 0.91, 'review_label': 'delta',
+             'review_source': 'app_user', 'correct': True, 'model_version': '3', 'has_photo': True},
+            {'submission_id': s2, 'submitted_at': '2026-10-27T19:59:00Z', 'status': 'failed',
+             'predicted_airline': None, 'confidence': None, 'review_label': None, 'review_source': None,
+             'correct': None, 'model_version': None, 'has_photo': True},
+            {'submission_id': s3, 'submitted_at': '2026-10-27T19:58:00Z', 'status': 'succeeded',
+             'predicted_airline': 'southwest', 'confidence': 0.79, 'review_label': 'american',
+             'review_source': 'reviewer', 'correct': False, 'model_version': '1', 'has_photo': False}])
+        self.assertNotIn('/Volumes', json.dumps(body))
+        aggregate, recent, by_version = t.fake.sql
         self.assertIn(performance.CONFIDENCE_BUCKET_SQL, aggregate[0])
         self.assertIn('LIMIT 10', recent[0])
-        for statement in (aggregate[0], recent[0]):
+        self.assertIn(performance.REVIEW_SQL, by_version[0])
+        for statement in (aggregate[0], recent[0], by_version[0]):
             self.assertIn(f'{TABLE_PREFIX}`photo_submissions`', statement)
-            self.assertNotIn('_path', statement)
 
     def test_empty_table(self):
         t = make()
         body = self.ok(t.client.get(self.URL))
         self.assertEqual({k: v for k, v in body.items() if k != 'confidence_buckets'},
                          {'total': 0, 'succeeded': 0, 'failed': 0, 'reviewed': 0, 'reviewed_correct': 0,
-                          'by_predicted_airline': [], 'recent': []})
+                          'by_predicted_airline': [], 'by_model_version': [], 'recent': []})
         self.assertEqual([b['count'] for b in body['confidence_buckets']], [0] * 5)
 
     def test_bucket_expression_edges(self):
@@ -629,7 +661,7 @@ class SubmissionStatsTests(Base):
         self.ok(t.client.get(self.URL))
         t.clock.t += 14
         self.ok(t.client.get(self.URL))
-        self.assertEqual(len(t.fake.sql), 2)
+        self.assertEqual(len(t.fake.sql), 3)
         t.clock.t += 1
         t.fake.sql_error = RuntimeError('SQL statement FAILED: permission denied')
         self.error(t.client.get(self.URL), 503)
@@ -650,7 +682,7 @@ class WiringTests(Base):
         t.client.get('/api/performance/predictions',
                      params={'eval_set': 'context_sensitivity', 'variant': 'context_1.5'})
         t.client.get('/api/performance/submissions')
-        self.assertEqual(len(t.fake.sql), 5)
+        self.assertEqual(len(t.fake.sql), 6)
         for statement, params, wait, _ in t.fake.sql:
             self.assertEqual(wait, '20s')
             for value in ('context_1.5', 'context_sensitivity', EVAL_NEW):
@@ -680,7 +712,7 @@ class WiringTests(Base):
         t = make()
         with mock.patch.object(pipeline, 'execute_sql', wraps=pipeline.execute_sql) as spy:
             self.ok(t.client.get('/api/performance/submissions'))
-        self.assertEqual(spy.call_count, 2)
+        self.assertEqual(spy.call_count, 3)
         for call in spy.call_args_list:
             self.assertEqual((call.kwargs['wait_timeout'], call.kwargs['max_wait_s']), ('20s', 25))
         js = (ROOT / 'app' / 'static' / 'performance.js').read_text(encoding='utf-8')

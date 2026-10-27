@@ -15,7 +15,7 @@ import sys
 
 from fastapi import FastAPI, File, Form, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, StrictBool
 
@@ -104,6 +104,7 @@ def create_app(service: pipeline.SubmissionService | None = None,
     # Shares the submission service's lazily created Databricks client.
     performance = performance or model_performance.PerformanceService(
         service.settings, lambda: service.client("api"),
+        files_client_factory=lambda: service.client("files"),
         training_experiment_id=model_performance.experiment_id_from_env())
 
     @asynccontextmanager
@@ -217,6 +218,15 @@ def create_app(service: pipeline.SubmissionService | None = None,
     @app.get("/api/performance/submissions")
     def performance_submissions():
         return JSONResponse(content=performance.submissions(), headers=NO_STORE)
+
+    @app.get("/api/submissions/{submission_id}/photo")
+    def submission_photo(submission_id: str, kind: str = "thumb"):
+        chunks, length = performance.photo(submission_id, kind)
+        headers = {"Cache-Control": "private, max-age=300", "X-Content-Type-Options": "nosniff",
+                   "Content-Disposition": "inline"}
+        if length is not None:
+            headers["Content-Length"] = str(length)
+        return StreamingResponse(chunks, media_type="image/png", headers=headers)
 
     app.mount("/", StaticFiles(directory=STATIC_DIR, html=True, check_dir=False), name="static")
     return app

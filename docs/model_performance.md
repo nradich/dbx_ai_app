@@ -99,5 +99,9 @@ Outputs in `/Volumes/dbx_ai_app/airplane_tail_id/training_data/evaluations/<eval
   "val_macro_f1": ..., "lr": ...}}` (404 if the run is not in the training experiment).
 - `GET /api/performance/submissions` → `{"total", "succeeded", "failed", "reviewed",
   "reviewed_correct", "by_predicted_airline": [{airline, count}], "confidence_buckets":
-  [{"lower": 0.2, "upper": 0.4, "count": 3}], "recent": [{submission_id, submitted_at,
-  predicted_airline, confidence, review_label, model_version}]}` (recent: last 10, no paths).
+  [{"lower": 0.2, "upper": 0.4, "count": 3}], "by_model_version": [{model_version,
+  submissions, reviewed, correct}], "recent": [{submission_id, submitted_at, status,
+  predicted_airline, confidence, review_label, review_source, correct, model_version,
+  has_photo}]}` (recent: last 10, no paths).
+- `GET /api/submissions/{id}/photo?kind=thumb|crop|original` → `image/png` of a stored
+  submission photo (thumbnail ≤ 256 px, exact model input, or upright original).
