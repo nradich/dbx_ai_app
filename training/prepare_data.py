@@ -11,6 +11,7 @@ they are not assertions that two photographs are identical.
 import argparse
 from collections import Counter, defaultdict
 import hashlib
+import io
 import itertools
 import json
 import math
@@ -261,13 +262,359 @@ def prepare(source, output, annotations=ANNOTATIONS):
     return manifest
 
 
+# ---------------------------------------------------------------------------
+# Dataset v2 (contract: docs/model_performance.md, section "Dataset v2").
+# ---------------------------------------------------------------------------
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+V1_SOURCE_ROOT = "airline_tails"
+V2_IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png")
+KINDS = ("tail-photo", "tail-crop", "full-plane")
+CONTEXT_SCALE = 2.5
+V2_DUPLICATE_METHOD = (
+    "training.prepare_data fingerprints over all v2 records: exact source and crop SHA256, "
+    "decoded RGB pixel hashes, and perceptual candidates requiring both dHash <= 4/64 and "
+    "pHash <= 8/63 on either the oriented source or the tail crop. Splits are explicit: a "
+    "candidate pair crossing splits (or with conflicting labels) is an error; pairs within one "
+    "split are listed here. Heuristic screen, not proof of independent capture.")
+
+
+def _png_bytes(image):
+    buffer = io.BytesIO()
+    image.save(buffer, format="PNG")
+    return buffer.getvalue()
+
+
+def _clean_rgb(image):
+    """Metadata-free RGB copy (same approach as crop_tail)."""
+    image = image.convert("RGB")
+    return Image.frombytes("RGB", image.size, image.tobytes())
+
+
+def _portable_relative(value, what):
+    if not isinstance(value, str) or not value or "\\" in value:
+        raise ValueError(f"{what} must be a portable relative path: {value!r}")
+    relative = PurePosixPath(value)
+    if relative.is_absolute() or ".." in relative.parts or "." in relative.parts:
+        raise ValueError(f"{what} must be a portable relative path: {value!r}")
+    return relative
+
+
+def _resolve_inside(base, relative, what):
+    path = base.joinpath(*relative.parts)
+    if not path.resolve().is_relative_to(base.resolve()):
+        raise ValueError(f"{what} escapes {base}: {relative}")
+    return path
+
+
+def context_geometry(size, bbox, scale=CONTEXT_SCALE):
+    """Pixel tail box, pixel context box and the tail box normalized in the context.
+
+    The normalized tail box is expanded ``scale`` times about its centre in width and
+    height, clamped to the image, and converted to pixels with crop_tail's floor/ceil
+    rounding. ``context_bbox`` is rounded to 6 decimals; when plain rounding would not
+    reproduce the exact tail pixels under floor/ceil, the nearest 1e-6 neighbour that
+    does is used, so crop_tail(context, context_bbox) == crop_tail(source, bbox).
+    """
+    w, h = size
+    left, top, right, bottom = bbox
+    tail = (math.floor(left * w), math.floor(top * h), math.ceil(right * w), math.ceil(bottom * h))
+    cx, cy = (left + right) / 2, (top + bottom) / 2
+    half_w, half_h = (right - left) * scale / 2, (bottom - top) * scale / 2
+    context = (min(tail[0], math.floor(max(0.0, cx - half_w) * w)),
+               min(tail[1], math.floor(max(0.0, cy - half_h) * h)),
+               max(tail[2], math.ceil(min(1.0, cx + half_w) * w)),
+               max(tail[3], math.ceil(min(1.0, cy + half_h) * h)))
+    cw, ch = context[2] - context[0], context[3] - context[1]
+    targets = ((tail[0] - context[0], cw, math.floor), (tail[1] - context[1], ch, math.floor),
+               (tail[2] - context[0], cw, math.ceil), (tail[3] - context[1], ch, math.ceil))
+    normalized = []
+    for pixel, extent, rounding in targets:
+        base = round(pixel / extent, 6)
+        for candidate in (base, round(base + 1e-6, 6), round(base - 1e-6, 6)):
+            if 0 <= candidate <= 1 and rounding(candidate * extent) == pixel:
+                normalized.append(candidate)
+                break
+        else:
+            raise ValueError(f"cannot express tail box in context coordinates: {bbox}")
+    return tail, context, normalized
+
+
+def _load_v2_spec(annotations_path, repo_root):
+    spec = json.loads(Path(annotations_path).read_text(encoding="utf-8"))
+    if not isinstance(spec, dict) or spec.get("version") != 2:
+        raise ValueError(f"annotations version must be 2, got {spec.get('version') if isinstance(spec, dict) else spec!r}")
+    roots = spec.get("source_roots")
+    if (not isinstance(roots, list) or not roots or len(set(roots)) != len(roots)):
+        raise ValueError("source_roots must be a nonempty list of unique paths")
+    for root in roots:
+        relative = _portable_relative(root, "source root")
+        if len(relative.parts) != 1:
+            raise ValueError(f"source root must be a top-level repository folder: {root}")
+        if not _resolve_inside(repo_root, relative, "source root").is_dir():
+            raise ValueError(f"missing source root: {root}")
+    if not isinstance(spec.get("records"), list) or not spec["records"]:
+        raise ValueError("annotations need a nonempty records list")
+    return spec
+
+
+def _validate_v2_entries(spec, repo_root):
+    """Static validation (no image decoding); returns entries sorted by (airline, id)."""
+    roots = spec["source_roots"]
+    entries, seen_paths, ids = [], set(), {}
+    for index, entry in enumerate(spec["records"]):
+        where = f"record {index}"
+        if not isinstance(entry, dict):
+            raise ValueError(f"{where}: must be an object")
+        relative = _portable_relative(entry.get("source_path"), f"{where} source_path")
+        where = f"record {entry['source_path']}"
+        if relative.parts[0] not in roots:
+            raise ValueError(f"{where}: source_path is not under a source root {roots}")
+        if len(relative.parts) != 3:
+            raise ValueError(f"{where}: expected <root>/<airline>/<file>")
+        if relative.suffix.lower() not in V2_IMAGE_SUFFIXES:
+            raise ValueError(f"{where}: unsupported image type {relative.suffix}")
+        airline = entry.get("airline")
+        if airline not in CLASSES:
+            raise ValueError(f"{where}: unknown airline {airline!r}; expected one of {CLASSES}")
+        if relative.parts[1] != airline:
+            raise ValueError(f"{where}: airline {airline!r} does not match folder {relative.parts[1]!r}")
+        if entry.get("split") not in SPLITS:
+            raise ValueError(f"{where}: split must be one of {SPLITS}, got {entry.get('split')!r}")
+        if entry.get("kind") not in KINDS:
+            raise ValueError(f"{where}: kind must be one of {KINDS}, got {entry.get('kind')!r}")
+        for field in ("group", "box_source"):
+            if not isinstance(entry.get(field), str) or not entry[field].strip():
+                raise ValueError(f"{where}: {field} must be a nonempty string")
+        if entry["source_path"] in seen_paths:
+            raise ValueError(f"{where}: annotated more than once")
+        seen_paths.add(entry["source_path"])
+        image_id = relative.stem
+        if image_id in ids:
+            raise ValueError(f"duplicate image ID {image_id!r}: {ids[image_id]} and {entry['source_path']}")
+        ids[image_id] = entry["source_path"]
+        _resolve_inside(repo_root, relative, where)
+        entries.append(dict(entry, id=image_id, source_root=relative.parts[0]))
+    actual = set()
+    for root in roots:
+        for path in (repo_root / root).rglob("*"):
+            if path.is_file() and path.suffix.lower() in V2_IMAGE_SUFFIXES:
+                actual.add(path.relative_to(repo_root).as_posix())
+    missing, unannotated = sorted(seen_paths - actual), sorted(actual - seen_paths)
+    if missing or unannotated:
+        raise ValueError(f"annotated files must equal image files under the source roots; "
+                         f"missing={missing}, unannotated={unannotated}")
+    splits_by_group = defaultdict(set)
+    for e in entries:
+        splits_by_group[e["group"]].add(e["split"])
+    spanning = {g: sorted(s) for g, s in sorted(splits_by_group.items()) if len(s) > 1}
+    if spanning:
+        raise ValueError(f"groups span splits: {spanning}")
+    for root, airline in sorted({(e["source_root"], e["airline"]) for e in entries}):
+        if not (repo_root / root / airline / "SOURCES.md").is_file():
+            raise ValueError(f"missing attribution: {root}/{airline}/SOURCES.md")
+    parent = spec.get("parent") or {}
+    if parent.get("annotations"):
+        parent_path = _resolve_inside(
+            repo_root, _portable_relative(parent["annotations"], "parent annotations"), "parent annotations")
+        by_path = {e["source_path"]: e for e in entries}
+        for old in json.loads(parent_path.read_text(encoding="utf-8"))["records"]:
+            new_path = f"{V1_SOURCE_ROOT}/{old['source_path']}"
+            if new_path not in by_path:
+                raise ValueError(f"v1 record missing from v2: {new_path}")
+            if by_path[new_path]["bbox"] != old["bbox"]:
+                raise ValueError(f"v1 bbox changed for {new_path}: {old['bbox']} -> {by_path[new_path]['bbox']}")
+    return sorted(entries, key=lambda e: (e["airline"], e["id"]))
+
+
+def _process_v2_entry(entry, repo_root):
+    """Decode one annotated source; return the manifest record and encoded outputs."""
+    path = repo_root.joinpath(*PurePosixPath(entry["source_path"]).parts)
+    source_bytes = path.read_bytes()
+    with Image.open(io.BytesIO(source_bytes)) as original:
+        image = ImageOps.exif_transpose(original).convert("RGB")
+    try:
+        crop = crop_tail(image, entry["bbox"])
+    except ValueError as exc:
+        raise ValueError(f"record {entry['source_path']}: {exc}") from None
+    tail, context_box, context_bbox = context_geometry(image.size, entry["bbox"])
+    context = _clean_rgb(image.crop(context_box))
+    split, airline, image_id = entry["split"], entry["airline"], entry["id"]
+    outputs = {"path": f"{split}/{airline}/{image_id}.png",
+               "context_path": f"context/{split}/{airline}/{image_id}.png",
+               "original_path": (f"originals/{split}/{airline}/{image_id}.png"
+                                 if entry["kind"] == "full-plane" else None)}
+    encoded = {outputs["path"]: _png_bytes(crop), outputs["context_path"]: _png_bytes(context)}
+    if outputs["original_path"]:
+        encoded[outputs["original_path"]] = _png_bytes(_clean_rgb(image))
+        tile = image.copy()
+        tile.thumbnail((323, 230))
+        sx, sy = tile.width / image.width, tile.height / image.height
+        ImageDraw.Draw(tile).rectangle((tail[0] * sx, tail[1] * sy, tail[2] * sx - 1, tail[3] * sy - 1),
+                                       outline=(255, 0, 0), width=3)
+    else:
+        tile = crop.copy()
+        tile.thumbnail((323, 230))
+    record = {"id": image_id, "airline": airline, "label": CLASSES.index(airline),
+              "source_path": entry["source_path"], "bbox": entry["bbox"], "group": entry["group"],
+              "sha256": sha256(encoded[outputs["path"]]), "source_sha256": sha256(source_bytes),
+              "split": split, "path": outputs["path"], "source_root": entry["source_root"],
+              "kind": entry["kind"], "box_source": entry["box_source"],
+              "context_path": outputs["context_path"], "context_bbox": context_bbox,
+              "context_sha256": sha256(encoded[outputs["context_path"]]),
+              "original_path": outputs["original_path"],
+              "original_sha256": (sha256(encoded[outputs["original_path"]])
+                                  if outputs["original_path"] else None),
+              "_fingerprints": {"source": fingerprints(image), "crop": fingerprints(crop)}}
+    return record, encoded, tile
+
+
+def _screen_images(manifest_relative, repo_root):
+    """Fingerprint every image (and its bbox crop) listed in a screening manifest."""
+    manifest_path = _resolve_inside(
+        repo_root, _portable_relative(manifest_relative, "screen_against entry"), "screen manifest")
+    if not manifest_path.is_file():
+        raise ValueError(f"missing screen manifest: {manifest_relative}")
+    folder = manifest_path.parent
+    images = []
+    for item in json.loads(manifest_path.read_text(encoding="utf-8"))["records"]:
+        relative = _portable_relative(item.get("path"), f"screen image in {manifest_relative}")
+        data = _resolve_inside(folder, relative, "screen image").read_bytes()
+        if "sha256" in item and sha256(data) != item["sha256"]:
+            raise ValueError(f"screen image sha256 mismatch: {manifest_relative}:{item['path']}")
+        with Image.open(io.BytesIO(data)) as original:
+            image = ImageOps.exif_transpose(original).convert("RGB")
+        try:
+            crop = crop_tail(image, item["bbox"])
+        except (KeyError, ValueError) as exc:
+            raise ValueError(f"screen image {manifest_relative}:{item['path']}: bad bbox ({exc})") from None
+        images.append({"id": f"{manifest_relative}:{item.get('id', relative.stem)}",
+                       "airline": item.get("airline"), "source_sha256": sha256(data),
+                       "sha256": sha256(_png_bytes(crop)),
+                       "_fingerprints": {"source": fingerprints(image), "crop": fingerprints(crop)}})
+    return images
+
+
+def review_sheet_v2(records, tiles, destination):
+    """Contact sheet with ceil(n / 3) rows; full-plane tiles show the tail box on the source."""
+    rows = max(1, math.ceil(len(records) / 3))
+    sheet = Image.new("RGB", (1000, rows * 270), "white")
+    draw = ImageDraw.Draw(sheet)
+    for i, r in enumerate(records):
+        x, y = i % 3 * 333, i // 3 * 270
+        sheet.paste(tiles[r["id"]], (x, y + 35))
+        draw.text((x + 4, y + 4), f"{r['id']} | {r['split']}", fill="black")
+    sheet.save(destination, quality=90)
+
+
+def prepare_v2(annotations_path, repo_root=REPO_ROOT, output=Path(".local/dataset_v2")):
+    """Build dataset v2 from a version-2 annotation file with explicit splits."""
+    annotations_path = Path(annotations_path).resolve()
+    repo_root, output = Path(repo_root).resolve(), Path(output).resolve()
+    spec = _load_v2_spec(annotations_path, repo_root)
+    roots = spec["source_roots"]
+    screens = spec.get("screen_against", [])
+    if not isinstance(screens, list) or not all(isinstance(s, str) for s in screens):
+        raise ValueError("screen_against must be a list of manifest paths")
+    protected = [repo_root / r for r in roots] + [annotations_path.parent]
+    protected += [(repo_root / s).parent for s in screens]
+    if output == repo_root or output in repo_root.parents or any(
+            output == p or p in output.parents or output in p.parents for p in protected):
+        raise ValueError("output must be separate from immutable source, annotation and screen folders")
+    entries = _validate_v2_entries(spec, repo_root)
+
+    records, encoded, tiles = [], {}, {}
+    for entry in entries:
+        record, files, tile = _process_v2_entry(entry, repo_root)
+        records.append(record)
+        encoded.update(files)
+        tiles[record["id"]] = tile
+    by_id = {r["id"]: r for r in records}
+    findings = duplicate_pairs(records)
+    for pair in findings:
+        a, b = (by_id[i] for i in pair["ids"])
+        if a["airline"] != b["airline"]:
+            raise ValueError(f"duplicate candidate with conflicting labels: {pair}")
+        if a["split"] != b["split"]:
+            raise ValueError(f"cross-split duplicate ({a['split']} vs {b['split']}): {pair}")
+    validate_leakage(records, findings)
+
+    screen_images = [image for s in screens for image in _screen_images(s, repo_root)]
+    screen_findings = [finding for r in records for image in screen_images
+                       for finding in duplicate_pairs([r, image])]
+    if screen_findings:
+        raise ValueError(f"dataset images duplicate screened evaluation images: {screen_findings}")
+
+    for r in records:
+        del r["_fingerprints"]
+    counts = {c: {s: sum(r["airline"] == c and r["split"] == s for r in records)
+                  for s in SPLITS} for c in CLASSES}
+    sources = [(root, c) for root in roots for c in CLASSES
+               if any(r["source_root"] == root and r["airline"] == c for r in records)]
+    parent = spec.get("parent") or {}
+    policy_note = spec.get("split_policy")
+    manifest = {"version": 2, "dataset_version": "v2", "classes": list(CLASSES),
+                "coordinate_system": spec.get("coordinate_system"),
+                "source_roots": list(roots),
+                "parent_annotations": parent.get("annotations"),
+                "parent_manifest_sha256": parent.get("manifest_sha256"),
+                "records": records, "counts": counts,
+                "split_policy": {"method": "explicit",
+                                 "note": policy_note if isinstance(policy_note, str)
+                                 else "Explicit reviewed splits; a group never spans splits."},
+                "context_scale": CONTEXT_SCALE,
+                "duplicate_checks": {"method": V2_DUPLICATE_METHOD, "records_checked": len(records),
+                                     "findings": findings},
+                "screen_checks": {"against": list(screens), "images_checked": len(screen_images),
+                                  "findings": screen_findings},
+                "review_notes": spec.get("review_notes", []),
+                "group_reasons": spec.get("group_reasons", {}),
+                "attribution": [f"sources/{root}/{c}/SOURCES.md" for root, c in sources]}
+    if output.exists() and any(output.iterdir()):
+        old_manifest = output / "manifest.json"
+        if not old_manifest.exists() or json.loads(old_manifest.read_text(encoding="utf-8")) != manifest:
+            raise ValueError("nonempty output differs from this preparation; choose a fresh output directory")
+    output.mkdir(parents=True, exist_ok=True)
+    for relative, data in sorted(encoded.items()):
+        destination = output / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(data)
+    for root, c in sources:
+        directory = output / "sources" / root / c
+        directory.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(repo_root / root / c / "SOURCES.md", directory / "SOURCES.md")
+    for c in CLASSES:
+        members = [r for r in records if r["airline"] == c]
+        if members:
+            directory = output / "review" / c
+            directory.mkdir(parents=True, exist_ok=True)
+            review_sheet_v2(members, tiles, directory / "review.jpg")
+    (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({"counts": counts, "duplicates": findings,
+                      "screen_images_checked": len(screen_images),
+                      "screen_findings": screen_findings}, indent=2))
+    return manifest
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, default=Path("airline_tails"))
-    parser.add_argument("--output", type=Path, default=Path(".local/dataset"))
+    parser.add_argument("--output", type=Path, default=None,
+                        help="default .local/dataset (v1) or .local/dataset_v2 (v2)")
+    parser.add_argument("--annotations", type=Path, default=ANNOTATIONS,
+                        help="v1 or version-2 annotation file (version 2 selects dataset v2)")
+    parser.add_argument("--repo-root", type=Path, default=REPO_ROOT,
+                        help="base for v2 source_roots, parent and screen paths")
     args = parser.parse_args()
     try:
-        prepare(args.source, args.output)
+        spec = json.loads(args.annotations.read_text(encoding="utf-8"))
+        version = spec.get("version") if isinstance(spec, dict) else None
+        if version == 2:
+            prepare_v2(args.annotations, args.repo_root, args.output or Path(".local/dataset_v2"))
+        elif version == 1:
+            prepare(args.source, args.output or Path(".local/dataset"), args.annotations)
+        else:
+            raise ValueError(f"unsupported annotations version: {version!r}")
     except (ValueError, OSError) as exc:
         parser.exit(1, f"Preparation failed: {exc}\n")
 

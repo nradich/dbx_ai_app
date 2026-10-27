@@ -80,8 +80,13 @@ SUBMISSION_COLUMNS = (
     ("model_version", "STRING"), ("inference_attempts", "INT"), ("inference_seconds", "DOUBLE"),
     ("predicted_airline", "STRING"), ("confidence", "DOUBLE"), ("probabilities_json", "STRING"),
     ("candidate_count", "INT"), ("candidates_json", "STRING"), ("review_label", "STRING"),
-    ("reviewed_at", "TIMESTAMP"),
+    ("reviewed_at", "TIMESTAMP"), ("review_source", "STRING"),
 )
+
+# Answers accepted from the app's "Was this right?" feedback. "other" = an airline the model
+# does not know. Keep the five airlines in sync with training/prepare_data.CLASSES.
+REVIEW_CHOICES = ("alaska", "american", "delta", "southwest", "united", "other")
+APP_REVIEW_SOURCE = "app_user"
 
 
 class UserError(Exception):
@@ -393,17 +398,37 @@ def insert_submission(w, settings: Settings, values: dict, **sql_kwargs) -> None
     statement = (f"MERGE INTO {settings.table('photo_submissions')} AS t "
                  f"USING (SELECT {source}) AS s ON t.submission_id = s.submission_id "
                  "WHEN NOT MATCHED THEN INSERT *")
+    execute_with_conflict_retry(w, settings, statement, params, "recording", **sql_kwargs)
+
+
+def execute_with_conflict_retry(w, settings: Settings, statement: str, params: dict, what: str,
+                                **sql_kwargs) -> list[dict]:
+    """Run an idempotent write, retrying Delta concurrent-write conflicts."""
     sleep = sql_kwargs.get("sleep", time.sleep)
     for attempt in range(1, MERGE_ATTEMPTS + 1):
         try:
-            execute_sql(w, settings.warehouse_id, statement, params, **sql_kwargs)
-            return
+            return execute_sql(w, settings.warehouse_id, statement, params, **sql_kwargs)
         except RuntimeError as exc:
-            # The MERGE is idempotent, so a concurrent-write conflict can simply be retried.
             if attempt == MERGE_ATTEMPTS or "CONCURRENT" not in str(exc).upper():
                 raise
-            log.warning("Concurrent write while recording; retrying (%d)", attempt)
+            log.warning("Concurrent write while %s; retrying (%d)", what, attempt)
             sleep(2 * attempt)
+    raise AssertionError("unreachable")
+
+
+def save_review(w, settings: Settings, submission_id: str, predicted: str, label: str,
+                reviewed_at: datetime, **sql_kwargs) -> int:
+    """Store app feedback; never overwrites a label set by a reviewer. Returns rows updated."""
+    rows = execute_with_conflict_retry(w, settings, (
+        f"UPDATE {settings.table('photo_submissions')} "
+        "SET review_label = :label, reviewed_at = CAST(:reviewed_at AS TIMESTAMP), "
+        "review_source = :source "
+        "WHERE submission_id = :submission_id AND predicted_airline = :predicted "
+        "AND (review_label IS NULL OR review_source = :source)"),
+        {"label": label, "reviewed_at": reviewed_at.astimezone(timezone.utc).isoformat(),
+         "source": APP_REVIEW_SOURCE, "submission_id": submission_id, "predicted": predicted},
+        "saving a review", **sql_kwargs)
+    return int(rows[0].get("num_affected_rows") or 0) if rows else 0
 
 
 def _epoch_to_iso(value) -> str | None:
@@ -413,6 +438,14 @@ def _epoch_to_iso(value) -> str | None:
 
 def _optional_float(value) -> float | None:
     return None if value is None else float(value)
+
+
+def _review_dict(label, predicted, source, reviewed_at) -> dict | None:
+    """Public review shape; labels recorded without a source were set by a reviewer."""
+    if label is None:
+        return None
+    return {"label": label, "correct": (label == predicted) if predicted else None,
+            "source": source or "reviewer", "reviewed_at": reviewed_at}
 
 
 def _optional_int(value) -> int | None:
@@ -493,7 +526,7 @@ class SubmissionService:
                 "storage": {"original_path": original_path, "crop_path": crop_path,
                             "crop_width": prepared.crop_width, "crop_height": prepared.crop_height,
                             "crop_downscaled": prepared.crop_downscaled},
-                "recorded": False, "error": None,
+                "recorded": False, "error": None, "review": None,
             }
             private = {"prepared": prepared, "submitted_at": submitted_at,
                        "observed_at": observed_at, "recorded": False}
@@ -539,6 +572,49 @@ class SubmissionService:
                 self._jobs[submission_id] = {"public": copy.deepcopy(status), "private": None,
                                              "started": True}
                 self._evict_locked()
+        return status
+
+    def review(self, submission_id: str, correct: bool, airline: str | None) -> dict | None:
+        """Record the user's "Was this right?" answer. Returns the updated status, or None if unknown."""
+        status = self.get(submission_id)
+        if status is None:
+            return None
+        submission_id = status["submission_id"]
+        prediction = status.get("prediction")
+        if status.get("status") != "succeeded" or not prediction:
+            raise UserError(409, "There is no airline prediction to give feedback on.")
+        if not status.get("recorded"):
+            raise UserError(409, "This result was not saved, so feedback can't be recorded.")
+        existing = status.get("review")
+        if existing and existing.get("source") != APP_REVIEW_SOURCE:
+            raise UserError(409, "A reviewer has already confirmed the airline for this photo.")
+        predicted = prediction["airline"]
+        if correct:
+            if airline not in (None, predicted):
+                raise UserError(422, "If the prediction was right, don't choose a different airline.")
+            label = predicted
+        else:
+            if airline not in REVIEW_CHOICES:
+                raise UserError(422, "Choose the airline it actually was.")
+            if airline == predicted:
+                raise UserError(422, "That is the predicted airline. Choose the airline it actually was.")
+            label = airline
+        reviewed_at = self._now()
+        try:
+            updated = save_review(self.client(), self.settings, submission_id, predicted, label,
+                                  reviewed_at, **self._sql())
+        except Exception:
+            log.exception("Could not save the review for submission %s", submission_id)
+            raise UserError(503, "Your answer could not be saved. Please try again.") from None
+        if updated == 0:
+            raise UserError(409, "A reviewer has already confirmed the airline for this photo.")
+        review = _review_dict(label, predicted, APP_REVIEW_SOURCE, schedule.iso_z(reviewed_at))
+        with self._lock:
+            job = self._jobs.get(submission_id)
+            if job is not None:
+                job["public"]["review"] = copy.deepcopy(review)
+        status["review"] = review
+        log.info("Saved feedback for submission %s (correct=%s)", submission_id, correct)
         return status
 
     def shutdown(self) -> None:
@@ -704,7 +780,7 @@ class SubmissionService:
                                    if prediction else None),
             "candidate_count": None if candidates is None else len(candidates),
             "candidates_json": None if candidates is None else json.dumps(candidates, sort_keys=True),
-            "review_label": None, "reviewed_at": None,
+            "review_label": None, "reviewed_at": None, "review_source": None,
         }
 
     # Status after restart ----------------------------------------------------
@@ -715,7 +791,8 @@ class SubmissionService:
             "unix_timestamp(s.observed_at) AS observed_epoch, s.original_path, s.crop_path, "
             "s.crop_width, s.crop_height, s.crop_downscaled, s.serving_endpoint, s.served_entity, "
             "s.model_name, s.model_version, s.inference_attempts, s.predicted_airline, "
-            "s.confidence, s.probabilities_json, s.candidates_json, a.airline_name, a.iata_code "
+            "s.confidence, s.probabilities_json, s.candidates_json, a.airline_name, a.iata_code, "
+            "s.review_label, s.review_source, unix_timestamp(s.reviewed_at) AS reviewed_epoch "
             f"FROM {self.settings.table('photo_submissions')} s "
             f"LEFT JOIN {self.settings.table('demo_airlines')} a "
             "ON a.airline_id = s.predicted_airline "
@@ -752,4 +829,6 @@ class SubmissionService:
                         "crop_height": _optional_int(row.get("crop_height")),
                         "crop_downscaled": str(row.get("crop_downscaled")).lower() == "true"},
             "recorded": True, "error": row.get("error"),
+            "review": _review_dict(row.get("review_label"), row.get("predicted_airline"),
+                                   row.get("review_source"), _epoch_to_iso(row.get("reviewed_epoch"))),
         }

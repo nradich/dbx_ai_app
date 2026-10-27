@@ -1,0 +1,48 @@
+experiment_name: airplane-tail-evaluation
+environment:
+  version: databricks_ai_v6
+  dependencies: []
+compute:
+  num_accelerators: 1
+  accelerator_type: GPU_1xA10
+code_source:
+  type: snapshot
+  snapshot:
+    root_path: .
+    include_paths:
+      - compare.py
+      - eval_metrics.py
+command: python "$CODE_SOURCE_PATH/compare.py"
+max_retries: 0
+timeout_minutes: 30
+parameters:
+  models:
+    - models:/dbx_ai_app.airplane_tail_id.airplane_tail_identifier/1
+    - models:/dbx_ai_app.airplane_tail_id.airplane_tail_identifier/2
+    - models:/dbx_ai_app.airplane_tail_id.airplane_tail_identifier/3
+  dataset_root: /Volumes/dbx_ai_app/airplane_tail_id/training_data/dataset_v2
+  full_plane_root: /Volumes/dbx_ai_app/airplane_tail_id/training_data/full_plane_tests_v1
+  v1_test_ids:
+    - alaska_tail_5
+    - alaska_tail_8
+    - american_tail_6
+    - american_tail_7
+    - delta_tail_7
+    - delta_tail_8
+    - southwest_tail_6
+    - southwest_tail_9
+    - united_tail_8
+    - united_tail_9
+  context_scales: [1.0, 1.5, 2.0, 3.0]
+  output_root: /Volumes/dbx_ai_app/airplane_tail_id/training_data/evaluations
+  serving_endpoint_version: "1"
+  crop_max_side: 1536
+  batch_size: 32
+  # Reviewed app submissions that are not in any training set: [{id, label, original_path, crop_path, crop_box}].
+  # The two 2026-10-27 test submissions (southwest_01, alaska_07) are excluded: those photos are v2 training data.
+  app_reviewed:
+    - id: f026d010-de52-4c13-9d97-885e5f1cd176
+      label: delta
+      original_path: /Volumes/dbx_ai_app/airplane_tail_id/submitted_photos/2026/10/27/f026d010-de52-4c13-9d97-885e5f1cd176/original.png
+      crop_path: /Volumes/dbx_ai_app/airplane_tail_id/submitted_photos/2026/10/27/f026d010-de52-4c13-9d97-885e5f1cd176/tail_crop.png
+      crop_box: [0.5492, 0.1036, 0.8633, 0.6112]

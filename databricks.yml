@@ -19,6 +19,12 @@ variables:
     description: SQL warehouse used for the schedule lookup and submission records.
     lookup:
       warehouse: dbx_dev_kit_warehouse
+  training_experiment_id:
+    # The default is the airplane-tail-identifier experiment in the original workspace.
+    # Other workspaces must override it, for example:
+    #   databricks bundle deploy -p YOUR_PROFILE --var training_experiment_id=<experiment ID>
+    description: ID of the MLflow experiment that holds the training runs (airplane-tail-identifier), shown read-only on the Model performance tab.
+    default: "350719556651226"
 
 resources:
   apps:
@@ -58,6 +64,27 @@ resources:
             securable_full_name: dbx_ai_app.airplane_tail_id.photo_submissions
             securable_type: TABLE
             permission: MODIFY
+        # Model performance tab (read-only). Create the tables with app_setup/create_eval_tables.sql.
+        - name: training-experiment
+          description: Training runs and per-epoch metrics.
+          experiment:
+            experiment_id: ${var.training_experiment_id}
+            permission: CAN_READ
+        - name: model-eval-runs
+          uc_securable:
+            securable_full_name: dbx_ai_app.airplane_tail_id.model_eval_runs
+            securable_type: TABLE
+            permission: SELECT
+        - name: model-eval-metrics
+          uc_securable:
+            securable_full_name: dbx_ai_app.airplane_tail_id.model_eval_metrics
+            securable_type: TABLE
+            permission: SELECT
+        - name: model-eval-predictions
+          uc_securable:
+            securable_full_name: dbx_ai_app.airplane_tail_id.model_eval_predictions
+            securable_type: TABLE
+            permission: SELECT
 
 targets:
   dev:

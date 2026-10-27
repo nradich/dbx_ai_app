@@ -1,0 +1,44 @@
+# Improved recipe on dataset v2. Same data, seed and head learning rate as workload_v2.yaml.
+# alias "" = register without setting any alias; latest_pointer "" = do not rewrite latest.json.
+# color_jitter = [brightness, contrast, saturation, hue].
+experiment_name: airplane-tail-identifier
+environment:
+  version: databricks_ai_v6
+  dependencies: []
+compute:
+  num_accelerators: 1
+  accelerator_type: GPU_1xA10
+code_source:
+  type: snapshot
+  snapshot:
+    root_path: .
+    include_paths:
+      - train.py
+      - model.py
+      - vision.py
+      - verify_model.py
+      - metrics_utils.py
+command: python "$CODE_SOURCE_PATH/train.py"
+max_retries: 0
+timeout_minutes: 30
+parameters:
+  dataset_root: /Volumes/dbx_ai_app/airplane_tail_id/training_data/dataset_v2
+  output_root: /Volumes/dbx_ai_app/airplane_tail_id/training_data/runs
+  registered_model_name: dbx_ai_app.airplane_tail_id.airplane_tail_identifier
+  recipe: improved
+  alias: ""
+  latest_pointer: ""
+  epochs: 40
+  batch_size: 16
+  learning_rate: 0.002
+  seed: 42
+  label_smoothing: 0.1
+  fine_tune_layer4_lr: 0.0001
+  context_jitter: true
+  context_scale_range: [1.0, 2.0]
+  random_erasing_p: 0.25
+  lr_schedule: cosine
+  crop_scale: [0.7, 1.0]
+  crop_ratio: [0.8, 1.25]
+  rotation_degrees: 10
+  color_jitter: [0.3, 0.3, 0.2, 0.02]

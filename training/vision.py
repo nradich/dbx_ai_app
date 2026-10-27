@@ -20,15 +20,21 @@ def evaluation_transform():
     ])
 
 
-def training_transform():
-    return transforms.Compose([
+def training_transform(crop_scale=(0.85, 1.0), crop_ratio=(0.9, 1.1), rotation_degrees=8,
+                       color_jitter=(0.15, 0.15, 0.1, 0.0), random_erasing_p=0.0):
+    """Defaults reproduce the v1 recipe exactly; the improved recipe passes stronger values."""
+    brightness, contrast, saturation, hue = color_jitter
+    steps = [
         transforms.Resize((240, 240), antialias=True),
-        transforms.RandomResizedCrop(INPUT_SIZE, scale=(0.85, 1.0), ratio=(0.9, 1.1)),
-        transforms.RandomRotation(8),
-        transforms.ColorJitter(brightness=0.15, contrast=0.15, saturation=0.1),
+        transforms.RandomResizedCrop(INPUT_SIZE, scale=tuple(crop_scale), ratio=tuple(crop_ratio)),
+        transforms.RandomRotation(rotation_degrees),
+        transforms.ColorJitter(brightness=brightness, contrast=contrast, saturation=saturation, hue=hue),
         transforms.ToTensor(),
         transforms.Normalize(MEAN, STD),
-    ])
+    ]
+    if random_erasing_p > 0:  # Only appended when enabled so v1 random-number consumption is unchanged.
+        steps.append(transforms.RandomErasing(p=random_erasing_p))
+    return transforms.Compose(steps)
 
 
 def open_rgb(path_or_file):

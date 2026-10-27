@@ -57,7 +57,8 @@ and end-to-end serving smoke test. The app should submit the selected tail crop.
   preserves groups. Training verifies crop hashes and logs the manifest hash.
   Use a fresh dataset version if source data or annotations change.
 - [Additional photo candidates](additional_tail_photos/README.md) are kept separate
-  from the existing 50-image training dataset pending annotation and split review.
+  from the original 50-image dataset v1; dataset v2 (below) adds them with reviewed
+  tail boxes and explicit splits.
 - Attribution: `airline_tails/<class>/SOURCES.md`, copied to prepared
   `sources/<class>/SOURCES.md` and MLflow artifacts. Sources for existing
    `southwest_tail_1.png`–`southwest_tail_5.png` remain unknown; do not infer licenses.
@@ -191,6 +192,67 @@ from the synthetic schedule and records each submission in the `photo_submission
 table. Deploy it with the repository's `databricks.yml` bundle; storage is created
 by `app_setup/create_storage.sql`. The [API contract](app/API.md) documents the
 browser–backend interface.
+
+## Dataset v2, retraining and model performance
+
+Live photos exposed a background bias in version 1: a Delta tail photographed from
+above against grey tarmac was predicted Southwest, and recolouring only the tarmac
+flipped the answer to Delta. Version 1 had learned "grey ground behind the tail
+means Southwest" from six training photos per airline. Dataset v2 and two new
+training recipes address this, and every step is tracked in MLflow and Unity
+Catalog. Contracts: [docs/model_performance.md](docs/model_performance.md).
+
+- **Dataset v2** (`dataset/tail_annotations_v2.json`, 83 images: 54 train / 13
+  validation / 16 test). It adds the 33 attributed photos from
+  `additional_tail_photos/`, including reviewed tail boxes on 11 full-plane
+  Delta/Southwest photos. All v1 images keep their v1 split, so the v1 test set
+  stays comparable. Related sessions stay in one split; the Acroterion series goes
+  to train by decision, so the full-plane stress set is contaminated for v2 and is
+  reported with that caveat. Build: `python training/prepare_data.py --annotations
+  dataset/tail_annotations_v2.json` (writes `.local/dataset_v2`, including wider
+  "context" crops and upright originals of full-plane photos), then upload to
+  `/Volumes/dbx_ai_app/airplane_tail_id/training_data/dataset_v2`.
+- **Training** (`training/workload_v2.yaml` = v1 recipe on v2 data;
+  `training/workload_v2_improved.yaml` = context jitter around the tail box, random
+  erasing, stronger colour jitter, label smoothing, cosine schedule and
+  fine-tuning ResNet layer4). Run with `air run -f <file> -p YOUR_PROFILE` from
+  `training/`. Each run logs per-epoch train/val loss and accuracy, learning rate,
+  final test metrics (per-class F1, ECE, Brier), prediction tables and figures to
+  the MLflow experiment `airplane-tail-identifier`, and registers a version without
+  moving any alias.
+- **Comparison** (`evaluation/workload_compare.yaml`, MLflow experiment
+  `airplane-tail-evaluation`) scores every version on the same sets: v2 validation,
+  the v1 test crops, the 6 new held-out photos, the full-plane stress set (whole
+  image and tail crop), a context-sensitivity sweep (tail box ×1.0–3.0 and whole
+  image), and reviewed app submissions. It selects the best new version by
+  validation only. `python evaluation/publish.py --eval-run-id <id> --profile
+  YOUR_PROFILE --warehouse-id <id>` loads the results into `model_eval_runs`,
+  `model_eval_metrics` and `model_eval_predictions` (`app_setup/create_eval_tables.sql`).
+- **Viewing results:** the Tailspot app's **Model performance** tab (live training
+  curves from MLflow, comparison matrix, context-sensitivity charts, confusion
+  matrices, every prediction, app-submission stats) and
+  `notebooks/04_model_performance.py`.
+
+### Comparison of 2026-10-27 (`df462c7da8374fd99ad5ebe795457305`)
+
+| Accuracy (n) | v1 (`demo`, serving) | v2: v1 recipe, data v2 | v3: improved, data v2 (`challenger`) |
+|---|---:|---:|---:|
+| v1 test crops (10) | 10/10 | 10/10 | 9/10 |
+| New held-out photos (6) | 3/6 | 4/6 | **5/6** |
+| All v2 test crops (16) | 13/16 | 14/16 | 14/16 |
+| Your Delta app photo (1) | ✗ Southwest | ✗ United | **✓ Delta** (31%) |
+| Context ×2.0 around the box (13) | 3/13 | 8/13 | **10/13** |
+| Whole full-plane photo (10)* | 3/10 | 4/10 | 5/10 |
+| Share predicted Southwest, v2 test | 31% | 25% | 6% |
+
+\* Contaminated for v2/v3 (related Acroterion photos in training). Version 3 was
+selected on validation (13/13 for v2 and v3, lower validation log loss); it is
+registered with alias `challenger`. `demo` and the serving endpoint remain on
+version 1 until promotion is approved. Caveats: the sets are tiny, so a single
+image moves accuracy by 6–17 points. Version 3 misses one v1 test image
+(`southwest_tail_9` → Delta) and one new Delta ground photo. Its confidence on
+your photo is low (31%). On whole full-plane photos, versions 2 and 3 now lean to
+United instead of Southwest. A tail crop remains required.
 
 ## App wireframe
 

@@ -13,3 +13,8 @@ GRANT SELECT ON TABLE dbx_ai_app.airplane_tail_id.demo_airlines TO `APP_SP_CLIEN
 GRANT SELECT ON TABLE dbx_ai_app.airplane_tail_id.demo_weekly_departures TO `APP_SP_CLIENT_ID`;
 GRANT SELECT, MODIFY ON TABLE dbx_ai_app.airplane_tail_id.photo_submissions TO `APP_SP_CLIENT_ID`;
 GRANT READ VOLUME, WRITE VOLUME ON VOLUME dbx_ai_app.airplane_tail_id.submitted_photos TO `APP_SP_CLIENT_ID`;
+-- Model performance tab (tables from app_setup/create_eval_tables.sql). The app also needs CAN_READ on
+-- the MLflow training experiment airplane-tail-identifier (an app resource in databricks.yml).
+GRANT SELECT ON TABLE dbx_ai_app.airplane_tail_id.model_eval_runs TO `APP_SP_CLIENT_ID`;
+GRANT SELECT ON TABLE dbx_ai_app.airplane_tail_id.model_eval_metrics TO `APP_SP_CLIENT_ID`;
+GRANT SELECT ON TABLE dbx_ai_app.airplane_tail_id.model_eval_predictions TO `APP_SP_CLIENT_ID`;

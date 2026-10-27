@@ -1,0 +1,1203 @@
+{
+ "version": 2,
+ "dataset_version": "v2",
+ "coordinate_system": "normalized left,top,right,bottom on EXIF-transposed source",
+ "source_roots": [
+  "airline_tails",
+  "additional_tail_photos"
+ ],
+ "parent": {
+  "annotations": "dataset/tail_annotations.json",
+  "manifest_sha256": "0a2ce2f183a868c9ded710dcbfa3f98bfca7870ac819e19a4eb9ddc1797056d8"
+ },
+ "split_policy": "Explicit splits. All v1 records keep their v1 split so the v1 test set stays comparable. New groups were assigned by review: the Acroterion series and sessions shared with v1 train go to train; independent new groups are split between validation and test.",
+ "screen_against": [
+  "full_plane_tests/manifest.json"
+ ],
+ "review_notes": [
+  "All 50 images visually reviewed in local EXIF-transposed contact sheets. Boxes enclose the visible vertical fin with a small margin; horizontal stabilizers, fuselage and background are excluded where a rectangular box permits. Existing occlusions and edge truncation are retained, not reconstructed.",
+  "Alaska 1-4 retain legacy faces; 10 retains the standard face within the Kraken special livery. Delta 9-10 retain their T-tail junctions. Southwest 1-5 retain modern unlettered fins, 6-10 older lettered/retro fins. United retains both gold and blue globe liveries.",
+  "Shared photographer alone is not proof of a shared session. Conservative session groups use source titles, nearby photo identifiers and visual context. Registrations in SOURCES.md are distinct unless explicitly grouped by session.",
+  "Southwest 1-5 have no recorded attribution. Visual review shows different angles/backgrounds/airframes and no matching photograph; each is provisionally independent, with provenance uncertainty retained here and in copied SOURCES.md.",
+  "v2 adds 33 attributed photographs from additional_tail_photos. Saved tail crops use the whole image as the tail box; the 11 full-plane Delta and Southwest photographs have reviewed tail boxes enclosing the fin with a small margin (horizontal stabilizer included where a rectangle cannot exclude it).",
+  "New test images: Alaska 11, 15; American 06; Delta 02, 05 (ground backgrounds); United 10. New validation images: Alaska 18, American 03, United 05."
+ ],
+ "group_reasons": {
+  "boston-june-2025": "Alaska 6,7,9 and American 8,9: 4300streetcar, Boston departures June 2025; conservatively one cross-airline session.",
+  "alaska-aeroprints-8979": "Alaska 2,3: Aeroprints, nearby Flickr IDs 8979588564/8979892540 and similar legacy-fin views; conservatively shared session, different registrations.",
+  "delta-redlegsfan21": "Delta 3-6: same photographer and close airport tail studies; conservatively one group despite distinct registrations and photo IDs.",
+  "delta-cory-watts": "Delta 9,10: same photographer, distinctive low-angle T-tail studies; conservative source-style group, not claimed identical aircraft.",
+  "southwest-aeroprints-8902": "Southwest 7,8: Aeroprints and nearby Flickr IDs 8902938779/8902174939; conservatively one session, different liveries.",
+  "boston-november-2025": "United 5,10 (v1 train) and Delta 06-08: 4300streetcar Boston November 2025 departures; conservatively one session, all train.",
+  "boston-april-2025": "United 7 (v1 validation) and Alaska 18: 4300streetcar, final approach to Boston, April 2025; conservatively one session, kept in validation.",
+  "acroterion": "All Acroterion photographs: BWI MD series (Alaska 05-06, American 11-12, Southwest 01-08, United 01/03/06/14-16) plus American 02 (DCA) and United 11 (IAD). Related to six full-plane stress-test photos; all train by decision, so the full-plane stress set is reported with a contamination caveat.",
+  "boston-july-2026": "Alaska 07 and United 20: 4300streetcar Boston departures July 2026; conservatively one session.",
+  "boston-december-2024": "Alaska 11 and 15: 4300streetcar final approach to Boston, December 2024; one session, held out for test.",
+  "colin-brown-atlanta": "Delta 02 and 05: Colin Brown, Atlanta ground photographs; one group, held out for test (ground backgrounds probe the background bias).",
+  "singletons": "Other groups are single images: distinct source photographs and registrations. Shared photographer alone (4300streetcar Alaska 19, February 2025) is not treated as a shared session."
+ },
+ "records": [
+  {
+   "source_path": "airline_tails/alaska/alaska_tail_1.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.32,
+    0.09,
+    0.74,
+    0.76
+   ],
+   "group": "alaska-1",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/alaska/alaska_tail_2.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.18,
+    0.08,
+    0.94,
+    0.79
+   ],
+   "group": "alaska-aeroprints-8979",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/alaska/alaska_tail_3.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.12,
+    0.06,
+    0.98,
+    0.77
+   ],
+   "group": "alaska-aeroprints-8979",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/alaska/alaska_tail_4.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.03,
+    0.06,
+    0.76,
+    0.75
+   ],
+   "group": "alaska-4",
+   "split": "val",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/alaska/alaska_tail_5.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.4,
+    0.12,
+    0.89,
+    0.63
+   ],
+   "group": "alaska-5",
+   "split": "test",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/alaska/alaska_tail_6.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.14,
+    0.12,
+    0.52,
+    0.6
+   ],
+   "group": "boston-june-2025",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/alaska/alaska_tail_7.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.34,
+    0.1,
+    0.93,
+    0.71
+   ],
+   "group": "boston-june-2025",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/alaska/alaska_tail_8.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.13,
+    0.13,
+    0.57,
+    0.69
+   ],
+   "group": "alaska-8",
+   "split": "test",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/alaska/alaska_tail_9.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.37,
+    0.17,
+    0.92,
+    0.72
+   ],
+   "group": "boston-june-2025",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/alaska/alaska_tail_10.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.18,
+    0.14,
+    0.52,
+    0.65
+   ],
+   "group": "alaska-10",
+   "split": "val",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/american/american_tail_1.jpg",
+   "airline": "american",
+   "bbox": [
+    0.36,
+    0.17,
+    0.74,
+    0.8
+   ],
+   "group": "american-1",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/american/american_tail_2.jpg",
+   "airline": "american",
+   "bbox": [
+    0.25,
+    0.05,
+    0.69,
+    0.74
+   ],
+   "group": "american-2",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/american/american_tail_3.jpg",
+   "airline": "american",
+   "bbox": [
+    0.07,
+    0.13,
+    0.67,
+    0.67
+   ],
+   "group": "american-3",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/american/american_tail_4.jpg",
+   "airline": "american",
+   "bbox": [
+    0.06,
+    0.18,
+    0.95,
+    0.68
+   ],
+   "group": "american-4",
+   "split": "val",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/american/american_tail_5.jpg",
+   "airline": "american",
+   "bbox": [
+    0.11,
+    0.05,
+    0.61,
+    0.7
+   ],
+   "group": "american-5",
+   "split": "val",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/american/american_tail_6.jpg",
+   "airline": "american",
+   "bbox": [
+    0.29,
+    0.1,
+    0.73,
+    0.75
+   ],
+   "group": "american-6",
+   "split": "test",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/american/american_tail_7.jpg",
+   "airline": "american",
+   "bbox": [
+    0.32,
+    0.07,
+    0.81,
+    0.64
+   ],
+   "group": "american-7",
+   "split": "test",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/american/american_tail_8.jpg",
+   "airline": "american",
+   "bbox": [
+    0.33,
+    0.11,
+    0.91,
+    0.64
+   ],
+   "group": "boston-june-2025",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/american/american_tail_9.jpg",
+   "airline": "american",
+   "bbox": [
+    0.29,
+    0.08,
+    0.71,
+    0.45
+   ],
+   "group": "boston-june-2025",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/american/american_tail_10.jpg",
+   "airline": "american",
+   "bbox": [
+    0.17,
+    0.17,
+    0.83,
+    0.66
+   ],
+   "group": "american-10",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/delta/delta_tail_1.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.07,
+    0.0,
+    0.79,
+    0.69
+   ],
+   "group": "delta-1",
+   "split": "val",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/delta/delta_tail_2.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.15,
+    0.1,
+    0.8,
+    0.7
+   ],
+   "group": "delta-2",
+   "split": "val",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/delta/delta_tail_3.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.05,
+    0.04,
+    0.83,
+    0.95
+   ],
+   "group": "delta-redlegsfan21",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/delta/delta_tail_4.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.1,
+    0.07,
+    0.88,
+    0.69
+   ],
+   "group": "delta-redlegsfan21",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/delta/delta_tail_5.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.2,
+    0.1,
+    1.0,
+    0.77
+   ],
+   "group": "delta-redlegsfan21",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/delta/delta_tail_6.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.17,
+    0.07,
+    1.0,
+    0.94
+   ],
+   "group": "delta-redlegsfan21",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/delta/delta_tail_7.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.18,
+    0.04,
+    0.86,
+    0.66
+   ],
+   "group": "delta-7",
+   "split": "test",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/delta/delta_tail_8.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.01,
+    0.06,
+    0.94,
+    0.62
+   ],
+   "group": "delta-8",
+   "split": "test",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/delta/delta_tail_9.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.08,
+    0.21,
+    0.79,
+    0.88
+   ],
+   "group": "delta-cory-watts",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/delta/delta_tail_10.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.03,
+    0.17,
+    0.84,
+    0.82
+   ],
+   "group": "delta-cory-watts",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/southwest/southwest_tail_1.png",
+   "airline": "southwest",
+   "bbox": [
+    0.1,
+    0.13,
+    0.74,
+    0.75
+   ],
+   "group": "southwest-1",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/southwest/southwest_tail_2.png",
+   "airline": "southwest",
+   "bbox": [
+    0.31,
+    0.1,
+    0.67,
+    0.65
+   ],
+   "group": "southwest-2",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/southwest/southwest_tail_3.png",
+   "airline": "southwest",
+   "bbox": [
+    0.18,
+    0.0,
+    0.6,
+    0.69
+   ],
+   "group": "southwest-3",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/southwest/southwest_tail_4.png",
+   "airline": "southwest",
+   "bbox": [
+    0.12,
+    0.07,
+    0.81,
+    0.76
+   ],
+   "group": "southwest-4",
+   "split": "val",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/southwest/southwest_tail_5.png",
+   "airline": "southwest",
+   "bbox": [
+    0.26,
+    0.23,
+    0.81,
+    0.78
+   ],
+   "group": "southwest-5",
+   "split": "val",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/southwest/southwest_tail_6.jpg",
+   "airline": "southwest",
+   "bbox": [
+    0.07,
+    0.03,
+    0.64,
+    0.73
+   ],
+   "group": "southwest-6",
+   "split": "test",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/southwest/southwest_tail_7.jpg",
+   "airline": "southwest",
+   "bbox": [
+    0.01,
+    0.17,
+    0.8,
+    0.82
+   ],
+   "group": "southwest-aeroprints-8902",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/southwest/southwest_tail_8.jpg",
+   "airline": "southwest",
+   "bbox": [
+    0.15,
+    0.18,
+    0.99,
+    0.77
+   ],
+   "group": "southwest-aeroprints-8902",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/southwest/southwest_tail_9.jpg",
+   "airline": "southwest",
+   "bbox": [
+    0.04,
+    0.09,
+    0.78,
+    0.94
+   ],
+   "group": "southwest-9",
+   "split": "test",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/southwest/southwest_tail_10.jpg",
+   "airline": "southwest",
+   "bbox": [
+    0.06,
+    0.08,
+    0.95,
+    0.79
+   ],
+   "group": "southwest-10",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/united/united_tail_1.jpg",
+   "airline": "united",
+   "bbox": [
+    0.31,
+    0.0,
+    0.995,
+    0.65
+   ],
+   "group": "united-1",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/united/united_tail_2.jpg",
+   "airline": "united",
+   "bbox": [
+    0.37,
+    0.12,
+    0.83,
+    0.7
+   ],
+   "group": "united-2",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/united/united_tail_3.jpg",
+   "airline": "united",
+   "bbox": [
+    0.07,
+    0.12,
+    0.96,
+    0.65
+   ],
+   "group": "united-3",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/united/united_tail_4.jpg",
+   "airline": "united",
+   "bbox": [
+    0.3,
+    0.1,
+    0.96,
+    0.55
+   ],
+   "group": "united-4",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/united/united_tail_5.jpg",
+   "airline": "united",
+   "bbox": [
+    0.27,
+    0.09,
+    0.86,
+    0.66
+   ],
+   "group": "boston-november-2025",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/united/united_tail_6.jpg",
+   "airline": "united",
+   "bbox": [
+    0.07,
+    0.14,
+    0.56,
+    0.62
+   ],
+   "group": "united-6",
+   "split": "val",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/united/united_tail_7.jpg",
+   "airline": "united",
+   "bbox": [
+    0.34,
+    0.05,
+    0.88,
+    0.65
+   ],
+   "group": "boston-april-2025",
+   "split": "val",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/united/united_tail_8.jpg",
+   "airline": "united",
+   "bbox": [
+    0.1,
+    0.14,
+    0.64,
+    0.77
+   ],
+   "group": "united-8",
+   "split": "test",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/united/united_tail_9.jpg",
+   "airline": "united",
+   "bbox": [
+    0.06,
+    0.09,
+    0.62,
+    0.66
+   ],
+   "group": "united-9",
+   "split": "test",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "airline_tails/united/united_tail_10.jpg",
+   "airline": "united",
+   "bbox": [
+    0.25,
+    0.13,
+    0.89,
+    0.71
+   ],
+   "group": "boston-november-2025",
+   "split": "train",
+   "kind": "tail-photo",
+   "box_source": "v1 annotation"
+  },
+  {
+   "source_path": "additional_tail_photos/alaska/alaska_05.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/alaska/alaska_06.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/alaska/alaska_07.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "boston-july-2026",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/alaska/alaska_11.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "boston-december-2024",
+   "split": "test",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/alaska/alaska_15.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "boston-december-2024",
+   "split": "test",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/alaska/alaska_18.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "boston-april-2025",
+   "split": "val",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/alaska/alaska_19.jpg",
+   "airline": "alaska",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "alaska-19-boston-february-2025",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/american/american_candidate_02.jpg",
+   "airline": "american",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/american/american_candidate_03.jpg",
+   "airline": "american",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "american-candidate-03",
+   "split": "val",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/american/american_candidate_06.jpg",
+   "airline": "american",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "american-candidate-06",
+   "split": "test",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/american/american_candidate_11.jpg",
+   "airline": "american",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/american/american_candidate_12.jpg",
+   "airline": "american",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/delta/delta_02.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.1,
+    0.12,
+    0.34,
+    0.46
+   ],
+   "group": "colin-brown-atlanta",
+   "split": "test",
+   "kind": "full-plane",
+   "box_source": "reviewed 2026-10-27 on a box overlay contact sheet"
+  },
+  {
+   "source_path": "additional_tail_photos/delta/delta_05.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.115,
+    0.13,
+    0.35,
+    0.47
+   ],
+   "group": "colin-brown-atlanta",
+   "split": "test",
+   "kind": "full-plane",
+   "box_source": "reviewed 2026-10-27 on a box overlay contact sheet"
+  },
+  {
+   "source_path": "additional_tail_photos/delta/delta_06.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.76,
+    0.36,
+    0.935,
+    0.62
+   ],
+   "group": "boston-november-2025",
+   "split": "train",
+   "kind": "full-plane",
+   "box_source": "reviewed 2026-10-27 on a box overlay contact sheet"
+  },
+  {
+   "source_path": "additional_tail_photos/delta/delta_07.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.68,
+    0.45,
+    0.95,
+    0.75
+   ],
+   "group": "boston-november-2025",
+   "split": "train",
+   "kind": "full-plane",
+   "box_source": "reviewed 2026-10-27 on a box overlay contact sheet"
+  },
+  {
+   "source_path": "additional_tail_photos/delta/delta_08.jpg",
+   "airline": "delta",
+   "bbox": [
+    0.7,
+    0.32,
+    0.95,
+    0.66
+   ],
+   "group": "boston-november-2025",
+   "split": "train",
+   "kind": "full-plane",
+   "box_source": "reviewed 2026-10-27 on a box overlay contact sheet"
+  },
+  {
+   "source_path": "additional_tail_photos/southwest/southwest_01.jpg",
+   "airline": "southwest",
+   "bbox": [
+    0.06,
+    0.6,
+    0.26,
+    0.79
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "full-plane",
+   "box_source": "reviewed 2026-10-27 on a box overlay contact sheet"
+  },
+  {
+   "source_path": "additional_tail_photos/southwest/southwest_02.jpg",
+   "airline": "southwest",
+   "bbox": [
+    0.66,
+    0.2,
+    0.885,
+    0.57
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "full-plane",
+   "box_source": "reviewed 2026-10-27 on a box overlay contact sheet"
+  },
+  {
+   "source_path": "additional_tail_photos/southwest/southwest_04.jpg",
+   "airline": "southwest",
+   "bbox": [
+    0.73,
+    0.19,
+    0.86,
+    0.6
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "full-plane",
+   "box_source": "reviewed 2026-10-27 on a box overlay contact sheet"
+  },
+  {
+   "source_path": "additional_tail_photos/southwest/southwest_05.jpg",
+   "airline": "southwest",
+   "bbox": [
+    0.68,
+    0.21,
+    0.83,
+    0.62
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "full-plane",
+   "box_source": "reviewed 2026-10-27 on a box overlay contact sheet"
+  },
+  {
+   "source_path": "additional_tail_photos/southwest/southwest_07.jpg",
+   "airline": "southwest",
+   "bbox": [
+    0.73,
+    0.32,
+    0.87,
+    0.58
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "full-plane",
+   "box_source": "reviewed 2026-10-27 on a box overlay contact sheet"
+  },
+  {
+   "source_path": "additional_tail_photos/southwest/southwest_08.jpg",
+   "airline": "southwest",
+   "bbox": [
+    0.78,
+    0.25,
+    0.95,
+    0.55
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "full-plane",
+   "box_source": "reviewed 2026-10-27 on a box overlay contact sheet"
+  },
+  {
+   "source_path": "additional_tail_photos/united/united_01.jpg",
+   "airline": "united",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/united/united_03.jpg",
+   "airline": "united",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/united/united_05.jpg",
+   "airline": "united",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "united-05",
+   "split": "val",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/united/united_06.jpg",
+   "airline": "united",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/united/united_10.jpg",
+   "airline": "united",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "united-10",
+   "split": "test",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/united/united_11.jpg",
+   "airline": "united",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/united/united_14.jpg",
+   "airline": "united",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/united/united_15.jpg",
+   "airline": "united",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/united/united_16.jpg",
+   "airline": "united",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "acroterion",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  },
+  {
+   "source_path": "additional_tail_photos/united/united_20.jpg",
+   "airline": "united",
+   "bbox": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "group": "boston-july-2026",
+   "split": "train",
+   "kind": "tail-crop",
+   "box_source": "whole saved tail crop"
+  }
+ ]
+}
