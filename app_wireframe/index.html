@@ -19,9 +19,22 @@
       <section class="card input-card" aria-labelledby="input-title">
         <div class="card-heading"><div><span class="step">01 / YOUR SIGHTING</span><h2 id="input-title">Let's take a look</h2></div><span class="corner-mark">✳</span></div>
         <div class="form-label-row"><label for="photo">Tail photo</label><span>JPG OR PNG</span></div>
-        <label class="upload" id="upload-zone" for="photo"><span class="upload-icon">↑</span><strong>Choose a photo</strong><span>or drag and drop it here</span><small>Make sure the tail fills most of the image.</small><input id="photo" type="file" accept="image/jpeg,image/png" class="visually-hidden"></label>
-        <div class="preview" id="preview" hidden><img id="preview-image" alt="Selected aircraft tail preview"><div class="preview-info"><div><span class="preview-eyebrow">PHOTO READY</span><strong id="file-name"></strong></div><button type="button" class="text-button" id="change-photo">Change photo ↗</button></div></div>
-        <p class="photo-guidance"><span>✳</span> Tail-focused photos work best. Full-plane photos are not supported by the current model.</p>
+        <label class="upload" id="upload-zone" for="photo"><span class="upload-icon">↑</span><strong>Choose a photo</strong><span>or drag and drop it here</span><small>Upload a full-plane or tail photo.</small><input id="photo" type="file" accept="image/jpeg,image/png" class="visually-hidden"></label>
+        <div class="preview" id="preview" hidden>
+          <div class="preview-info"><div><span class="preview-eyebrow">SELECT THE TAIL</span><strong id="file-name"></strong></div><button type="button" class="text-button" id="change-photo">Change photo ↗</button></div>
+          <p class="crop-help">Drag a box around the tail, leaving a little space around it.</p>
+          <canvas id="crop-canvas" aria-label="Photo: draw a box around the aircraft tail"></canvas>
+          <fieldset class="crop-fields"><legend>Or enter the box edges as percentages of the image</legend>
+            <label>Left <input id="crop-left" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+            <label>Top <input id="crop-top" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+            <label>Right <input id="crop-right" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+            <label>Bottom <input id="crop-bottom" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+          </fieldset>
+          <p id="crop-error" class="crop-error" role="status"></p>
+          <button type="button" id="apply-crop" class="crop-button" disabled>Preview tail crop ↗</button>
+          <div id="cropped-result" hidden><div class="crop-output-heading">TAIL CROP · MODEL INPUT</div><img id="cropped-image" alt="Preview of the selected tail crop"><button type="button" id="download-crop" class="text-button">Download crop ↓</button></div>
+        </div>
+        <p class="photo-guidance"><span>✳</span> Choose the tail in your photo before sending it to the model.</p>
         <div class="field-divider"></div>
         <div class="form-label-row"><label for="observed">When did you see it on the runway?</label><span>LOCAL TIME</span></div>
         <div class="time-field"><input id="observed" type="datetime-local" value="2026-10-27T08:20"><span class="field-icon">◷</span></div>

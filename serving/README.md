@@ -71,7 +71,14 @@ the app backend using managed credentials, keeping authentication out of browser
 code. `serving/client.py` shows the Python SDK request/response contract; use the
 same JSON contract from a TypeScript backend. In an async Python route, wrap this
 synchronous helper with `await asyncio.to_thread(identify_tail, image_bytes)`.
-The helper strips inherited image metadata before transmission. Its local
+The helper accepts either an already-cropped image or original image bytes with
+`crop_box=(left, top, right, bottom)` as normalized coordinates from 0 to 1 on
+the EXIF-oriented image. It applies the user-selected crop before encoding and
+transmitting, rounds its edges outward, and strips inherited image metadata. For
+example, `identify_tail(photo_bytes, crop_box=(0.45, 0.1, 0.95, 0.7))` sends only
+that region. The backend must validate the uploaded image and chosen box, and
+must use the same orientation as the UI; this helper does not find the tail.
+Its local
 request-format and metadata-removal checks can be run with:
 
 ```powershell
