@@ -1,0 +1,46 @@
+# v1 recipe on dataset v2 (baseline). Every recipe knob is spelled out with its v1 value.
+# The improved recipe on the same data is training/workload_v2_improved.yaml.
+# alias "" = register without setting any alias; latest_pointer "" = do not rewrite latest.json.
+# matplotlib 3.10.6 is part of databricks_ai_v6 (recorded in the v1 run's environment.json);
+# train.py tags figures=unavailable instead of failing if it is ever missing.
+experiment_name: airplane-tail-identifier
+environment:
+  version: databricks_ai_v6
+  dependencies: []
+compute:
+  num_accelerators: 1
+  accelerator_type: GPU_1xA10
+code_source:
+  type: snapshot
+  snapshot:
+    root_path: .
+    include_paths:
+      - train.py
+      - model.py
+      - vision.py
+      - verify_model.py
+      - metrics_utils.py
+command: python "$CODE_SOURCE_PATH/train.py"
+max_retries: 0
+timeout_minutes: 30
+parameters:
+  dataset_root: /Volumes/dbx_ai_app/airplane_tail_id/training_data/dataset_v2
+  output_root: /Volumes/dbx_ai_app/airplane_tail_id/training_data/runs
+  registered_model_name: dbx_ai_app.airplane_tail_id.airplane_tail_identifier
+  recipe: v1
+  alias: ""
+  latest_pointer: ""
+  epochs: 30
+  batch_size: 16
+  learning_rate: 0.002
+  seed: 42
+  label_smoothing: 0.0
+  fine_tune_layer4_lr: 0.0
+  context_jitter: false
+  context_scale_range: [1.0, 2.0]
+  random_erasing_p: 0.0
+  lr_schedule: none
+  crop_scale: [0.85, 1.0]
+  crop_ratio: [0.9, 1.1]
+  rotation_degrees: 8
+  color_jitter: [0.15, 0.15, 0.1, 0.0]

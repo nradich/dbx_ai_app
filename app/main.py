@@ -18,6 +18,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
+import performance as model_performance
 import pipeline
 import schedule
 
@@ -87,9 +88,14 @@ class BodySizeLimit:
         await send({"type": "http.response.body", "body": body})
 
 
-def create_app(service: pipeline.SubmissionService | None = None) -> FastAPI:
-    """Build the app; tests inject a service backed by fakes."""
+def create_app(service: pipeline.SubmissionService | None = None,
+               performance: model_performance.PerformanceService | None = None) -> FastAPI:
+    """Build the app; tests inject services backed by fakes. Nothing contacts Databricks here."""
     service = service or pipeline.SubmissionService()
+    # Shares the submission service's lazily created Databricks client.
+    performance = performance or model_performance.PerformanceService(
+        service.settings, lambda: service.client("api"),
+        training_experiment_id=model_performance.experiment_id_from_env())
 
     @asynccontextmanager
     async def lifespan(_app: FastAPI):
@@ -99,6 +105,7 @@ def create_app(service: pipeline.SubmissionService | None = None) -> FastAPI:
     app = FastAPI(title="Tailspot", lifespan=lifespan, docs_url=None, redoc_url=None,
                   openapi_url=None)
     app.state.service = service
+    app.state.performance = performance
     app.add_middleware(BodySizeLimit, limit=MAX_REQUEST_BYTES)
 
     @app.exception_handler(RequestValidationError)
@@ -157,6 +164,35 @@ def create_app(service: pipeline.SubmissionService | None = None) -> FastAPI:
             return JSONResponse(status_code=404, headers=NO_STORE,
                                 content={"detail": "Submission not found"})
         return JSONResponse(content=status, headers=NO_STORE)
+
+    # Model performance (read-only) --------------------------------------------
+    @app.exception_handler(model_performance.PerformanceError)
+    async def performance_error(_request: Request, exc: model_performance.PerformanceError):
+        return JSONResponse(status_code=exc.status_code, headers=NO_STORE,
+                            content={"detail": exc.detail})
+
+    @app.get("/api/performance/summary")
+    def performance_summary():
+        return JSONResponse(content=performance.summary(), headers=NO_STORE)
+
+    @app.get("/api/performance/predictions")
+    def performance_predictions(eval_set: str | None = None, variant: str | None = None,
+                                eval_run_id: str | None = None):
+        # Optional here so missing names get the same 422 (with no-store) as unknown ones.
+        return JSONResponse(content=performance.predictions(eval_set, variant, eval_run_id),
+                            headers=NO_STORE)
+
+    @app.get("/api/performance/training-runs")
+    def performance_training_runs():
+        return JSONResponse(content=performance.training_runs(), headers=NO_STORE)
+
+    @app.get("/api/performance/training-runs/{run_id}/history")
+    def performance_history(run_id: str):
+        return JSONResponse(content=performance.history(run_id), headers=NO_STORE)
+
+    @app.get("/api/performance/submissions")
+    def performance_submissions():
+        return JSONResponse(content=performance.submissions(), headers=NO_STORE)
 
     app.mount("/", StaticFiles(directory=STATIC_DIR, html=True, check_dir=False), name="static")
     return app

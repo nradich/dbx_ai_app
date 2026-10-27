@@ -24,15 +24,32 @@ The demo limits from the main README still apply: the model expects a tail crop,
 unknown-airline rejection, and its confidence is uncalibrated. The schedule is
 synthetic, and a sighting cannot confirm a particular flight.
 
+## Model performance tab
+
+The **Model performance** tab (`#performance`) is read-only:
+- **Latest comparison:** read from `model_eval_runs`, `model_eval_metrics` and
+  `model_eval_predictions`, published by `evaluation/publish.py`. It shows the model
+  versions, a results matrix with n, context-sensitivity charts, and a per-set
+  drill-down with confusion matrices and every prediction.
+- **Training runs:** read live from the MLflow experiment `airplane-tail-identifier`.
+  Running runs refresh automatically.
+- **App submission statistics:** read from `photo_submissions`.
+
+The app reads the experiment ID from the `training-experiment` resource
+(`TAILSPOT_TRAINING_EXPERIMENT_ID`). The bundle variable `training_experiment_id`
+defaults to this workspace's experiment; override it in other workspaces. The tab
+never changes aliases or the serving endpoint.
+
 ## Files
 
 | File | Purpose |
 | --- | --- |
 | `main.py` | FastAPI routes, upload size limit, static files |
 | `pipeline.py` | Validation, storage, inference retries, schedule lookup, recording |
+| `performance.py` | Read-only model performance endpoints (UC tables, MLflow, submissions) |
 | `schedule.py` | Sighting-time parsing and the departure window |
 | `serving_client.py` | Byte-identical copy of `serving/client.py` (enforced by a test) |
-| `static/` | Browser UI |
+| `static/` | Browser UI (`app.js` Identify tab, `performance.js` Model performance tab) |
 | `app.yaml`, `requirements.txt` | Databricks Apps runtime configuration |
 
 ## Setup and deployment
@@ -40,7 +57,9 @@ synthetic, and a sighting cannot confirm a particular flight.
 From the repository root, with an authenticated profile:
 
 1. Load the schedule tables as described in `schedule/README.md`.
-2. Run `app_setup/create_storage.sql` to create the Volume and submissions table.
+2. Run `app_setup/create_storage.sql` to create the Volume and submissions table, and
+   `app_setup/create_eval_tables.sql` for the model performance tables. The bundle
+   declares those tables as resources, so they must exist before deployment.
 3. Deploy the bundle (`databricks.yml`) and start the app:
    ```powershell
    databricks bundle validate -p YOUR_PROFILE
@@ -52,7 +71,8 @@ From the repository root, with an authenticated profile:
    the tables and Volume. On deployment, Databricks granted the app's service
    principal everything it needs: `USE CATALOG`, `USE SCHEMA`, `SELECT` on the
    schedule tables, `SELECT` and `MODIFY` on `photo_submissions`, and `READ VOLUME`
-   and `WRITE VOLUME` on `submitted_photos`.
+   and `WRITE VOLUME` on `submitted_photos`. It also grants `SELECT` on the three
+   `model_eval_*` tables and `CAN_READ` on the training experiment.
 4. Optional: `app_setup/grant_app_access.sql` lists the same grants explicitly, for
    deployments without the bundle. Substitute the `service_principal_client_id`
    shown by `databricks apps get tailspot` before running it.
