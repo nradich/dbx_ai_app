@@ -26,19 +26,25 @@ synthetic, and a sighting cannot confirm a particular flight.
 
 ## Model performance tab
 
-The **Model performance** tab (`#performance`) is read-only:
+The **Model performance** tab (`#performance`) is read-only. Its sections, in page order:
+- **App submission statistics (first):** read from `photo_submissions`, including live reviewed
+  accuracy per model version and the 10 most recent submissions (5 visible, the rest scroll).
+  Each shows a thumbnail, the guess and confidence, and whether it was correct, with an
+  All / Correct / Wrong / Not reviewed filter. Clicking a thumbnail opens the full upright
+  photo, served by the app from the Volume
+  (`GET /api/submissions/{id}/photo`); anyone who can open the app can view these photos.
 - **Latest comparison:** read from `model_eval_runs`, `model_eval_metrics` and
   `model_eval_predictions`, published by `evaluation/publish.py`. It shows the model
   versions, a results matrix with n, context-sensitivity charts, and a per-set
   drill-down with confusion matrices and every prediction.
 - **Training runs:** read live from the MLflow experiment `airplane-tail-identifier`.
   Running runs refresh automatically.
-- **App submission statistics:** read from `photo_submissions`, including live reviewed
-  accuracy per model version and the 10 most recent submissions (5 visible, the rest scroll).
-  Each shows a thumbnail, the guess and confidence, and whether it was correct, with an
-  All / Correct / Wrong / Not reviewed filter. Clicking a thumbnail opens the full upright
-  photo, served by the app from the Volume
-  (`GET /api/submissions/{id}/photo`); anyone who can open the app can view these photos.
+- **Caveats.**
+
+A sticky section bar (In the app · Models · Results · Context · Predictions · Training ·
+Caveats, plus Top) stays visible while scrolling. It highlights the current section, moves
+keyboard focus to the chosen section's heading, and hides links to comparison sections when
+none is published. Each section has a shareable link such as `#performance/training`.
 
 The app reads the experiment ID from the `training-experiment` resource
 (`TAILSPOT_TRAINING_EXPERIMENT_ID`). The bundle variable `training_experiment_id`

@@ -206,12 +206,33 @@
         <div>
           <div class="eyebrow"><span class="line" aria-hidden="true"></span> MODEL PERFORMANCE <span class="eyebrow-number">/ 02</span></div>
           <h1>How well does it<br><span>really work?</span></h1>
-          <p>Every compared model version, scored on the same held-out images. The test sets are small, so every number shows how many images it is based on.</p>
+          <p>Live results from photos submitted in this app come first, then every compared model version scored on the same held-out images. The samples are small, so every number shows how many images it is based on.</p>
         </div>
         <div class="perf-toolbar">
           <button type="button" class="crop-button perf-refresh" id="perf-refresh">Refresh <span aria-hidden="true">↻</span></button>
           <p class="perf-updated" id="perf-updated" role="status">Not loaded yet</p>
         </div>
+      </section>
+
+      <nav class="perf-nav" id="perf-nav" aria-label="Model performance sections">
+        <ul class="perf-nav-list">
+          <li><a class="perf-nav-link" href="#performance/submissions" data-section="submissions">In the app</a></li>
+          <li><a class="perf-nav-link" href="#performance/models" data-section="models">Models</a></li>
+          <li><a class="perf-nav-link" href="#performance/results" data-section="results">Results</a></li>
+          <li><a class="perf-nav-link" href="#performance/context" data-section="context">Context</a></li>
+          <li><a class="perf-nav-link" href="#performance/predictions" data-section="predictions">Predictions</a></li>
+          <li><a class="perf-nav-link" href="#performance/training" data-section="training">Training</a></li>
+          <li><a class="perf-nav-link" href="#performance/caveats" data-section="caveats">Caveats</a></li>
+        </ul>
+        <button type="button" class="perf-nav-top" id="perf-nav-top">Top <span aria-hidden="true">↑</span></button>
+      </nav>
+
+      <section class="card perf-section" id="perf-sec-submissions" data-section="submissions" aria-labelledby="perf-submissions-title">
+        <div class="card-heading">
+          <div><span class="step">A / IN THE APP</span><h2 id="perf-submissions-title" tabindex="-1">App submissions</h2></div>
+          <span class="corner-mark" aria-hidden="true">✳</span>
+        </div>
+        <div id="perf-submissions"></div>
       </section>
 
       <!-- Comparison summary (cards, models, matrix, context, drill-down) -->
@@ -221,35 +242,35 @@
       <div id="perf-summary-content" hidden>
         <div class="perf-cards" id="perf-cards"></div>
 
-        <section class="card perf-section" aria-labelledby="perf-models-title">
+        <section class="card perf-section" id="perf-sec-models" data-section="models" aria-labelledby="perf-models-title">
           <div class="card-heading">
-            <div><span class="step">A / MODEL VERSIONS</span><h2 id="perf-models-title">Models compared</h2></div>
+            <div><span class="step">B / MODEL VERSIONS</span><h2 id="perf-models-title" tabindex="-1">Models compared</h2></div>
             <span class="corner-mark" aria-hidden="true">✳</span>
           </div>
           <div id="perf-models"></div>
         </section>
 
-        <section class="card perf-section" aria-labelledby="perf-matrix-title">
+        <section class="card perf-section" id="perf-sec-results" data-section="results" aria-labelledby="perf-matrix-title">
           <div class="card-heading">
-            <div><span class="step">B / RESULTS</span><h2 id="perf-matrix-title">Accuracy by evaluation set</h2></div>
+            <div><span class="step">C / RESULTS</span><h2 id="perf-matrix-title" tabindex="-1">Accuracy by evaluation set</h2></div>
             <span class="corner-mark" aria-hidden="true">✳</span>
           </div>
           <p class="perf-section-note">Correct / images scored (accuracy), with macro F1 and expected calibration error (ECE, lower is better). The best model in each row is marked.</p>
           <div id="perf-matrix"></div>
         </section>
 
-        <section class="card perf-section" aria-labelledby="perf-context-title">
+        <section class="card perf-section" id="perf-sec-context" data-section="context" aria-labelledby="perf-context-title">
           <div class="card-heading">
-            <div><span class="step">C / CONTEXT SENSITIVITY</span><h2 id="perf-context-title">How much of the plane should be in the box?</h2></div>
+            <div><span class="step">D / CONTEXT SENSITIVITY</span><h2 id="perf-context-title" tabindex="-1">How much of the plane should be in the box?</h2></div>
             <span class="corner-mark" aria-hidden="true">✳</span>
           </div>
           <p class="perf-section-note">The same images, cropped around the tail box scaled 1.0× to 3.0× about its centre, and the whole image.</p>
           <div id="perf-context"></div>
         </section>
 
-        <section class="card perf-section" aria-labelledby="perf-drill-title">
+        <section class="card perf-section" id="perf-sec-predictions" data-section="predictions" aria-labelledby="perf-drill-title">
           <div class="card-heading">
-            <div><span class="step">D / DRILL-DOWN</span><h2 id="perf-drill-title">Every prediction</h2></div>
+            <div><span class="step">E / DRILL-DOWN</span><h2 id="perf-drill-title" tabindex="-1">Every prediction</h2></div>
             <span class="corner-mark" aria-hidden="true">✳</span>
           </div>
           <div class="perf-controls">
@@ -262,26 +283,18 @@
         </section>
       </div>
 
-      <section class="card perf-section" aria-labelledby="perf-training-title">
+      <section class="card perf-section" id="perf-sec-training" data-section="training" aria-labelledby="perf-training-title">
         <div class="card-heading">
-          <div><span class="step">E / TRAINING</span><h2 id="perf-training-title">Training runs</h2></div>
+          <div><span class="step">F / TRAINING</span><h2 id="perf-training-title" tabindex="-1">Training runs</h2></div>
           <span class="corner-mark" aria-hidden="true">✳</span>
         </div>
         <div id="perf-training-list"></div>
         <div id="perf-training-detail"></div>
       </section>
 
-      <section class="card perf-section" aria-labelledby="perf-submissions-title">
+      <section class="card perf-section perf-caveats" id="perf-sec-caveats" data-section="caveats" aria-labelledby="perf-caveats-title">
         <div class="card-heading">
-          <div><span class="step">F / IN THE APP</span><h2 id="perf-submissions-title">App submissions</h2></div>
-          <span class="corner-mark" aria-hidden="true">✳</span>
-        </div>
-        <div id="perf-submissions"></div>
-      </section>
-
-      <section class="card perf-section perf-caveats" aria-labelledby="perf-caveats-title">
-        <div class="card-heading">
-          <div><span class="step">G / READ THIS FIRST</span><h2 id="perf-caveats-title">Honest caveats</h2></div>
+          <div><span class="step">G / READ THIS FIRST</span><h2 id="perf-caveats-title" tabindex="-1">Honest caveats</h2></div>
           <span class="corner-mark" aria-hidden="true">✳</span>
         </div>
         <ul class="perf-caveat-list">

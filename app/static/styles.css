@@ -1215,7 +1215,39 @@ footer strong {
 .perf-toolbar { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
 .perf-updated, .perf-muted, .perf-loading { font-size: 12px; color: #708579; }
 .perf-loading { padding: 18px 0; }
-.perf-section { margin-bottom: 18px; }
+.perf-section { margin-bottom: 18px; scroll-margin-top: 76px; }
+.perf h2[tabindex="-1"]:focus { outline: none; }
+.view-panel:focus:not(:focus-visible) { outline: none; }
+
+/* Sticky in-page section navigation */
+.perf-nav {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 18px; padding: 7px 8px;
+  background: rgba(246, 246, 241, .94); border: 1px solid #e4eae2; border-radius: 12px;
+  box-shadow: 0 6px 18px -14px rgba(29, 60, 51, .45);
+}
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .perf-nav { background: rgba(246, 246, 241, .82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+}
+.perf-nav-list {
+  display: flex; gap: 4px; flex: 1; min-width: 0; margin: 0; padding: 0; list-style: none;
+  overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth;
+}
+.perf-nav-list::-webkit-scrollbar { display: none; }
+.perf-nav-list li[hidden] { display: none; }
+.perf-nav-link {
+  display: block; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+  color: #4d6a5b; font: 600 12px 'DM Sans', sans-serif; text-decoration: none;
+}
+.perf-nav-link:hover { background: #eef4ea; color: #1d3c33; }
+.perf-nav-link[aria-current="true"] { background: #285441; color: #fff; }
+.perf-nav-top {
+  flex: none; padding: 7px 12px; border: 1px solid #dfe7de; border-radius: 999px; background: #fff;
+  color: #285441; font: 700 11px 'DM Sans', sans-serif; cursor: pointer;
+}
+.perf-nav-top:hover { background: #eef4ea; }
+@media (prefers-reduced-motion: reduce) { .perf-nav-list { scroll-behavior: auto; } }
 .perf-section-note { font-size: 13px; color: #708579; line-height: 1.6; margin: -12px 0 16px; max-width: 760px; }
 .perf-empty, .perf-state-slot:not(:empty) { margin-bottom: 18px; }
 .perf-error {
