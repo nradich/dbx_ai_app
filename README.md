@@ -180,8 +180,21 @@ a synthetic weekly San Diego schedule, and a candidate lookup by classifier labe
 and observation time. The fixture is not a real flight schedule; a tail prediction
 and time alone cannot confirm a particular flight or destination.
 
+## Tailspot Databricks App
+
+[The Tailspot app](app/README.md) is a Databricks App (FastAPI and the adapted
+wireframe UI). A user uploads a photo, outlines the tail and enters the San Diego
+sighting time. The app stores an upright, metadata-free copy of the photo and the
+exact tail crop in the Unity Catalog Volume `submitted_photos`, then queries the
+serving endpoint, retrying while it starts from zero. It lists possible departures
+from the synthetic schedule and records each submission in the `photo_submissions`
+table. Deploy it with the repository's `databricks.yml` bundle; storage is created
+by `app_setup/create_storage.sql`. The [API contract](app/API.md) documents the
+browser–backend interface.
+
 ## App wireframe
 
-Open [the interactive wireframe](app_wireframe/index.html) for a mock of the
-photo submission and possible-departure flow. It uses fixed sample results and
-does not call the serving endpoint or Unity Catalog. See [wireframe notes](app_wireframe/README.md).
+Open [the interactive wireframe](app_wireframe/index.html) for the original static mock
+of the photo submission and possible-departure flow; the Tailspot app implements it.
+The mock uses fixed sample results and does not call the serving endpoint or Unity
+Catalog. See [wireframe notes](app_wireframe/README.md).

@@ -1,0 +1,10 @@
+command: ["python", "main.py"]
+env:
+  - name: SERVING_ENDPOINT
+    valueFrom: serving-endpoint
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql-warehouse
+  - name: TAILSPOT_SCHEMA
+    value: dbx_ai_app.airplane_tail_id
+  - name: TAILSPOT_VOLUME_PATH
+    value: /Volumes/dbx_ai_app/airplane_tail_id/submitted_photos

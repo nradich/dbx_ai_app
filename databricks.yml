@@ -1,0 +1,64 @@
+# Declarative Automation Bundle for the Tailspot Databricks App.
+# Deploy from the repository root:
+#   databricks bundle validate -p YOUR_PROFILE
+#   databricks bundle deploy -p YOUR_PROFILE
+#   databricks bundle run tailspot -p YOUR_PROFILE   # deploys the code and starts the app
+# Create the Volume and table first with app_setup/create_storage.sql. The declared
+# resources grant the app's service principal its access on deployment
+# (app_setup/grant_app_access.sql lists the same grants; see app/README.md).
+bundle:
+  name: tailspot
+
+# Upload only the app folder, not the training photos.
+sync:
+  paths:
+    - ./app
+
+variables:
+  warehouse_id:
+    description: SQL warehouse used for the schedule lookup and submission records.
+    lookup:
+      warehouse: dbx_dev_kit_warehouse
+
+resources:
+  apps:
+    tailspot:
+      name: tailspot
+      description: Identify an airline from a tail photo and list possible San Diego departures (synthetic demo schedule).
+      source_code_path: ./app
+      resources:
+        - name: serving-endpoint
+          description: Airline tail classifier.
+          serving_endpoint:
+            name: airplane-tail-identifier
+            permission: CAN_QUERY
+        - name: sql-warehouse
+          description: Schedule lookup and submission records.
+          sql_warehouse:
+            id: ${var.warehouse_id}
+            permission: CAN_USE
+        - name: submitted-photos
+          description: Stored originals and tail crops.
+          uc_securable:
+            securable_full_name: dbx_ai_app.airplane_tail_id.submitted_photos
+            securable_type: VOLUME
+            permission: WRITE_VOLUME
+        - name: demo-airlines
+          uc_securable:
+            securable_full_name: dbx_ai_app.airplane_tail_id.demo_airlines
+            securable_type: TABLE
+            permission: SELECT
+        - name: demo-weekly-departures
+          uc_securable:
+            securable_full_name: dbx_ai_app.airplane_tail_id.demo_weekly_departures
+            securable_type: TABLE
+            permission: SELECT
+        - name: photo-submissions
+          uc_securable:
+            securable_full_name: dbx_ai_app.airplane_tail_id.photo_submissions
+            securable_type: TABLE
+            permission: MODIFY
+
+targets:
+  dev:
+    default: true

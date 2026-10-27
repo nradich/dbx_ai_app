@@ -23,10 +23,11 @@ same event and branch so stale work does not keep running.
 
 | Check | Why it matters for the airline app |
 | --- | --- |
-| Tracked Python/JavaScript syntax and JSON/YAML parsing | Catches a broken script or malformed endpoint/workload configuration before it reaches the other computer. It parses source without importing training libraries or running notebooks. JavaScript files are checked when present, including the wireframe after it is merged. |
+| Tracked Python/JavaScript syntax and JSON/YAML parsing | Catches a broken script or malformed endpoint/workload/app configuration before it reaches the other computer. It parses source without importing training libraries or running notebooks, including the wireframe and the Tailspot app's JavaScript. |
 | Dataset preparation tests | Checks image cropping, source immutability, duplicate handling and isolation between training/validation/test splits. Currently validates the original 50-image dataset. |
 | Weekly schedule tests | Checks that airline labels match the classifier, the sample CSV is consistent, and local-time recurrence handles daylight-saving and adjacent-day matching. |
-| Serving client tests | Uses a fake endpoint to inspect the request and response contract and metadata removal. Once the crop PR is merged, its orientation and crop tests run here too. |
+| Tailspot app tests (`tests/test_app_*.py`) | Uses fake Databricks clients to check upload validation, orientation, tail crops, stored files, the departure window against the schedule reference, cold-start retries, failure paths, the submissions-table row and the HTTP contract. It also keeps `app/serving_client.py` identical to `serving/client.py`. |
+| Serving client tests | Uses a fake endpoint to inspect the request and response contract, metadata removal, orientation and crop handling. |
 | Saved evaluation-image validation | Confirms the ten checked-in full-plane photos still match their manifest, dimensions, metadata and recorded source constraints. It uses the `validate` command; it does not download images or rescore the model. |
 
 The job needs no Databricks credentials or GPU. It runs on GitHub even while both

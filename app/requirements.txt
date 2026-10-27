@@ -1,0 +1,10 @@
+# Tailspot app runtime dependencies (Databricks Apps, Python 3.11).
+fastapi==0.162.0
+uvicorn==0.54.0
+python-multipart==0.0.32
+databricks-sdk==0.157.0
+pillow==13.0.0
+tzdata==2026.5
+# FastAPI requires opentelemetry-api>=1.44; upgrade the runtime's preinstalled
+# opentelemetry-sdk (which pins an older API) so the environment stays consistent.
+opentelemetry-sdk==1.45.1

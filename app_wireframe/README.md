@@ -8,7 +8,9 @@ empty and result states. The sample is fixed: neither the photo nor the entered
 time is sent anywhere or affects the result. The sample flights correspond to the
 synthetic Tuesday 08:20 example in `schedule/lookup_example.sql`.
 
-This is a design mock, not a deployable Databricks App. The selection and crop
+This is a design mock, not a deployable Databricks App. The working implementation
+is the Tailspot app in [`app/`](../app/README.md), which follows the plan below and
+the storage proposal in the next section. The selection and crop in this mock
 run locally in the browser, but there is no inference, authentication, or SQL
 connection. Future implementation should send the original bytes and normalized
 crop coordinates to the backend, invoke `serving/client.py` with managed
@@ -37,5 +39,7 @@ enabling collection, and validate file types and size before storage.
 Predictions are not training labels: a reviewer must confirm or correct the airline
 and approve images for a separately versioned training dataset. Track image hashes
 and source/submission groups so duplicates and related crops stay in the same split.
-This is a proposed future workflow; this wireframe does not store photos or create
-a Volume, metadata table, or retraining pipeline.
+This wireframe does not store photos. The Tailspot app now implements the storage
+part: the `submitted_photos` Volume, the `photo_submissions` table (with empty
+`review_label`/`reviewed_at` columns for review) and image hashes. Review tooling,
+a retention policy and a retraining pipeline are still future work.

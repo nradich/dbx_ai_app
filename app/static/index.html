@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>tailspot. · Identify the airline from a tail photo</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="prototype-banner" role="note"><span class="status-dot" aria-hidden="true"></span> DEMO <span class="banner-divider" aria-hidden="true"></span> Synthetic San Diego schedule · Predictions can be wrong</div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Tailspot home"><span class="brand-icon" aria-hidden="true">✦</span><span>tailspot<span class="brand-period">.</span></span></a>
+    <div class="header-right">
+      <span class="header-label">AIRPORT</span>
+      <span class="airport-chip"><span class="airport-dot" aria-hidden="true"></span> San Diego <b>SAN</b></span>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="intro">
+      <div>
+        <div class="eyebrow"><span class="line" aria-hidden="true"></span> AIRCRAFT IDENTIFICATION <span class="eyebrow-number">/ 01</span></div>
+        <h1>See the tail.<br><span>Find the flight.</span></h1>
+        <p>Start with a clear photo of an aircraft tail. We'll help narrow down the airline and possible departures.</p>
+      </div>
+      <div class="intro-note"><span class="note-icon" aria-hidden="true">↗</span><span>FROM A SIGHTING<br><strong>TO A SHORTLIST</strong></span></div>
+    </section>
+
+    <div class="workspace">
+      <!-- 01 / Input -->
+      <section class="card input-card" aria-labelledby="input-title">
+        <div class="card-heading">
+          <div><span class="step">01 / YOUR SIGHTING</span><h2 id="input-title">Let's take a look</h2></div>
+          <span class="corner-mark" aria-hidden="true">✳</span>
+        </div>
+
+        <div class="form-label-row"><label for="photo">Tail photo</label><span>JPG OR PNG</span></div>
+        <label class="upload" id="upload-zone" for="photo">
+          <span class="upload-icon" aria-hidden="true">↑</span>
+          <strong>Choose a photo</strong>
+          <span>or drag and drop it here</span>
+          <small>Tail close-up or full-plane photo · up to <span id="upload-limit">20 MB</span></small>
+          <input id="photo" type="file" accept="image/jpeg,image/png" class="visually-hidden" aria-describedby="photo-error">
+        </label>
+
+        <div class="preview" id="preview" hidden>
+          <div class="preview-info">
+            <div><span class="preview-eyebrow">SELECT THE TAIL</span><strong id="file-name"></strong></div>
+            <button type="button" class="text-button" id="change-photo">Change photo ↗</button>
+          </div>
+          <div class="crop-help-row">
+            <p class="crop-help">Drag a box around the tail, leaving a little space around it.</p>
+            <button type="button" class="text-button" id="use-whole-photo">Use whole photo</button>
+          </div>
+          <canvas id="crop-canvas" aria-label="Photo: draw a box around the aircraft tail"></canvas>
+          <fieldset class="crop-fields">
+            <legend>Or enter the box edges as percentages of the image</legend>
+            <label>Left <input id="crop-left" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+            <label>Top <input id="crop-top" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+            <label>Right <input id="crop-right" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+            <label>Bottom <input id="crop-bottom" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+          </fieldset>
+          <p id="crop-error" class="crop-error" role="status"></p>
+          <button type="button" id="apply-crop" class="crop-button" disabled>Preview tail crop ↗</button>
+          <div id="cropped-result" hidden>
+            <div class="crop-output-heading">TAIL CROP PREVIEW</div>
+            <img id="cropped-image" alt="Preview of the selected tail crop">
+            <p class="crop-output-note">The server may reduce large crops to 1536 px before sending them to the model.</p>
+            <button type="button" id="download-crop" class="text-button">Download crop ↓</button>
+          </div>
+        </div>
+
+        <p id="photo-error" class="form-error" role="alert" hidden></p>
+        <p class="photo-guidance"><span aria-hidden="true">✳</span> The model only sees what is inside the box, and works best on a tight tail crop.</p>
+
+        <div class="field-divider"></div>
+
+        <div class="form-label-row"><label for="observed">When did you see it on the runway?</label><span>LOCAL TIME</span></div>
+        <div class="time-field">
+          <input id="observed" type="datetime-local" required aria-describedby="observed-hint">
+          <span class="field-icon" aria-hidden="true">◷</span>
+        </div>
+        <p class="field-hint" id="observed-hint">San Diego time · Pacific Time</p>
+
+        <button class="primary-button" id="submit-button" type="button" disabled>Identify airline <span aria-hidden="true">↗</span></button>
+        <p class="button-note" id="submit-note">Choose a photo to get started.</p>
+      </section>
+
+      <!-- 02 / Results -->
+      <section class="card result-card" id="result-card" aria-labelledby="results-title">
+        <div class="card-heading">
+          <div><span class="step">02 / THE SHORTLIST</span><h2 id="results-title" tabindex="-1">Your results</h2></div>
+          <span class="status-badge" id="result-badge" hidden></span>
+          <span class="corner-mark" id="result-corner" aria-hidden="true">✳</span>
+        </div>
+
+        <div id="result-region" aria-live="polite">
+          <!-- Empty -->
+          <div id="empty-state" class="empty-state">
+            <div class="empty-icon" aria-hidden="true"><span>✈</span><i></i></div>
+            <h3>A little closer to the answer.</h3>
+            <p>Choose a photo, outline the tail and tell us when you saw it.</p>
+            <div class="empty-divider"></div>
+            <span>YOUR RESULTS WILL APPEAR HERE</span>
+          </div>
+
+          <!-- Working -->
+          <div id="working-state" class="working-state" hidden>
+            <div class="spinner" aria-hidden="true"></div>
+            <h3>Identifying the airline…</h3>
+            <p id="working-message" class="working-message">Uploading your photo…</p>
+            <p class="working-meta">
+              <span id="working-attempt" hidden></span>
+              <span aria-hidden="true">ELAPSED <span id="working-elapsed">00:00</span></span>
+            </p>
+            <ol class="progress-steps" id="progress-steps" aria-label="Progress">
+              <li data-step="upload">Save photo</li>
+              <li data-step="model">Identify airline</li>
+              <li data-step="schedule">Check schedule</li>
+              <li data-step="record">Save result</li>
+            </ol>
+            <div class="candidate-note working-note">
+              <span aria-hidden="true">✳</span>
+              <p><strong>The first request after a quiet period can take a few minutes.</strong> The model scales to zero when idle and needs time to wake up. Keep this page open — we'll keep checking.</p>
+            </div>
+            <button type="button" class="reset-button" id="cancel-working">← Stop waiting and start over</button>
+          </div>
+
+          <!-- Result -->
+          <div id="result-state" hidden>
+            <div class="result-label"><span>IDENTIFIED AIRLINE</span><span>MODEL OUTPUT</span></div>
+            <div class="airline-result">
+              <div class="airline-emblem" id="airline-emblem" aria-hidden="true"></div>
+              <div>
+                <span class="result-caption">AIRLINE</span>
+                <h3 id="airline-name"></h3>
+                <p id="airline-confidence"></p>
+              </div>
+              <div class="airline-arrow" aria-hidden="true">↗</div>
+            </div>
+            <div class="probabilities" id="probabilities">
+              <span class="result-caption" id="probabilities-title">SCORES FOR ALL AIRLINES</span>
+              <ul class="probability-list" id="probability-list" aria-labelledby="probabilities-title"></ul>
+            </div>
+            <p class="result-warning" id="result-warning" hidden></p>
+
+            <div class="candidate-heading">
+              <div><span class="step">NEXT / SCHEDULE LOOKUP</span><h3>Possible departures</h3><p id="sighting-line"></p></div>
+              <span class="count-badge" id="candidate-count"></span>
+            </div>
+            <div id="candidate-list"></div>
+            <p class="no-candidates" id="no-candidates" hidden></p>
+
+            <div class="candidate-note">
+              <span aria-hidden="true">✳</span>
+              <p><strong>These are possibilities, not confirmed flights.</strong> Schedule times are gate departures, and runway timing can vary. The model can also be wrong, even when its confidence is high. The schedule is synthetic demo data.</p>
+            </div>
+            <p class="submission-footnote" id="submission-footnote" hidden></p>
+            <button type="button" class="reset-button" id="reset-result">← Start over</button>
+          </div>
+
+          <!-- Failed -->
+          <div id="failed-state" class="failed-state" hidden>
+            <div class="failed-icon" aria-hidden="true">!</div>
+            <h3>We couldn't finish this one.</h3>
+            <p id="failed-message" class="failed-message"></p>
+            <div class="failed-actions">
+              <button type="button" class="crop-button retry-button" id="retry-submission">Try again ↻</button>
+              <button type="button" class="reset-button" id="reset-failed">← Start over</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer><span><strong>tailspot.</strong> &nbsp; A different view of the sky.</span><span>SAN DIEGO INTERNATIONAL AIRPORT <span class="footer-dot" aria-hidden="true">●</span> DEMO</span></footer>
+  </main>
+</body>
+</html>
