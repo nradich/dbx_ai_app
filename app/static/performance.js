@@ -209,11 +209,29 @@
     return `/api/submissions/${encodeURIComponent(String(submissionId))}/photo?kind=${encodeURIComponent(kind)}`;
   }
 
+  // In-page sections of the performance tab, in page order (ids are perf-sec-<key>).
+  const SECTION_KEYS = ['submissions', 'models', 'results', 'context', 'predictions', 'training', 'caveats'];
+
+  /** '#performance' -> {tab: 'performance', section: null}; '#performance/models' -> section 'models'. */
+  function parsePerfHash(hash) {
+    if (hash === '#performance') return { tab: 'performance', section: null };
+    const match = /^#performance\/([a-z]+)$/.exec(hash || '');
+    if (match && SECTION_KEYS.includes(match[1])) return { tab: 'performance', section: match[1] };
+    return { tab: 'identify', section: null };
+  }
+
+  /** Key of the section the reader is in: the last one whose top has passed `line`, else the first. */
+  function activeSectionKey(tops, line) {
+    const passed = tops.filter(([, top]) => top <= line);
+    if (passed.length) return passed[passed.length - 1][0];
+    return tops.length ? tops[0][0] : null;
+  }
+
   const helpers = {
     pct, fixed, accuracyCell, variantLabel, scaleOrder, classesFor, confusion, bestFlags,
     indexMetrics, linePath, integerTicks, clockTime, errorMessage, submissionsAccuracyText,
     versionLabel, titleCase, recentOutcome, filterRecent, outcomeText, versionAccuracyText, photoUrl,
-    CLASS_ORDER, SCALE_ORDER, CHART, RECENT_FILTERS,
+    parsePerfHash, activeSectionKey, CLASS_ORDER, SCALE_ORDER, CHART, RECENT_FILTERS, SECTION_KEYS,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = helpers;
   root.TailspotPerformance = helpers;
@@ -346,6 +364,7 @@
     drillRows: null, drillToken: 0,
     runs: [], selectedRunId: null, historyToken: 0, historyTimer: null, runsTimer: null, lastHistory: null,
     submissions: null, recentFilter: 'all',
+    activeSection: null, pendingSection: null, navLockTimer: null, navFrame: 0,
   };
   const colorFor = (version) => PALETTE[Math.max(0, state.versions.indexOf(version)) % PALETTE.length];
   const perfVisible = () => !$('panel-performance').hidden && !document.hidden;
@@ -373,6 +392,9 @@
       $('perf-summary-content').hidden = true;
       $('perf-empty').hidden = true;
       showError(slot, err.message, loadSummary);
+    } finally {
+      // Comparison sections appear or disappear with the summary; keep the section nav in step.
+      syncNav();
     }
   }
 
@@ -773,6 +795,99 @@
     ]);
   }
 
+  // ---------- In-page section navigation ----------
+  const NAV_LINE_PX = 96; // a section counts as "current" once its top passes just below the sticky nav
+  const reducedMotion = () => Boolean(root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const sectionEl = (key) => $(`perf-sec-${key}`);
+  const navLinks = () => [...document.querySelectorAll('#perf-nav .perf-nav-link')];
+
+  /** Hidden by itself or by an ancestor inside the panel (e.g. no comparison published yet). */
+  function sectionHidden(section) {
+    const panel = $('panel-performance');
+    for (let node = section; node && node !== panel; node = node.parentElement) if (node.hidden) return true;
+    return !section;
+  }
+  function visibleSectionKeys() { return SECTION_KEYS.filter((key) => !sectionHidden(sectionEl(key))); }
+
+  function setHash(section) {
+    if (!root.history || !root.history.replaceState) return;
+    const base = location.pathname + location.search;
+    root.history.replaceState(null, '', section ? `${base}#performance/${section}` : `${base}#performance`);
+  }
+
+  function setActiveSection(key) {
+    if (state.activeSection === key) return;
+    state.activeSection = key;
+    const list = document.querySelector('#perf-nav .perf-nav-list');
+    navLinks().forEach((link) => {
+      const on = link.dataset.section === key;
+      if (on) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+      // Keep the active link visible when the nav scrolls sideways (narrow screens).
+      if (on && list && list.scrollWidth > list.clientWidth) {
+        list.scrollLeft = Math.max(0, link.offsetLeft - (list.clientWidth - link.offsetWidth) / 2);
+      }
+    });
+  }
+
+  /** Hide links to sections that are not shown; re-evaluate the current section. */
+  function syncNav() {
+    const visible = new Set(visibleSectionKeys());
+    navLinks().forEach((link) => { link.parentElement.hidden = !visible.has(link.dataset.section); });
+    if (!visible.has(state.activeSection)) state.activeSection = null;
+    updateActiveFromScroll();
+  }
+
+  function updateActiveFromScroll() {
+    if (state.navLockTimer || !perfVisible()) return;
+    const keys = visibleSectionKeys();
+    if (!keys.length) return;
+    const atBottom = root.innerHeight + root.scrollY >= document.documentElement.scrollHeight - 2;
+    const tops = keys.map((key) => [key, sectionEl(key).getBoundingClientRect().top]);
+    setActiveSection(atBottom && root.scrollY > 0 ? keys[keys.length - 1] : activeSectionKey(tops, NAV_LINE_PX));
+  }
+
+  function onScroll() {
+    if (state.navLockTimer) {
+      // Smooth scrolling after a nav click: keep the clicked section until scrolling settles.
+      clearTimeout(state.navLockTimer);
+      state.navLockTimer = setTimeout(releaseNavLock, 200);
+      return;
+    }
+    if (state.navFrame) return;
+    state.navFrame = (root.requestAnimationFrame || ((f) => setTimeout(f, 16)))(() => {
+      state.navFrame = 0;
+      updateActiveFromScroll();
+    });
+  }
+  function releaseNavLock() { state.navLockTimer = null; }
+
+  /** Scroll to a section, mark it current and (by default) move keyboard focus to its heading. */
+  function goToSection(key, opts = {}) {
+    const section = sectionEl(key);
+    if (!section || sectionHidden(section)) return false;
+    clearTimeout(state.navLockTimer);
+    state.navLockTimer = setTimeout(releaseNavLock, 700);
+    setActiveSection(key);
+    if (section.scrollIntoView) section.scrollIntoView({ behavior: opts.smooth === false || reducedMotion() ? 'auto' : 'smooth', block: 'start' });
+    if (opts.focus !== false) {
+      const heading = section.querySelector('h2');
+      if (heading) heading.focus({ preventScroll: true });
+    }
+    if (opts.updateHash !== false) setHash(key);
+    return true;
+  }
+
+  function scrollToTop() {
+    clearTimeout(state.navLockTimer);
+    state.navLockTimer = setTimeout(releaseNavLock, 700);
+    setActiveSection(visibleSectionKeys()[0] || null);
+    const panel = $('panel-performance');
+    if (panel.scrollIntoView) panel.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
+    panel.focus({ preventScroll: true });
+    setHash(null);
+  }
+
   // ---------- Loading & tabs ----------
   async function loadAll() {
     const button = $('perf-refresh');
@@ -782,6 +897,12 @@
     await Promise.allSettled([loadSummary(), loadTraining(false), loadSubmissions()]);
     button.disabled = false;
     $('perf-updated').textContent = `Updated ${clockTime(new Date())}`;
+    syncNav();
+    if (state.pendingSection) {
+      const key = state.pendingSection;
+      state.pendingSection = null;
+      if (perfVisible()) goToSection(key, { focus: false, smooth: false, updateHash: false });
+    }
   }
 
   function selectTab(name, opts = {}) {
@@ -803,7 +924,17 @@
     if (name === 'performance') {
       if (!state.loaded) loadAll();
       else if (selectedRun() && selectedRun().status === 'RUNNING') loadTraining(true);
+      syncNav();
     } else clearPolls();
+  }
+
+  /** Apply a '#performance[/section]' hash: open the tab and, once loaded, the section. */
+  function applyHash() {
+    const target = parsePerfHash(location.hash);
+    selectTab(target.tab, { updateHash: false });
+    if (target.tab !== 'performance' || !target.section) return;
+    if (state.loaded && !$('perf-refresh').disabled) goToSection(target.section, { focus: false, updateHash: false });
+    else state.pendingSection = target.section;
   }
 
   function initPerformance() {
@@ -822,16 +953,24 @@
         selectTab(next.dataset.tab, { focus: true });
       });
     });
+    navLinks().forEach((link) => link.addEventListener('click', (e) => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; // let new-tab clicks through
+      e.preventDefault();
+      goToSection(link.dataset.section);
+    }));
+    $('perf-nav-top').addEventListener('click', scrollToTop);
+    root.addEventListener('scroll', onScroll, { passive: true });
+    root.addEventListener('resize', onScroll, { passive: true });
     $('perf-refresh').addEventListener('click', loadAll);
     $('perf-drill-set').addEventListener('change', populateVariants);
     $('perf-drill-variant').addEventListener('change', loadDrill);
     $('perf-drill-mistakes').addEventListener('change', () => { if (state.drillRows) renderDrill(); });
-    root.addEventListener('hashchange', () => selectTab(location.hash === '#performance' ? 'performance' : 'identify', { updateHash: false }));
+    root.addEventListener('hashchange', applyHash);
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) clearPolls();
       else if (perfVisible() && selectedRun() && selectedRun().status === 'RUNNING') loadTraining(true);
     });
-    if (location.hash === '#performance') selectTab('performance', { updateHash: false });
+    if (parsePerfHash(location.hash).tab === 'performance') applyHash();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPerformance);
