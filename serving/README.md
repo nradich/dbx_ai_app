@@ -2,12 +2,14 @@
 
 Endpoint: **`airplane-tail-identifier`**
 
-- Model: `dbx_ai_app.airplane_tail_id.airplane_tail_identifier`, immutable version **1**.
-- Small CPU workload, 100% traffic to `airplane-tail-v1`, scale-to-zero enabled.
+- Model: `dbx_ai_app.airplane_tail_id.airplane_tail_identifier`, immutable version **3**
+  (alias `demo`; promoted from version 1 on 2026-10-27).
+- Small CPU workload, 100% traffic to `airplane-tail-v3`, scale-to-zero enabled.
 - Tail-focused image input; no automatic localization or unknown-airline detection.
-- Deployment verified: ten held-out requests returned the same labels and all class
-  probabilities as the registered version's CPU reference (10/10 correct on these
-  existing test crops). The endpoint reached `READY` / `NOT_UPDATING`.
+- Deployment verified: all 16 dataset v2 held-out crops returned the same labels and
+  all class probabilities as version 3's recorded CPU reference (14/16 correct on
+  those crops). The endpoint reached `READY` / `NOT_UPDATING`. Version 1 was verified
+  the same way on its 10 held-out crops (10/10) before the switch.
 - Scale-to-zero reduces idle compute but adds cold-start delay to the next request.
   Serving compute incurs charges while active. For an interactive app, show loading
   and retry states; consider disabling scale-to-zero if warm response time is required.
@@ -25,6 +27,12 @@ Wait for **both** `state.ready = READY` and `state.config_update = NOT_UPDATING`
 The configuration pins a numeric version; moving the `demo` alias alone does not
 update the endpoint. Deploy future versions through an explicit config update and
 repeat the serving verification before using them in the app.
+
+To change the version on the existing endpoint, edit `serving/endpoint.json` and apply
+its `config` object with `databricks serving-endpoints update-config
+airplane-tail-identifier --json @<config file>`. The previous version keeps serving
+until the new one is ready. The app needs no change: it reads the served version from
+the endpoint for each submission and for the Model performance tab.
 
 ## Request / response
 
@@ -93,14 +101,19 @@ uv run --with databricks-sdk --with pillow python -B -m unittest discover -s ser
 
 ## End-to-end smoke test
 
-After preparing `.local/dataset/` and downloading the successful training run's
-`result.json` as `.local/training_result.json`:
+Prepare the dataset the served version was trained on, then download that training
+run's `result.json` from `/Volumes/.../training_data/runs/<run_id>/result.json`. For
+version 3 (dataset v2, run `9d9fe8ed33194dce9cd9e4359408f5b9`):
 
 ```powershell
-python serving/smoke_test.py --profile YOUR_PROFILE
+python training/prepare_data.py --annotations dataset/tail_annotations_v2.json
+python serving/smoke_test.py --profile YOUR_PROFILE --dataset .local/dataset_v2 --reference .local/training_result_v3.json
 ```
 
-This submits ten independent requests (one per original held-out tail image) and
-compares labels and all probabilities with the registered model's CPU reference.
-The local report is ignored. These are deployment consistency checks on existing
-test images, not new evidence of generalization.
+`--version` defaults to the version in `serving/endpoint.json`. For version 1, use the
+defaults `.local/dataset` and `.local/training_result.json` with `--version 1`. The
+test checks that the endpoint serves only that version and that the dataset manifest
+hash matches the reference run. It then sends one request per held-out image and
+compares labels and all probabilities with the registered model's CPU reference. The
+local report is ignored. These are deployment consistency checks on existing test
+images, not new evidence of generalization.

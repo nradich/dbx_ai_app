@@ -430,7 +430,9 @@ class ImportTest(unittest.TestCase):
         self.assertEqual(set(workload["code_source"]["snapshot"]["include_paths"]), {"compare.py", "eval_metrics.py"})
         params = compare.load_params(workload["parameters"])
         self.assertEqual(len(params["v1_test_ids"]), 10)
-        self.assertEqual(params["serving_endpoint_version"], "1")
+        endpoint = json.loads((ROOT / "serving" / "endpoint.json").read_text(encoding="utf-8"))
+        self.assertEqual(params["serving_endpoint_version"],
+                         endpoint["config"]["served_entities"][0]["entity_version"])
 
 
 # ---------------------------------------------------------------- publish

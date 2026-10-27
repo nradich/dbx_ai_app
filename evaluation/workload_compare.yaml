@@ -35,7 +35,7 @@ parameters:
     - united_tail_9
   context_scales: [1.0, 1.5, 2.0, 3.0]
   output_root: /Volumes/dbx_ai_app/airplane_tail_id/training_data/evaluations
-  serving_endpoint_version: "1"
+  serving_endpoint_version: "3"
   crop_max_side: 1536
   batch_size: 32
   # Reviewed app submissions that are not in any training set: [{id, label, original_path, crop_path, crop_box}].

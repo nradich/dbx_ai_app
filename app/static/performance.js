@@ -346,7 +346,7 @@
       card('Evaluation', data.eval_run_id ? String(data.eval_run_id).slice(0, 8) : '—', 'run ID'),
     );
     $('perf-models').replaceChildren(models.length ? table(
-      ['Version', 'Recipe', 'Dataset', 'Aliases', 'Flags', 'Val accuracy'],
+      ['Version', 'Recipe', 'Dataset', 'Aliases when evaluated', 'Flags', 'Val accuracy'],
       models.map((m) => [
         { content: versionLabel(m.model_version), th: true }, dash(m.recipe), dash(m.dataset_version),
         { content: (m.aliases || []).length ? m.aliases.map((a) => badge(a, 'alias')) : '—' },

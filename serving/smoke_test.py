@@ -1,4 +1,4 @@
-"""Verify the serving endpoint against all ten original held-out CPU predictions.
+"""Verify the serving endpoint against every held-out CPU prediction of the served version.
 
 Requires only Pillow locally; Databricks CLI supplies authentication. No local
 PyTorch, MLflow, model download or training is required.
@@ -27,23 +27,28 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--profile", required=True)
     parser.add_argument("--endpoint", default="airplane-tail-identifier")
+    parser.add_argument("--version", default=None,
+                        help="Registered version expected on the endpoint (default: serving/endpoint.json)")
     parser.add_argument("--dataset", type=Path, default=Path(".local/dataset"))
     parser.add_argument("--reference", type=Path, default=Path(".local/training_result.json"))
     parser.add_argument("--output", type=Path, default=Path(".local/serving_smoke_result.json"))
     args = parser.parse_args()
+    version = args.version or str(json.loads(
+        (Path(__file__).resolve().parent / "endpoint.json").read_text(encoding="utf-8"))
+        ["config"]["served_entities"][0]["entity_version"])
     endpoint = cli(args.profile, "serving-endpoints", "get", args.endpoint)
     if endpoint["state"] != {"ready": "READY", "config_update": "NOT_UPDATING"}:
         raise RuntimeError(f"Endpoint is not fully ready: {endpoint['state']}")
     entities = endpoint["config"]["served_entities"]
     expected_name = "dbx_ai_app.airplane_tail_id.airplane_tail_identifier"
-    if len(entities) != 1 or entities[0]["entity_name"] != expected_name or entities[0]["entity_version"] != "1":
-        raise RuntimeError("Endpoint must serve only the evaluated model version 1")
+    if len(entities) != 1 or entities[0]["entity_name"] != expected_name or entities[0]["entity_version"] != version:
+        raise RuntimeError(f"Endpoint must serve only the evaluated model version {version}")
     manifest_bytes = (args.dataset / "manifest.json").read_bytes()
     manifest = json.loads(manifest_bytes)
     reference = json.loads(args.reference.read_text(encoding="utf-8"))
-    if (reference["registered_model"] != expected_name or str(reference["version"]) != "1"
-            or reference["model_uri"] != f"models:/{expected_name}/1"):
-        raise ValueError("Reference must describe the same registered model version 1")
+    if (reference["registered_model"] != expected_name or str(reference["version"]) != version
+            or reference["model_uri"] != f"models:/{expected_name}/{version}"):
+        raise ValueError(f"Reference must describe the same registered model version {version}")
     if hashlib.sha256(manifest_bytes).hexdigest() != reference["manifest_sha256"]:
         raise ValueError("Dataset manifest differs from the evaluated run")
     expected = {r["id"]: r for r in reference["cpu_reference"]["predictions"]}
@@ -86,9 +91,9 @@ def main():
                         "confidence": prediction["confidence"], "correct": row["airline"] == prediction["airline"],
                         "matches_registered_cpu_reference": True, "cli_roundtrip_seconds": elapsed})
         print(row["id"], prediction["airline"], f"{prediction['confidence']:.1%}", flush=True)
-    if len(records) != 10:
-        raise AssertionError("Expected all ten held-out requests")
-    result = {"endpoint": args.endpoint, "model": expected_name, "version": "1",
+    if len(records) != int(reference["counts"]["test"]) or {r["id"] for r in records} != set(expected):
+        raise AssertionError("Expected one request per held-out image of the reference run")
+    result = {"endpoint": args.endpoint, "model": expected_name, "version": version,
               "checked": len(records), "correct": sum(r["correct"] for r in records),
               "all_match_registered_cpu_reference": True, "predictions": records}
     args.output.parent.mkdir(parents=True, exist_ok=True)

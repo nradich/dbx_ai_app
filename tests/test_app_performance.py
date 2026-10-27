@@ -286,6 +286,19 @@ class SummaryTests(Base):
         t.fake.entities = t.fake.entities * 2  # traffic split: no single version
         self.assertIsNone(self.ok(t.client.get('/api/performance/summary'))['serving']['model_version'])
 
+    def test_model_serving_flag_follows_live_endpoint(self):
+        # Comparison recorded version 1 as serving; the endpoint now serves version 2.
+        t = make()
+        t.fake.eval_runs = [run_row('1', serving='true'), run_row('2', serving='false')]
+        flags = {m['model_version']: m['serving'] for m in self.ok(t.client.get('/api/performance/summary'))['models']}
+        self.assertEqual(flags, {'1': False, '2': True})
+        # Live version unknown: fall back to the recorded flag.
+        t = make()
+        t.fake.eval_runs = [run_row('1', serving='true'), run_row('2', serving='false')]
+        t.fake.endpoint_error = errors.PermissionDenied('no')
+        flags = {m['model_version']: m['serving'] for m in self.ok(t.client.get('/api/performance/summary'))['models']}
+        self.assertEqual(flags, {'1': True, '2': False})
+
     def test_summary_is_cached_for_30_seconds(self):
         t = make()
         t.fake.eval_runs = [run_row('1')]
