@@ -304,6 +304,10 @@ class PerformanceService:
             "aliases": _aliases(row.get("aliases")), "serving": bool(_bool(row.get("serving"))),
             "selected": bool(_bool(row.get("selected"))),
         } for row in rows), key=lambda model: _version_key(model["model_version"]))
+        if serving["model_version"] is not None:
+            # The recorded flag describes the endpoint when the comparison ran; show what serves now.
+            for model in models:
+                model["serving"] = model["model_version"] == serving["model_version"]
         metric_rows = self._sql(
             "SELECT model_version, eval_set, variant, metric, value, n "
             f"FROM {self.settings.table('model_eval_metrics')} WHERE eval_run_id = :eval_run_id",

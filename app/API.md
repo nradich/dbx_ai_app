@@ -87,8 +87,8 @@ After an app restart, finished submissions are read back from the submissions ta
   `airline_name` and `iata_code` are null if the label is not in `demo_airlines`.
   Confidence is uncalibrated.
 - `model`: null while queued, then always
-  `{"endpoint": "airplane-tail-identifier", "served_entity": "airplane-tail-v1",
-  "model_name": "dbx_ai_app.airplane_tail_id.airplane_tail_identifier", "model_version": "1"}`
+  `{"endpoint": "airplane-tail-identifier", "served_entity": "airplane-tail-v3",
+  "model_name": "dbx_ai_app.airplane_tail_id.airplane_tail_identifier", "model_version": "3"}`
   (fields other than `endpoint` may be null).
 - `candidates`, closest first (empty unless `schedule_lookup` is `ok`):
   ```json
@@ -158,8 +158,9 @@ The latest published comparison (the `eval_run_id` with the newest `created_at` 
 - `available` is false, with `eval_run_id`/`evaluated_at` null and empty `models`,
   `eval_sets` and `metrics`, when no comparison has been published.
 - `serving` is read live from the serving endpoint (`model_version` null if it cannot be read
-  or the endpoint serves more than one version); `models[].serving` records what was served
-  when the comparison ran.
+  or the endpoint serves more than one version). `models[].serving` marks the version serving
+  now; only when the live version is unknown does it fall back to what was served when the
+  comparison ran. `models[].aliases` are the registry aliases when the comparison ran.
 - `models` are ordered by version number. `eval_sets` lists, in a fixed order (`v2_val`,
   `v1_test`, `new_holdout`, `v2_test`, `full_plane_stress`, `context_sensitivity`,
   `app_reviewed`), only sets with metrics in this comparison, with a plain-English `label` and

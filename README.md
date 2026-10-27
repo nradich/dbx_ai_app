@@ -40,8 +40,9 @@ with `evaluation/workload.yaml` from its own directory after uploading the new f
 
 ## Model Serving for the app
 
-Serving endpoint: **`airplane-tail-identifier`**, pinned to registered version **1**,
-Small CPU with scale-to-zero. See [deployment and app integration](serving/README.md)
+Serving endpoint: **`airplane-tail-identifier`**, pinned to registered version **3**
+(promoted from version 1 on 2026-10-27, see below), Small CPU with scale-to-zero.
+See [deployment and app integration](serving/README.md)
 for the base64-image API contract, app service-principal resource, backend client,
 and end-to-end serving smoke test. The app should submit the selected tail crop.
 
@@ -235,7 +236,7 @@ Catalog. Contracts: [docs/model_performance.md](docs/model_performance.md).
 
 ### Comparison of 2026-10-27 (`df462c7da8374fd99ad5ebe795457305`)
 
-| Accuracy (n) | v1 (`demo`, serving) | v2: v1 recipe, data v2 | v3: improved, data v2 (`challenger`) |
+| Accuracy (n) | v1 (former `demo`) | v2: v1 recipe, data v2 | v3: improved, data v2 (now `demo`, serving) |
 |---|---:|---:|---:|
 | v1 test crops (10) | 10/10 | 10/10 | 9/10 |
 | New held-out photos (6) | 3/6 | 4/6 | **5/6** |
@@ -246,13 +247,21 @@ Catalog. Contracts: [docs/model_performance.md](docs/model_performance.md).
 | Share predicted Southwest, v2 test | 31% | 25% | 6% |
 
 \* Contaminated for v2/v3 (related Acroterion photos in training). Version 3 was
-selected on validation (13/13 for v2 and v3, lower validation log loss); it is
-registered with alias `challenger`. `demo` and the serving endpoint remain on
-version 1 until promotion is approved. Caveats: the sets are tiny, so a single
+selected on validation (13/13 for v2 and v3, lower validation log loss) and
+registered with alias `challenger`. Caveats: the sets are tiny, so a single
 image moves accuracy by 6–17 points. Version 3 misses one v1 test image
 (`southwest_tail_9` → Delta) and one new Delta ground photo. Its confidence on
 your photo is low (31%). On whole full-plane photos, versions 2 and 3 now lean to
 United instead of Southwest. A tail crop remains required.
+
+**Promotion (2026-10-27).** After a second app photo that version 1 got wrong (an
+American tail from above on tarmac: v1 Southwest 82%, v3 American 97%), version 3
+was promoted. The `demo` alias moved from version 1 to version 3, and
+`serving/endpoint.json` now pins version 3. The endpoint was updated in place;
+version 1 kept serving until version 3 was ready. The serving smoke test matched all
+16 v2 test crops to version 3's recorded CPU reference. To roll back, set
+`entity_version` back to `"1"` (served entity `airplane-tail-v1`), apply the config
+and run `serving/smoke_test.py --version 1`.
 
 ## App wireframe
 
