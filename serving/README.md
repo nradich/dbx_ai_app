@@ -78,6 +78,12 @@ transmitting, rounds its edges outward, and strips inherited image metadata. For
 example, `identify_tail(photo_bytes, crop_box=(0.45, 0.1, 0.95, 0.7))` sends only
 that region. The backend must validate the uploaded image and chosen box, and
 must use the same orientation as the UI; this helper does not find the tail.
+Orientation is read from the EXIF block only: like browsers, it ignores XMP-only
+orientation, so the box refers to the image the user saw. 16-bit grayscale PNGs are
+scaled to 8 bits rather than clipped. `prepare_tail_png` returns the exact PNG bytes
+`identify_tail` transmits, and `query_tail_png` sends already prepared bytes. The
+Tailspot app (`app/`) deploys a byte-identical copy as `app/serving_client.py`; a
+repository test keeps the two files identical.
 Its local
 request-format and metadata-removal checks can be run with:
 

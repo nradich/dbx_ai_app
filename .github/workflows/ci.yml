@@ -46,7 +46,7 @@ jobs:
       - name: Check source and configuration syntax
         run: python ci/check_syntax.py
 
-      - name: Test dataset preparation and recurring schedule
+      - name: Test dataset preparation, recurring schedule and the Tailspot app
         run: python -m unittest discover -s tests -p 'test_*.py' -v
 
       - name: Test serving requests with a fake endpoint
