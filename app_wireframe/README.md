@@ -1,16 +1,23 @@
 # Tailspot app wireframe
 
 Open `index.html` in a browser to review an interactive, local-only prototype.
-Select a JPEG/PNG to preview it and use **Show sample result** to switch between
+Select a JPEG/PNG, drag a box around the tail (or enter its edges as percentages),
+then choose **Preview tail crop**. The crop can also be downloaded locally as PNG.
+Use **Show sample result** to switch between
 empty and result states. The sample is fixed: neither the photo nor the entered
 time is sent anywhere or affects the result. The sample flights correspond to the
 synthetic Tuesday 08:20 example in `schedule/lookup_example.sql`.
 
-This is a design mock, not a deployable Databricks App. There is no inference,
-photo cropping, authentication, or SQL connection. Future implementation should
-accept a user-selected tail crop, invoke `serving/client.py` from the backend with
-managed credentials, and query Unity Catalog using an observation instant and a
-parameterized recurring-schedule lookup. The backend must handle missing/invalid
+This is a design mock, not a deployable Databricks App. The selection and crop
+run locally in the browser, but there is no inference, authentication, or SQL
+connection. Future implementation should send the original bytes and normalized
+crop coordinates to the backend, invoke `serving/client.py` with managed
+credentials, and query Unity Catalog using an observation instant and a
+parameterized recurring-schedule lookup. Coordinates are `[left, top, right,
+bottom]` fractions of the EXIF-oriented image. The backend transposes the image,
+validates the box and crops before sending image bytes to the endpoint. The
+browser's crop preview uses the same outward-rounded pixel boundaries. The
+backend must handle missing/invalid
 images, endpoint cold starts and errors, and zero/multiple schedule candidates.
 See `serving/README.md`, `schedule/README.md`, and `full_plane_tests/RESULTS.md`.
 The model does not reliably handle full-plane photos or reject unknown airlines;
