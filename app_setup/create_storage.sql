@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS dbx_ai_app.airplane_tail_id.photo_submissions (
   candidate_count INT COMMENT 'Number of possible departures shown. NULL if the lookup failed or was skipped',
   candidates_json STRING COMMENT 'JSON array of the possible departures shown. NULL if the lookup failed or was skipped',
   review_label STRING COMMENT 'Reviewer-confirmed airline, NULL until reviewed',
-  reviewed_at TIMESTAMP COMMENT 'When review_label was set'
+  reviewed_at TIMESTAMP COMMENT 'When review_label was set',
+  review_source STRING COMMENT 'Who set review_label: app_user (feedback in the app) or reviewer (NULL on older reviewed rows means reviewer)'
 ) USING DELTA
 COMMENT 'One row per Tailspot app submission. Predictions are not training labels. No user identity is stored.';

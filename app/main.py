@@ -17,6 +17,7 @@ from fastapi import FastAPI, File, Form, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, ConfigDict, StrictBool
 
 import performance as model_performance
 import pipeline
@@ -31,6 +32,14 @@ STATIC_DIR = Path(__file__).resolve().parent / "static"
 MAX_REQUEST_BYTES = pipeline.MAX_UPLOAD_BYTES + 1024 * 1024
 NO_STORE = {"Cache-Control": "no-store"}
 TOO_LARGE = {"detail": "The photo is larger than 20 MB. Choose a smaller photo."}
+
+
+class ReviewAnswer(BaseModel):
+    """Body of POST /api/submissions/{id}/review."""
+
+    model_config = ConfigDict(extra="forbid")
+    correct: StrictBool
+    airline: str | None = None
 
 
 class BodySizeLimit:
@@ -160,6 +169,21 @@ def create_app(service: pipeline.SubmissionService | None = None,
             log.exception("Could not load submission %s", submission_id)
             return JSONResponse(status_code=503, headers=NO_STORE, content={
                 "detail": "The submission status is temporarily unavailable."})
+        if status is None:
+            return JSONResponse(status_code=404, headers=NO_STORE,
+                                content={"detail": "Submission not found"})
+        return JSONResponse(content=status, headers=NO_STORE)
+
+    @app.post("/api/submissions/{submission_id}/review")
+    def review_submission(submission_id: str, answer: ReviewAnswer):
+        try:
+            status = service.review(submission_id, answer.correct, answer.airline)
+        except pipeline.UserError:
+            raise
+        except Exception:
+            log.exception("Could not review submission %s", submission_id)
+            return JSONResponse(status_code=503, headers=NO_STORE, content={
+                "detail": "Your answer could not be saved. Please try again."})
         if status is None:
             return JSONResponse(status_code=404, headers=NO_STORE,
                                 content={"detail": "Submission not found"})

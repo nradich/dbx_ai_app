@@ -74,7 +74,8 @@ After an app restart, finished submissions are read back from the submissions ta
     "crop_width": 512, "crop_height": 640, "crop_downscaled": false
   },
   "recorded": false,
-  "error": null
+  "error": null,
+  "review": null
 }
 ```
 - `prediction`, once the model answers:
@@ -104,11 +105,30 @@ After an app restart, finished submissions are read back from the submissions ta
 - `status` `succeeded` means the model answered. `error` may still be set — for example
   when departures could not be loaded or the record could not be saved (`recorded` false).
 - `status` `failed` means no prediction; `error` explains (model timeout or failure).
+- `review`: null until someone says whether the prediction was right, then
+  `{"label": "delta", "correct": false, "source": "app_user", "reviewed_at": "2026-10-27T20:45:00Z"}`.
+  `label` is the confirmed airline (`alaska`, `american`, `delta`, `southwest`, `united` or
+  `other` for an airline the model does not know); `source` is `app_user` (the feedback
+  buttons) or `reviewer` (set outside the app; final).
 
 The client polls every 3 seconds. A model cold start typically takes about 90 seconds
 (`stage` `waiting_for_model`, `inference_attempts` increases on retries). Each Databricks
 call is time-bounded, and no new inference attempt starts after 10 minutes, so every
 submission reaches `succeeded` or `failed`.
+
+## POST /api/submissions/{submission_id}/review (JSON)
+The "Did we get the airline right?" answer. Body: `{"correct": true}` or
+`{"correct": false, "airline": "<alaska|american|delta|southwest|united|other>"}` (the
+airline must differ from the prediction). Allowed only for a `succeeded`, recorded
+submission. The user may change their own answer; a `reviewer` label is never overwritten.
+Sets `review_label`, `reviewed_at` and `review_source = 'app_user'` in `photo_submissions`.
+
+Responses (`Cache-Control: no-store`):
+- 200 with the full submission status (as GET), including `review`
+- 404 unknown submission
+- 409 not finished, no prediction, not recorded, or already confirmed by a reviewer
+- 422 invalid body (missing `correct`, unknown or missing airline, contradictory answer)
+- 503 the answer could not be saved
 
 ## Model performance endpoints
 

@@ -96,7 +96,13 @@ Tests run without Databricks credentials:
 ## Stored photos
 
 Submissions are kept for later review and possible retraining, as proposed in
-`app_wireframe/README.md`. Predictions are not training labels: `review_label` stays
-empty until a reviewer confirms the airline. Define retention and user-facing
-disclosure before wider use. The UI notes that the photo, tail outline and time are
-saved with the result.
+`app_wireframe/README.md`. Predictions are not training labels. After a result, the
+app asks **"Did we get the airline right?"**: the user answers yes, or no and picks the
+actual airline (or "another airline"). The answer is stored in `review_label` with
+`review_source = 'app_user'`. A label set by a reviewer outside the app has
+`review_source = 'reviewer'` and is never overwritten by the app. App answers feed the
+reviewed-accuracy figures on the Model performance tab. Confirm them before using a
+photo for training or evaluation. Tables created before this column existed need
+`app_setup/add_review_source.sql` once. Define retention and user-facing disclosure
+before wider use. The UI notes that the photo, tail outline and time are saved with
+the result.

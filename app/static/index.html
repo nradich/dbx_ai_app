@@ -152,6 +152,25 @@
             </div>
             <p class="result-warning" id="result-warning" hidden></p>
 
+            <section class="feedback" id="feedback" aria-labelledby="feedback-question" hidden>
+              <p class="feedback-question" id="feedback-question">Did we get the airline right?</p>
+              <div class="feedback-actions" id="feedback-actions">
+                <button type="button" class="feedback-button feedback-yes" id="feedback-yes">✓ Yes, correct</button>
+                <button type="button" class="feedback-button feedback-no" id="feedback-no">✗ No, it was wrong</button>
+              </div>
+              <div class="feedback-correction" id="feedback-correction" hidden>
+                <label for="feedback-airline">Which airline was it?</label>
+                <div class="feedback-correction-row">
+                  <select id="feedback-airline"></select>
+                  <button type="button" class="feedback-button" id="feedback-save">Save answer</button>
+                  <button type="button" class="text-button" id="feedback-cancel">Cancel</button>
+                </div>
+              </div>
+              <p class="feedback-status" id="feedback-status" role="status"></p>
+              <button type="button" class="text-button feedback-change" id="feedback-change" hidden>Change answer</button>
+              <p class="feedback-note">Your answer is saved with this submission to measure how well the model works. It is not used for training without review.</p>
+            </section>
+
             <div class="candidate-heading">
               <div><span class="step">NEXT / SCHEDULE LOOKUP</span><h3>Possible departures</h3><p id="sighting-line"></p></div>
               <span class="count-badge" id="candidate-count"></span>
