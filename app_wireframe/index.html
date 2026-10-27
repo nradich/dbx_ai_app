@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tailspot · App wireframe</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="prototype-banner"><span class="status-dot"></span> INTERACTIVE WIREFRAME <span class="banner-divider"></span> Sample data only · No model or schedule connection</div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Tailspot home"><span class="brand-icon">✦</span><span>tailspot<span class="brand-period">.</span></span></a>
+    <div class="header-right"><span class="header-label">AIRPORT</span><span class="airport-chip"><span class="airport-dot"></span> San Diego <b>SAN</b></span></div>
+  </header>
+  <main id="top">
+    <section class="intro"><div><div class="eyebrow"><span class="line"></span> AIRCRAFT IDENTIFICATION <span class="eyebrow-number">/ 01</span></div><h1>See the tail.<br><span>Find the flight.</span></h1><p>Start with a clear photo of an aircraft tail. We'll help narrow down the airline and possible departures.</p></div><div class="intro-note"><span class="note-icon">↗</span><span>FROM A SIGHTING<br><strong>TO A SHORTLIST</strong></span></div></section>
+    <div class="workspace">
+      <section class="card input-card" aria-labelledby="input-title">
+        <div class="card-heading"><div><span class="step">01 / YOUR SIGHTING</span><h2 id="input-title">Let's take a look</h2></div><span class="corner-mark">✳</span></div>
+        <div class="form-label-row"><label for="photo">Tail photo</label><span>JPG OR PNG</span></div>
+        <label class="upload" id="upload-zone" for="photo"><span class="upload-icon">↑</span><strong>Choose a photo</strong><span>or drag and drop it here</span><small>Upload a full-plane or tail photo.</small><input id="photo" type="file" accept="image/jpeg,image/png" class="visually-hidden"></label>
+        <div class="preview" id="preview" hidden>
+          <div class="preview-info"><div><span class="preview-eyebrow">SELECT THE TAIL</span><strong id="file-name"></strong></div><button type="button" class="text-button" id="change-photo">Change photo ↗</button></div>
+          <p class="crop-help">Drag a box around the tail, leaving a little space around it.</p>
+          <canvas id="crop-canvas" aria-label="Photo: draw a box around the aircraft tail"></canvas>
+          <fieldset class="crop-fields"><legend>Or enter the box edges as percentages of the image</legend>
+            <label>Left <input id="crop-left" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+            <label>Top <input id="crop-top" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+            <label>Right <input id="crop-right" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+            <label>Bottom <input id="crop-bottom" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+          </fieldset>
+          <p id="crop-error" class="crop-error" role="status"></p>
+          <button type="button" id="apply-crop" class="crop-button" disabled>Preview tail crop ↗</button>
+          <div id="cropped-result" hidden><div class="crop-output-heading">TAIL CROP · MODEL INPUT</div><img id="cropped-image" alt="Preview of the selected tail crop"><button type="button" id="download-crop" class="text-button">Download crop ↓</button></div>
+        </div>
+        <p class="photo-guidance"><span>✳</span> Choose the tail in your photo before sending it to the model.</p>
+        <div class="field-divider"></div>
+        <div class="form-label-row"><label for="observed">When did you see it on the runway?</label><span>LOCAL TIME</span></div>
+        <div class="time-field"><input id="observed" type="datetime-local" value="2026-10-27T08:20"><span class="field-icon">◷</span></div>
+        <p class="field-hint">San Diego time · Pacific Time</p>
+        <button class="primary-button" id="show-result" type="button">Show sample result <span>↗</span></button>
+        <p class="button-note">The example below is fixed. Your photo and time are not analyzed.</p>
+      </section>
+      <section class="card result-card" aria-labelledby="results-title">
+        <div class="card-heading"><div><span class="step">02 / THE SHORTLIST</span><h2 id="results-title">Your results</h2></div><span class="sample-badge">SAMPLE</span></div>
+        <div id="empty-state" class="empty-state"><div class="empty-icon"><span>✈</span><i></i></div><h3>A little closer to the answer.</h3><p>Preview the result to see how an airline prediction and possible flights could appear here.</p><div class="empty-divider"></div><span>YOUR RESULTS WILL APPEAR HERE</span></div>
+        <div id="result-state" hidden aria-live="polite">
+          <div class="result-alert"><span>i</span><p><strong>Illustrative example</strong> · This is a fixed sample, not a prediction from your photo or time.</p></div>
+          <div class="result-label"><span>IDENTIFIED AIRLINE</span><span>MODEL OUTPUT</span></div>
+          <div class="airline-result"><div class="airline-emblem">S</div><div><span class="result-caption">AIRLINE</span><h3>Southwest Airlines <span class="airline-code">WN</span></h3><p>Based on an example tail photo</p></div><div class="airline-arrow">↗</div></div>
+          <div class="candidate-heading"><div><span class="step">NEXT / SCHEDULE LOOKUP</span><h3>Possible departures</h3><p>Tuesday · 8:20 AM sighting · SAN</p></div><span class="count-badge">2 CANDIDATES</span></div>
+          <div class="flight"><div class="flight-icon">↗</div><div class="flight-main"><strong>Phoenix <span>PHX</span></strong><small>WN1002 · Scheduled 8:30 AM</small></div><div class="flight-time">10 min <span>after sighting</span></div></div>
+          <div class="flight"><div class="flight-icon">↗</div><div class="flight-main"><strong>Las Vegas <span>LAS</span></strong><small>WN1001 · Scheduled 7:30 AM</small></div><div class="flight-time">50 min <span>before sighting</span></div></div>
+          <div class="candidate-note"><span>✳</span><p><strong>These are possibilities, not confirmed flights.</strong> Schedule times are gate departures, and runway timing can vary. The model can also be wrong, even when its confidence is high.</p></div>
+          <button type="button" class="reset-button" id="reset-result">← Back to the starting view</button>
+        </div>
+      </section>
+    </div>
+    <footer><span><strong>tailspot.</strong> &nbsp; A different view of the sky.</span><span>SAN DIEGO INTERNATIONAL AIRPORT <span class="footer-dot">●</span> PROTOTYPE 01</span></footer>
+  </main>
+</body>
+</html>
