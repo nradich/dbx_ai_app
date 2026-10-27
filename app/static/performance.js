@@ -166,10 +166,54 @@
     return `${isNum(s.reviewed_correct) ? s.reviewed_correct : 0}/${reviewed} reviewed correct`;
   }
 
+  const RECENT_FILTERS = [['all', 'All'], ['correct', 'Correct'], ['wrong', 'Wrong'], ['unreviewed', 'Not reviewed']];
+
+  /** Outcome of a recent submission: correct | wrong | unreviewed | failed. */
+  function recentOutcome(r) {
+    if (!r || r.status === 'failed' || !r.predicted_airline) return 'failed';
+    if (r.correct === true) return 'correct';
+    if (r.correct === false) return 'wrong';
+    return 'unreviewed';
+  }
+
+  /** Rows matching a filter; failed submissions count as "not reviewed" (nothing to judge). */
+  function filterRecent(rows, filter) {
+    const list = Array.isArray(rows) ? rows : [];
+    if (filter === 'correct' || filter === 'wrong') return list.filter((r) => recentOutcome(r) === filter);
+    if (filter === 'unreviewed') return list.filter((r) => ['unreviewed', 'failed'].includes(recentOutcome(r)));
+    return list;
+  }
+
+  /** Badge text for a recent submission. */
+  function outcomeText(r) {
+    const outcome = recentOutcome(r);
+    if (outcome === 'correct') return '✓ Correct';
+    if (outcome === 'wrong') {
+      const actual = r.review_label === 'other' ? 'another airline' : titleCase(r.review_label);
+      return `✗ Wrong — was ${actual}`;
+    }
+    if (outcome === 'failed') return 'No prediction';
+    return 'Not reviewed';
+  }
+
+  /** "2/3 correct (67%)" for a by_model_version entry, or "No reviewed photos yet". */
+  function versionAccuracyText(v) {
+    const reviewed = v && isNum(v.reviewed) ? v.reviewed : 0;
+    if (!reviewed) return 'No reviewed photos yet';
+    const correct = isNum(v.correct) ? v.correct : 0;
+    return `${correct}/${reviewed} correct (${Math.round((correct / reviewed) * 100)}%)`;
+  }
+
+  /** Same-origin photo URL; kind is thumb | crop | original. */
+  function photoUrl(submissionId, kind) {
+    return `/api/submissions/${encodeURIComponent(String(submissionId))}/photo?kind=${encodeURIComponent(kind)}`;
+  }
+
   const helpers = {
     pct, fixed, accuracyCell, variantLabel, scaleOrder, classesFor, confusion, bestFlags,
     indexMetrics, linePath, integerTicks, clockTime, errorMessage, submissionsAccuracyText,
-    versionLabel, titleCase, CLASS_ORDER, SCALE_ORDER, CHART,
+    versionLabel, titleCase, recentOutcome, filterRecent, outcomeText, versionAccuracyText, photoUrl,
+    CLASS_ORDER, SCALE_ORDER, CHART, RECENT_FILTERS,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = helpers;
   root.TailspotPerformance = helpers;
@@ -301,6 +345,7 @@
     loaded: false, summary: null, metrics: indexMetrics([]), versions: [],
     drillRows: null, drillToken: 0,
     runs: [], selectedRunId: null, historyToken: 0, historyTimer: null, runsTimer: null, lastHistory: null,
+    submissions: null, recentFilter: 'all',
   };
   const colorFor = (version) => PALETTE[Math.max(0, state.versions.indexOf(version)) % PALETTE.length];
   const perfVisible = () => !$('panel-performance').hidden && !document.hidden;
@@ -313,6 +358,8 @@
       const data = await fetchJson(API.summary);
       slot.replaceChildren();
       state.summary = data;
+      // The submissions section may have rendered first; refresh its "serving" marker.
+      if (state.submissions && $('perf-submissions').querySelector('.perf-version-cards')) renderSubmissions(state.submissions);
       if (!data || data.available === false) {
         $('perf-summary-content').hidden = true;
         $('perf-empty').hidden = false;
@@ -644,21 +691,86 @@
       el('span', { class: 'perf-hist-label', text: `${Math.round(b.lower * 100)}–${Math.round(b.upper * 100)}%` }),
     ])));
     const recent = s.recent || [];
+    const versions = (s.by_model_version || []).filter((v) => v.model_version !== null && v.model_version !== undefined);
+    const recentHost = el('div', { id: 'perf-recent' });
+    state.submissions = s;
     $('perf-submissions').replaceChildren(
       el('div', { class: 'perf-cards' }, [tile('Total', dash(s.total)), tile('Succeeded', dash(s.succeeded)), tile('Failed', dash(s.failed)),
         tile('Reviewed accuracy', submissionsAccuracyText(s))]),
+      el('h4', { text: 'Live accuracy by model version' }),
+      versions.length ? el('div', { class: 'perf-cards perf-version-cards' }, versions.map((v) => el('div', { class: 'perf-card' }, [
+        el('span', { class: 'perf-card-label', text: `${versionLabel(v.model_version)}${v.model_version === servingVersion() ? ' · serving' : ''}` }),
+        el('strong', { class: 'perf-card-value perf-card-value-small', text: versionAccuracyText(v) }),
+        el('span', { class: 'perf-card-sub', text: `${v.submissions} submission${v.submissions === 1 ? '' : 's'} · ${v.reviewed} reviewed` }),
+      ]))) : note('No submissions with a model version yet.'),
+      note('Based on app photos whose airline was confirmed (Yes/No answers or a reviewer). These are small, self-selected samples, not a test set.'),
       el('div', { class: 'perf-sub-grid' }, [
         el('div', { class: 'perf-bars' }, [el('h4', { text: 'Predicted airline' })].concat(byAirline.length
           ? byAirline.map((a) => barRow(titleCase(a.airline), (a.count || 0) / maxCount, String(a.count)))
           : [note('No successful predictions yet.')])),
         el('div', {}, [el('h4', { text: 'Confidence (uncalibrated)' }), hist]),
       ]),
-      el('h4', { text: 'Recent submissions' }),
-      recent.length ? table(['Submitted', 'Predicted', 'Confidence', 'Review label', 'Model'], recent.map((r) => [
-        { content: localDateTime(r.submitted_at), th: true }, titleCase(r.predicted_airline), pct(r.confidence),
-        r.review_label ? titleCase(r.review_label) : '—', versionLabel(r.model_version),
-      ]), { caption: 'Recent app submissions' }) : note('No submissions yet.'),
+      el('h4', { id: 'perf-recent-title', text: `Recent submissions (latest ${recent.length})` }),
+      recent.length ? recentHost : note('No submissions yet.'),
     );
+    if (recent.length) renderRecent(recentHost, recent);
+  }
+
+  function servingVersion() {
+    const serving = state.summary && state.summary.serving;
+    return serving && serving.model_version ? String(serving.model_version) : null;
+  }
+
+  function renderRecent(host, recent) {
+    const counts = Object.fromEntries(RECENT_FILTERS.map(([key]) => [key, filterRecent(recent, key).length]));
+    const buttons = el('div', { class: 'perf-filter', role: 'group', 'aria-label': 'Filter recent submissions' },
+      RECENT_FILTERS.map(([key, label]) => {
+        const button = el('button', { type: 'button', class: 'perf-filter-button', 'aria-pressed': String(state.recentFilter === key),
+          'data-filter': key, text: `${label} (${counts[key]})` });
+        button.addEventListener('click', () => {
+          state.recentFilter = key;
+          renderRecent(host, recent);
+          const again = host.querySelector(`[data-filter="${key}"]`);
+          if (again) again.focus();
+        });
+        return button;
+      }));
+    const rows = filterRecent(recent, state.recentFilter);
+    const list = rows.length
+      ? el('ul', { class: 'perf-recent-list', 'aria-labelledby': 'perf-recent-title' }, rows.map(recentItem))
+      : note('No submissions match this filter.');
+    host.replaceChildren(buttons, el('div', { class: 'perf-recent-scroll', tabindex: '0', role: 'region',
+      'aria-label': 'Recent submissions, scrollable' }, [list]));
+  }
+
+  function recentItem(r) {
+    const outcome = recentOutcome(r);
+    const airline = r.predicted_airline ? titleCase(r.predicted_airline) : 'No prediction';
+    const thumb = r.has_photo
+      ? el('a', { class: 'perf-thumb', href: photoUrl(r.submission_id, 'original'), target: '_blank', rel: 'noopener',
+        title: 'Open the full photo in a new tab' }, [
+        el('img', { src: photoUrl(r.submission_id, 'thumb'), alt: `Tail crop sent to the model (guess: ${airline})`,
+          loading: 'lazy', decoding: 'async', width: '72', height: '72' }),
+        el('span', { class: 'visually-hidden', text: ' (opens full photo in a new tab)' }),
+      ])
+      : el('span', { class: 'perf-thumb perf-thumb-missing', text: 'No photo' });
+    const img = thumb.querySelector && thumb.querySelector('img');
+    if (img) {
+      img.addEventListener('error', () => {
+        thumb.replaceChildren(el('span', { class: 'perf-thumb-missing', text: 'Photo unavailable' }));
+      }, { once: true });
+    }
+    return el('li', { class: `perf-recent-item is-${outcome}` }, [
+      thumb,
+      el('div', { class: 'perf-recent-main' }, [
+        el('div', { class: 'perf-recent-guess' }, [
+          el('strong', { text: airline }),
+          r.predicted_airline ? el('span', { class: 'perf-muted-inline', text: ` ${pct(r.confidence, 0)} confidence` }) : null,
+        ]),
+        el('div', { class: 'perf-recent-meta', text: `${localDateTime(r.submitted_at)} · Model ${versionLabel(r.model_version)}` }),
+      ]),
+      el('span', { class: `perf-outcome perf-outcome-${outcome}`, text: outcomeText(r) }),
+    ]);
   }
 
   // ---------- Loading & tabs ----------

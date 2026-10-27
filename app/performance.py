@@ -18,7 +18,7 @@ import os
 import re
 import threading
 import time
-from typing import Callable
+from typing import Callable, Iterator
 
 import pipeline
 import schedule
@@ -38,6 +38,11 @@ SUBMISSIONS_TTL_S = 15
 MAX_TRAINING_RUNS = 20
 RECENT_SUBMISSIONS = 10
 CACHE_ENTRIES = 256
+PHOTO_KINDS = ("thumb", "crop", "original")
+THUMB_MAX_SIDE = 256
+PHOTO_PATH_ENTRIES = 1000
+THUMB_CACHE_ENTRIES = 200
+PHOTO_CHUNK_BYTES = 1024 * 1024
 HISTORY_KEYS = ("train_loss", "train_accuracy", "val_loss", "val_accuracy", "val_macro_f1", "lr")
 FINISHED_STATUSES = frozenset({"FINISHED", "FAILED", "KILLED"})
 # Confidence buckets of width 0.2; a value on an edge goes to the upper bucket, 1.0 to the last.
@@ -54,6 +59,7 @@ REVIEW_SQL = ("CASE WHEN review_label IS NULL THEN NULL "
 _RUN_ID = re.compile(r"[0-9a-f]{32}")
 _EXPERIMENT_ID = re.compile(r"[0-9A-Za-z_-]{1,64}")
 _CONTEXT_VARIANT = re.compile(r"context_(?:full|[0-9]{1,2}\.[0-9]{1,6})")
+_SUBMISSION_ID = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
 
 # Evaluation sets in display order (evaluation/compare.py builds them; see
 # docs/model_performance.md). Only sets with metrics in the latest comparison are shown.
@@ -227,18 +233,25 @@ class PerformanceService:
 
     def __init__(self, settings: pipeline.Settings | None = None,
                  client_factory: Callable[[], object] | None = None, *,
+                 files_client_factory: Callable[[], object] | None = None,
                  training_experiment_id: str | None = None,
                  sleep: Callable[[float], None] = time.sleep,
                  monotonic: Callable[[], float] = time.monotonic):
         self.settings = settings or pipeline.Settings.from_env()
         self.training_experiment_id = training_experiment_id or None
         self._client_factory = client_factory
+        self._files_client_factory = files_client_factory
         self._client = None
+        self._files_client = None
         self._client_lock = threading.Lock()
         self._sleep, self._monotonic = sleep, monotonic
         self._cache = _Cache(monotonic)
         # Striped locks so concurrent requests for the same key run one load, with bounded memory.
         self._load_locks = tuple(threading.Lock() for _ in range(16))
+        # Storage paths of submissions, kept server-side only (never sent to the browser).
+        self._photo_lock = threading.Lock()
+        self._photo_paths: dict[str, dict] = {}
+        self._thumbs: dict[str, bytes] = {}
 
     # Plumbing ----------------------------------------------------------------
     def client(self):
@@ -247,6 +260,13 @@ class PerformanceService:
                 factory = self._client_factory or (lambda: pipeline._default_client("api"))
                 self._client = factory()
             return self._client
+
+    def files_client(self):
+        with self._client_lock:
+            if self._files_client is None:
+                factory = self._files_client_factory or (lambda: pipeline._default_client("files"))
+                self._files_client = factory()
+            return self._files_client
 
     def _sql(self, statement: str, params: dict | None = None) -> list[dict]:
         return pipeline.execute_sql(self.client(), self.settings.warehouse_id, statement, params,
@@ -471,10 +491,18 @@ class PerformanceService:
             "WHERE bucket IS NOT NULL GROUP BY bucket "
             "UNION ALL SELECT 'review', review, COUNT(*) FROM s WHERE review IS NOT NULL GROUP BY review")
         recent = self._sql(
-            "SELECT submission_id, unix_timestamp(submitted_at) AS submitted_epoch, "
-            "predicted_airline, confidence, review_label, model_version "
+            "SELECT submission_id, unix_timestamp(submitted_at) AS submitted_epoch, status, "
+            "predicted_airline, confidence, review_label, review_source, model_version, "
+            "crop_path, original_path "
             f"FROM {table} ORDER BY submitted_at DESC, submission_id DESC "
             f"LIMIT {RECENT_SUBMISSIONS}")
+        by_version = self._sql(
+            "SELECT model_version, COUNT(*) AS submissions, COUNT(review_label) AS reviewed, "
+            f"SUM(CASE WHEN {REVIEW_SQL} = 'correct' THEN 1 ELSE 0 END) AS correct "
+            f"FROM {table} GROUP BY model_version")
+        for row in recent:
+            self._remember_paths(row.get("submission_id"), row.get("crop_path"),
+                                 row.get("original_path"))
         counts: dict[tuple, int] = {}
         for row in groups:
             key = (row.get("kind"), row.get("label"))
@@ -493,12 +521,139 @@ class PerformanceService:
             "reviewed_correct": correct,
             "by_predicted_airline": [{"airline": label, "count": n} for label, n in airlines],
             "confidence_buckets": buckets,
+            "by_model_version": sorted(({
+                "model_version": _str(row.get("model_version")),
+                "submissions": _int(row.get("submissions")) or 0,
+                "reviewed": _int(row.get("reviewed")) or 0,
+                "correct": _int(row.get("correct")) or 0,
+            } for row in by_version), key=lambda item: _version_key(item["model_version"])),
             "recent": [{
                 "submission_id": row.get("submission_id"),
                 "submitted_at": pipeline._epoch_to_iso(row.get("submitted_epoch")),
+                "status": row.get("status"),
                 "predicted_airline": row.get("predicted_airline"),
                 "confidence": _float(row.get("confidence")),
                 "review_label": row.get("review_label"),
+                "review_source": (row.get("review_source") or "reviewer") if row.get("review_label") else None,
+                "correct": _review_correct(row.get("review_label"), row.get("predicted_airline")),
                 "model_version": _str(row.get("model_version")),
+                "has_photo": bool(self._valid_path(row.get("submission_id"), row.get("crop_path"))),
             } for row in recent],
         }
+
+    # Submission photos (served through the app; storage paths stay server-side) ---------
+    def _valid_path(self, submission_id, path) -> str | None:
+        """The path if it is this submission's file inside the configured Volume, else None."""
+        if not isinstance(submission_id, str) or not isinstance(path, str):
+            return None
+        pattern = (re.escape(self.settings.volume_path)
+                   + r"/[0-9]{4}/[0-9]{2}/[0-9]{2}/" + re.escape(submission_id)
+                   + r"/(?:original|tail_crop)\.png")
+        return path if re.fullmatch(pattern, path) else None
+
+    def _remember_paths(self, submission_id, crop_path, original_path) -> None:
+        if not isinstance(submission_id, str):
+            return
+        with self._photo_lock:
+            self._photo_paths.pop(submission_id, None)
+            self._photo_paths[submission_id] = {"crop": crop_path, "original": original_path}
+            while len(self._photo_paths) > PHOTO_PATH_ENTRIES:
+                self._photo_paths.pop(next(iter(self._photo_paths)))
+
+    def _photo_path(self, submission_id: str, kind: str) -> str:
+        column = "original" if kind == "original" else "crop"
+        with self._photo_lock:
+            paths = self._photo_paths.get(submission_id)
+        if paths is None:
+            try:
+                rows = self._sql(
+                    "SELECT crop_path, original_path FROM "
+                    f"{self.settings.table('photo_submissions')} WHERE submission_id = :submission_id",
+                    {"submission_id": submission_id})
+            except Exception:
+                log.exception("Could not look up photos for submission %s", submission_id)
+                raise PerformanceUnavailable("The photo is temporarily unavailable.") from None
+            if not rows:
+                raise NotFound("Photo not found")
+            self._remember_paths(submission_id, rows[0].get("crop_path"), rows[0].get("original_path"))
+            paths = {"crop": rows[0].get("crop_path"), "original": rows[0].get("original_path")}
+        path = self._valid_path(submission_id, paths.get(column))
+        if path is None:
+            raise NotFound("Photo not found")
+        return path
+
+    def photo(self, submission_id: str, kind: str) -> tuple[Iterator[bytes], int | None]:
+        """PNG bytes of a submission photo as (chunk iterator, length or None).
+
+        kind is "thumb" (the tail crop reduced to at most 256 px), "crop" (the exact model
+        input) or "original" (the upright, metadata-free full photo).
+        """
+        if kind not in PHOTO_KINDS:
+            raise InvalidRequest("kind must be thumb, crop or original.")
+        submission_id = (submission_id or "").lower()
+        if not _SUBMISSION_ID.fullmatch(submission_id):
+            raise NotFound("Photo not found")
+        if kind == "thumb":
+            with self._photo_lock:
+                cached = self._thumbs.get(submission_id)
+            if cached is None:
+                path = self._photo_path(submission_id, "crop")
+                try:
+                    cached = _thumbnail(b"".join(self._download(path)[0]))
+                except PerformanceError:
+                    raise
+                except Exception:
+                    log.exception("Could not build a thumbnail for %s", path)
+                    raise PerformanceUnavailable("The photo is temporarily unavailable.") from None
+                with self._photo_lock:
+                    self._thumbs[submission_id] = cached
+                    while len(self._thumbs) > THUMB_CACHE_ENTRIES:
+                        self._thumbs.pop(next(iter(self._thumbs)))
+            return iter((cached,)), len(cached)
+        return self._download(self._photo_path(submission_id, kind))
+
+    def _download(self, path: str) -> tuple[Iterator[bytes], int | None]:
+        from databricks.sdk import errors
+
+        try:
+            response = self.files_client().files.download(path)
+        except errors.NotFound:
+            raise NotFound("Photo not found") from None
+        except Exception:
+            log.exception("Could not download %s", path)
+            raise PerformanceUnavailable("The photo is temporarily unavailable.") from None
+        contents = response.contents
+
+        def chunks():
+            try:
+                while True:
+                    chunk = contents.read(PHOTO_CHUNK_BYTES)
+                    if not chunk:
+                        return
+                    yield chunk
+            finally:
+                close = getattr(contents, "close", None)
+                if close:
+                    close()
+
+        length = getattr(response, "content_length", None)
+        return chunks(), (int(length) if isinstance(length, int) and length >= 0 else None)
+
+
+def _review_correct(label, predicted) -> bool | None:
+    """Same rule as REVIEW_SQL: None when unreviewed; a failed submission is never correct."""
+    if label is None:
+        return None
+    return predicted is not None and label == predicted
+
+
+def _thumbnail(png: bytes) -> bytes:
+    from PIL import Image
+    import io
+
+    with Image.open(io.BytesIO(png)) as image:
+        image = image.convert("RGB")
+        image.thumbnail((THUMB_MAX_SIDE, THUMB_MAX_SIDE), Image.Resampling.LANCZOS)
+        buffer = io.BytesIO()
+        image.save(buffer, format="PNG", optimize=True)
+        return buffer.getvalue()

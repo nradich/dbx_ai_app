@@ -223,14 +223,31 @@ deleted, it belongs to another experiment, or no training experiment is configur
                         {"lower": 0.4, "upper": 0.6, "count": 0},
                         {"lower": 0.6, "upper": 0.8, "count": 0},
                         {"lower": 0.8, "upper": 1.0, "count": 4}],
+ "by_model_version": [{"model_version": "1", "submissions": 4, "reviewed": 4, "correct": 1},
+                      {"model_version": "3", "submissions": 2, "reviewed": 1, "correct": 1}],
  "recent": [{"submission_id": "uuid", "submitted_at": "2026-10-27T15:21:03Z",
-             "predicted_airline": "delta", "confidence": 0.91, "review_label": null,
-             "model_version": "2"}]}
+             "status": "succeeded", "predicted_airline": "delta", "confidence": 0.91,
+             "review_label": "delta", "review_source": "app_user", "correct": true,
+             "model_version": "3", "has_photo": true}]}
 ```
 From `photo_submissions`. `reviewed` counts rows with a `review_label`; `reviewed_correct`
 those with a non-null `predicted_airline` equal to the `review_label` (a reviewed failed
 submission counts as reviewed but not correct). `by_predicted_airline` is ordered by
 count (descending) then airline; failed submissions have no prediction and are not listed.
 `confidence_buckets` always has five buckets: a value on an edge goes to the upper bucket and
-1.0 to the last. `recent` is the 10 newest submissions; storage paths are never returned.
+1.0 to the last. `by_model_version` applies the same correctness rule per model version that
+answered (ordered by version; `null` for submissions without a recorded version). `recent` is
+the 10 newest submissions: `correct` is null until reviewed, `review_source` is `app_user` or
+`reviewer` (null when unreviewed), and `has_photo` says whether
+`/api/submissions/{id}/photo` can serve it. Storage paths are never returned.
 Predictions and confidences are uncalibrated model outputs, not confirmed labels.
+
+### GET /api/submissions/{submission_id}/photo?kind=thumb|crop|original
+Serves a submission's stored photo as `image/png` through the app (the browser needs no
+Volume access): `thumb` (default) is the tail crop reduced to at most 256 px, `crop` the
+exact bytes sent to the model, `original` the upright, metadata-free full photo. The storage
+path is looked up from `photo_submissions` by ID and must be that submission's file inside the
+configured Volume. Headers: `Cache-Control: private, max-age=300`,
+`X-Content-Type-Options: nosniff`. Errors (JSON `detail`): 422 unknown `kind`; 404 malformed
+or unknown ID, or missing file; 503 storage or SQL unavailable. Anyone who can open the app
+can view submitted photos.

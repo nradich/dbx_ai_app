@@ -33,7 +33,12 @@ The **Model performance** tab (`#performance`) is read-only:
   drill-down with confusion matrices and every prediction.
 - **Training runs:** read live from the MLflow experiment `airplane-tail-identifier`.
   Running runs refresh automatically.
-- **App submission statistics:** read from `photo_submissions`.
+- **App submission statistics:** read from `photo_submissions`, including live reviewed
+  accuracy per model version and the 10 most recent submissions (5 visible, the rest scroll).
+  Each shows a thumbnail, the guess and confidence, and whether it was correct, with an
+  All / Correct / Wrong / Not reviewed filter. Clicking a thumbnail opens the full upright
+  photo, served by the app from the Volume
+  (`GET /api/submissions/{id}/photo`); anyone who can open the app can view these photos.
 
 The app reads the experiment ID from the `training-experiment` resource
 (`TAILSPOT_TRAINING_EXPERIMENT_ID`). The bundle variable `training_experiment_id`
