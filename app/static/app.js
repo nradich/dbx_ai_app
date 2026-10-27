@@ -289,6 +289,33 @@ function isDuplicateWarning(warningText, shownText) {
   return Boolean(warning) && Boolean(shownText) && String(shownText).includes(warning);
 }
 
+/** Airlines a user can name when the prediction was wrong (values match the API's REVIEW_CHOICES). */
+const REVIEW_OPTIONS = [
+  ['alaska', 'Alaska Airlines'], ['american', 'American Airlines'], ['delta', 'Delta Air Lines'],
+  ['southwest', 'Southwest Airlines'], ['united', 'United Airlines'], ['other', 'Another airline'],
+];
+
+/** Choices offered after "No": every option except the predicted airline. */
+function reviewChoices(predicted) {
+  return REVIEW_OPTIONS.filter(([value]) => value !== predicted);
+}
+
+/** Display name for a review label. */
+function reviewLabelName(label) {
+  const option = REVIEW_OPTIONS.find(([value]) => value === label);
+  return option ? option[1] : titleCase(label);
+}
+
+/** Text describing a saved review ({label, correct, source}), or '' when there is none. */
+function reviewSummary(review) {
+  if (!review || typeof review !== 'object' || !review.label) return '';
+  const name = reviewLabelName(review.label);
+  if (review.source && review.source !== 'app_user') return `A reviewer confirmed this was ${name}.`;
+  return review.correct
+    ? `Thanks — recorded as correct (${name}).`
+    : `Thanks — recorded as wrong. It was ${name === 'Another airline' ? 'another airline' : name}.`;
+}
+
 /* ------------------------------------------------------------------ */
 /* DOM wiring                                                          */
 /* ------------------------------------------------------------------ */
@@ -346,6 +373,16 @@ function initApp() {
   const failedMessage = $('#failed-message');
   const retrySubmission = $('#retry-submission');
   const resetFailed = $('#reset-failed');
+  const feedback = $('#feedback');
+  const feedbackActions = $('#feedback-actions');
+  const feedbackYes = $('#feedback-yes');
+  const feedbackNo = $('#feedback-no');
+  const feedbackCorrection = $('#feedback-correction');
+  const feedbackAirline = $('#feedback-airline');
+  const feedbackSave = $('#feedback-save');
+  const feedbackCancel = $('#feedback-cancel');
+  const feedbackStatus = $('#feedback-status');
+  const feedbackChange = $('#feedback-change');
 
   const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -364,6 +401,8 @@ function initApp() {
   // Reference wall clock for the datetime-local max (server now_local, or browser time as a fallback).
   let referenceNowLocal = null;
   let referenceLoadedAt = 0;
+  // Submission the "Was this right?" block refers to: {id, predicted, predictedName}.
+  let feedbackTarget = null;
 
   function el(tag, className, text) {
     const node = document.createElement(tag);
@@ -703,8 +742,90 @@ function initApp() {
     submissionFootnote.textContent = parts.join(' · ');
     submissionFootnote.hidden = parts.length === 0;
 
+    renderFeedback(data, prediction, name);
     showPhase('result');
     focusResults();
+  }
+
+  /* ---------- "Did we get the airline right?" ---------- */
+
+  function setFeedbackBusy(value) {
+    [feedbackYes, feedbackNo, feedbackSave, feedbackCancel, feedbackChange, feedbackAirline]
+      .forEach(control => { control.disabled = value; });
+  }
+
+  function showFeedbackQuestion() {
+    feedbackActions.hidden = false;
+    feedbackCorrection.hidden = true;
+    feedbackChange.hidden = true;
+    feedbackStatus.textContent = '';
+    feedbackStatus.classList.remove('is-error');
+  }
+
+  function showSavedReview(review) {
+    feedbackActions.hidden = true;
+    feedbackCorrection.hidden = true;
+    feedbackStatus.classList.remove('is-error');
+    feedbackStatus.textContent = reviewSummary(review);
+    // Only the user's own answer can be changed; a reviewer's label is final.
+    feedbackChange.hidden = review.source !== 'app_user';
+  }
+
+  function renderFeedback(data, prediction, predictedName) {
+    const submissionId = typeof data.submission_id === 'string' ? data.submission_id : '';
+    const canReview = Boolean(prediction && prediction.airline && submissionId && data.recorded === true);
+    feedback.hidden = !canReview;
+    feedbackTarget = canReview ? { id: submissionId, predicted: prediction.airline, predictedName } : null;
+    setFeedbackBusy(false);
+    if (!canReview) return;
+    feedbackYes.textContent = `✓ Yes, it was ${predictedName}`;
+    feedbackAirline.replaceChildren(el('option', '', 'Choose an airline…'),
+      ...reviewChoices(prediction.airline).map(([value, label]) => {
+        const option = el('option', '', label);
+        option.value = value;
+        return option;
+      }));
+    feedbackAirline.firstChild.value = '';
+    if (data.review && data.review.label) showSavedReview(data.review);
+    else showFeedbackQuestion();
+  }
+
+  async function sendReview(correct, airline) {
+    const target = feedbackTarget;
+    if (!target) return;
+    setFeedbackBusy(true);
+    feedbackStatus.classList.remove('is-error');
+    feedbackStatus.textContent = 'Saving your answer…';
+    let response;
+    let text;
+    try {
+      response = await fetch(`${API_SUBMISSIONS_URL}/${encodeURIComponent(target.id)}/review`, {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify(correct ? { correct: true } : { correct: false, airline }),
+      });
+      text = await response.text();
+    } catch (_) {
+      text = null;
+    }
+    if (feedbackTarget !== target) return; // the user started over meanwhile
+    setFeedbackBusy(false);
+    let data = null;
+    try {
+      data = response && response.ok ? JSON.parse(text) : null;
+    } catch (_) {
+      data = null;
+    }
+    if (data && data.review) {
+      showSavedReview(data.review);
+      feedbackChange.focus();
+      return;
+    }
+    feedbackStatus.classList.add('is-error');
+    feedbackStatus.textContent = response
+      ? errorMessageFromResponse(response.status, text || '')
+      : "We couldn't reach the server. Please try again.";
   }
 
   function focusResults() {
@@ -834,6 +955,7 @@ function initApp() {
 
   async function submit(snapshot) {
     if (busy || !snapshot) return;
+    feedbackTarget = null;
     const run = {
       snapshot,
       startedAt: Date.now(),
@@ -918,6 +1040,7 @@ function initApp() {
 
   function startOver() {
     stopRun(currentRun);
+    feedbackTarget = null;
     lastSnapshot = null;
     clearPhoto();
     setBusy(false); // also refreshes the datetime-local max
@@ -1058,6 +1181,33 @@ function initApp() {
   cancelWorking.addEventListener('click', startOver);
   resetResult.addEventListener('click', startOver);
   resetFailed.addEventListener('click', startOver);
+
+  feedbackYes.addEventListener('click', () => sendReview(true, null));
+  feedbackNo.addEventListener('click', () => {
+    feedbackActions.hidden = true;
+    feedbackCorrection.hidden = false;
+    feedbackStatus.textContent = '';
+    feedbackStatus.classList.remove('is-error');
+    feedbackAirline.value = '';
+    feedbackAirline.focus();
+  });
+  feedbackSave.addEventListener('click', () => {
+    if (!feedbackAirline.value) {
+      feedbackStatus.classList.add('is-error');
+      feedbackStatus.textContent = 'Choose the airline it actually was.';
+      feedbackAirline.focus();
+      return;
+    }
+    sendReview(false, feedbackAirline.value);
+  });
+  feedbackCancel.addEventListener('click', () => {
+    showFeedbackQuestion();
+    feedbackNo.focus();
+  });
+  feedbackChange.addEventListener('click', () => {
+    showFeedbackQuestion();
+    feedbackYes.focus();
+  });
 
   showPhase('empty');
   updateSubmitState();

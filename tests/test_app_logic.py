@@ -573,9 +573,10 @@ class RepositoryConsistencyTests(unittest.TestCase):
         self.assertEqual(config['command'], ['python', 'main.py'])
         env = {item['name']: item for item in config['env']}
         self.assertEqual(set(env), {'SERVING_ENDPOINT', 'DATABRICKS_WAREHOUSE_ID', 'TAILSPOT_SCHEMA',
-                                    'TAILSPOT_VOLUME_PATH'})
+                                    'TAILSPOT_VOLUME_PATH', 'TAILSPOT_TRAINING_EXPERIMENT_ID'})
         self.assertEqual(env['SERVING_ENDPOINT'].get('valueFrom'), 'serving-endpoint')
         self.assertEqual(env['DATABRICKS_WAREHOUSE_ID'].get('valueFrom'), 'sql-warehouse')
+        self.assertEqual(env['TAILSPOT_TRAINING_EXPERIMENT_ID'].get('valueFrom'), 'training-experiment')
         defaults = pipeline.Settings()
         self.assertEqual(env['TAILSPOT_SCHEMA'].get('value'), defaults.schema)
         self.assertEqual(env['TAILSPOT_VOLUME_PATH'].get('value'), defaults.volume_path)

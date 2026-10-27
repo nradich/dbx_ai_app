@@ -8,3 +8,5 @@ env:
     value: dbx_ai_app.airplane_tail_id
   - name: TAILSPOT_VOLUME_PATH
     value: /Volumes/dbx_ai_app/airplane_tail_id/submitted_photos
+  - name: TAILSPOT_TRAINING_EXPERIMENT_ID
+    valueFrom: training-experiment

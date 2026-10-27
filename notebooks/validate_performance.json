@@ -1,0 +1,22 @@
+{
+  "run_name": "Validate model performance notebook",
+  "timeout_seconds": 900,
+  "tasks": [
+    {
+      "task_key": "model_performance",
+      "notebook_task": {
+        "notebook_path": "/Shared/dbx_ai_app/04_model_performance"
+      },
+      "environment_key": "review"
+    }
+  ],
+  "environments": [
+    {
+      "environment_key": "review",
+      "spec": {
+        "client": "4",
+        "dependencies": ["matplotlib==3.10.6", "pandas==2.2.3"]
+      }
+    }
+  ]
+}

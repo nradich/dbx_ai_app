@@ -22,9 +22,15 @@ provided) the normalized box on the source derivative. Full-plane files need
 tail-box annotation before they can be used by the current classifier. For
 tail crops, the source box is provenance, not an annotation on the saved crop.
 
-**These files are candidates, not part of the current 50-image dataset.** The
-existing preparation script intentionally requires exactly 50 annotated files.
-Do not copy candidates into `airline_tails/` or overwrite dataset v1. Before
+**These files are not part of dataset v1, which keeps exactly 50 images. They are
+part of dataset v2** (`dataset/tail_annotations_v2.json`). That file records the
+reviewed tail boxes for the 11 full-plane photos, the final session groups and an
+explicit split for each image, with the reasons in `group_reasons`. All Acroterion
+photos are in train. Delta 06–08 join the v1 Boston November 2025 train group.
+Alaska 11/15, American 06, Delta 02/05 and United 10 are held out for test, and
+Alaska 18, American 03 and United 05 are used for validation.
+
+The notes below explain how those decisions were reached. Do not copy candidates into `airline_tails/` or overwrite dataset v1. Before
 training, review labels and tail boxes, build a new versioned dataset and split
 by related photograph, aircraft and session groups. `provisional_group` is a
 conservative starting point, not a completed split: check source dates,

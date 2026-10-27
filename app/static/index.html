@@ -6,6 +6,7 @@
   <title>tailspot. · Identify the airline from a tail photo</title>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
+  <script src="performance.js" defer></script>
 </head>
 <body>
   <div class="prototype-banner" role="note"><span class="status-dot" aria-hidden="true"></span> DEMO <span class="banner-divider" aria-hidden="true"></span> Synthetic San Diego schedule · Predictions can be wrong</div>
@@ -18,6 +19,12 @@
   </header>
 
   <main id="top">
+    <div class="view-tabs" role="tablist" aria-label="Tailspot views">
+      <button type="button" class="view-tab" role="tab" id="tab-identify" data-tab="identify" aria-controls="panel-identify" aria-selected="true">Identify</button>
+      <button type="button" class="view-tab" role="tab" id="tab-performance" data-tab="performance" aria-controls="panel-performance" aria-selected="false" tabindex="-1">Model performance</button>
+    </div>
+
+    <div id="panel-identify" class="view-panel" role="tabpanel" aria-labelledby="tab-identify" tabindex="0">
     <section class="intro">
       <div>
         <div class="eyebrow"><span class="line" aria-hidden="true"></span> AIRCRAFT IDENTIFICATION <span class="eyebrow-number">/ 01</span></div>
@@ -145,6 +152,25 @@
             </div>
             <p class="result-warning" id="result-warning" hidden></p>
 
+            <section class="feedback" id="feedback" aria-labelledby="feedback-question" hidden>
+              <p class="feedback-question" id="feedback-question">Did we get the airline right?</p>
+              <div class="feedback-actions" id="feedback-actions">
+                <button type="button" class="feedback-button feedback-yes" id="feedback-yes">✓ Yes, correct</button>
+                <button type="button" class="feedback-button feedback-no" id="feedback-no">✗ No, it was wrong</button>
+              </div>
+              <div class="feedback-correction" id="feedback-correction" hidden>
+                <label for="feedback-airline">Which airline was it?</label>
+                <div class="feedback-correction-row">
+                  <select id="feedback-airline"></select>
+                  <button type="button" class="feedback-button" id="feedback-save">Save answer</button>
+                  <button type="button" class="text-button" id="feedback-cancel">Cancel</button>
+                </div>
+              </div>
+              <p class="feedback-status" id="feedback-status" role="status"></p>
+              <button type="button" class="text-button feedback-change" id="feedback-change" hidden>Change answer</button>
+              <p class="feedback-note">Your answer is saved with this submission to measure how well the model works. It is not used for training without review.</p>
+            </section>
+
             <div class="candidate-heading">
               <div><span class="step">NEXT / SCHEDULE LOOKUP</span><h3>Possible departures</h3><p id="sighting-line"></p></div>
               <span class="count-badge" id="candidate-count"></span>
@@ -171,6 +197,100 @@
             </div>
           </div>
         </div>
+      </section>
+    </div>
+    </div>
+
+    <div id="panel-performance" class="view-panel perf" role="tabpanel" aria-labelledby="tab-performance" tabindex="0" hidden>
+      <section class="intro perf-intro">
+        <div>
+          <div class="eyebrow"><span class="line" aria-hidden="true"></span> MODEL PERFORMANCE <span class="eyebrow-number">/ 02</span></div>
+          <h1>How well does it<br><span>really work?</span></h1>
+          <p>Every compared model version, scored on the same held-out images. The test sets are small, so every number shows how many images it is based on.</p>
+        </div>
+        <div class="perf-toolbar">
+          <button type="button" class="crop-button perf-refresh" id="perf-refresh">Refresh <span aria-hidden="true">↻</span></button>
+          <p class="perf-updated" id="perf-updated" role="status">Not loaded yet</p>
+        </div>
+      </section>
+
+      <!-- Comparison summary (cards, models, matrix, context, drill-down) -->
+      <div id="perf-summary-state" class="perf-state-slot"></div>
+      <p id="perf-empty" class="no-candidates perf-empty" hidden>No comparison has been published yet. Run evaluation/compare.py and evaluation/publish.py.</p>
+
+      <div id="perf-summary-content" hidden>
+        <div class="perf-cards" id="perf-cards"></div>
+
+        <section class="card perf-section" aria-labelledby="perf-models-title">
+          <div class="card-heading">
+            <div><span class="step">A / MODEL VERSIONS</span><h2 id="perf-models-title">Models compared</h2></div>
+            <span class="corner-mark" aria-hidden="true">✳</span>
+          </div>
+          <div id="perf-models"></div>
+        </section>
+
+        <section class="card perf-section" aria-labelledby="perf-matrix-title">
+          <div class="card-heading">
+            <div><span class="step">B / RESULTS</span><h2 id="perf-matrix-title">Accuracy by evaluation set</h2></div>
+            <span class="corner-mark" aria-hidden="true">✳</span>
+          </div>
+          <p class="perf-section-note">Correct / images scored (accuracy), with macro F1 and expected calibration error (ECE, lower is better). The best model in each row is marked.</p>
+          <div id="perf-matrix"></div>
+        </section>
+
+        <section class="card perf-section" aria-labelledby="perf-context-title">
+          <div class="card-heading">
+            <div><span class="step">C / CONTEXT SENSITIVITY</span><h2 id="perf-context-title">How much of the plane should be in the box?</h2></div>
+            <span class="corner-mark" aria-hidden="true">✳</span>
+          </div>
+          <p class="perf-section-note">The same images, cropped around the tail box scaled 1.0× to 3.0× about its centre, and the whole image.</p>
+          <div id="perf-context"></div>
+        </section>
+
+        <section class="card perf-section" aria-labelledby="perf-drill-title">
+          <div class="card-heading">
+            <div><span class="step">D / DRILL-DOWN</span><h2 id="perf-drill-title">Every prediction</h2></div>
+            <span class="corner-mark" aria-hidden="true">✳</span>
+          </div>
+          <div class="perf-controls">
+            <label>Evaluation set <select id="perf-drill-set"></select></label>
+            <label>Variant <select id="perf-drill-variant"></select></label>
+            <label class="perf-check"><input type="checkbox" id="perf-drill-mistakes"> Only mistakes</label>
+          </div>
+          <p class="perf-section-note" id="perf-drill-description"></p>
+          <div id="perf-drill-body" aria-live="polite"></div>
+        </section>
+      </div>
+
+      <section class="card perf-section" aria-labelledby="perf-training-title">
+        <div class="card-heading">
+          <div><span class="step">E / TRAINING</span><h2 id="perf-training-title">Training runs</h2></div>
+          <span class="corner-mark" aria-hidden="true">✳</span>
+        </div>
+        <div id="perf-training-list"></div>
+        <div id="perf-training-detail"></div>
+      </section>
+
+      <section class="card perf-section" aria-labelledby="perf-submissions-title">
+        <div class="card-heading">
+          <div><span class="step">F / IN THE APP</span><h2 id="perf-submissions-title">App submissions</h2></div>
+          <span class="corner-mark" aria-hidden="true">✳</span>
+        </div>
+        <div id="perf-submissions"></div>
+      </section>
+
+      <section class="card perf-section perf-caveats" aria-labelledby="perf-caveats-title">
+        <div class="card-heading">
+          <div><span class="step">G / READ THIS FIRST</span><h2 id="perf-caveats-title">Honest caveats</h2></div>
+          <span class="corner-mark" aria-hidden="true">✳</span>
+        </div>
+        <ul class="perf-caveat-list">
+          <li><strong>The test sets are small.</strong> Each result shows how many images it is based on (n). With 10 images, one mistake moves accuracy by 10 points, so small differences between versions may be noise.</li>
+          <li><strong>Confidence is uncalibrated.</strong> A 90% score does not mean the model is right 90% of the time. ECE shows how far confidence and accuracy disagree.</li>
+          <li><strong>The flight schedule plays no part here.</strong> These numbers score the airline classifier only; the schedule lookup in the Identify tab uses synthetic demo data.</li>
+          <li><strong>“Selected by validation”</strong> marks the new (v2) version with the best accuracy on the 13 validation images; ties are broken by lower log loss, which can favour a model trained without label smoothing. The test sets were not used to choose it.</li>
+          <li id="perf-caveat-stress" hidden><strong>Full-plane stress set:</strong> <span id="perf-caveat-stress-text"></span></li>
+        </ul>
       </section>
     </div>
 
