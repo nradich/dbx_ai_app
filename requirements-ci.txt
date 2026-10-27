@@ -1,0 +1,6 @@
+# CPU-only repository tests; these are not the model's serving dependencies.
+Pillow==13.0.0
+requests==2.34.2
+databricks-sdk==0.157.0
+tzdata==2026.5
+PyYAML==6.0.3
